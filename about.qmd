@@ -4,6 +4,9 @@ title: "About"
 
 About this site
 
-```{r}
-1 + 1
-```
+Welcome to Imran's home page on Visual Analytics.
+
+In this website, you will find my coursework for this intense yet insightfulmodule from Singapore Management University for Academic year 23-24, Jan.\
+\
+Students are assessed based on pre & in-class exercises, take home assignments and a final group project.\
+\
