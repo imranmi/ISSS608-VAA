@@ -2,5 +2,5 @@
 title: "ISSS608-VAA"
 ---
 
-Welcome to **ISSS608 visual analytics and applications** home page. \
+Welcome to Imran's **ISSS608 Visual Analytics & Applications** home page.\
 In this website, you will find my coursework for this course.

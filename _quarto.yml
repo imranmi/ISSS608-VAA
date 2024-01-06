@@ -2,18 +2,56 @@ project:
   type: website
 
 website:
-  title: "ISSS608-VAA"
+  title: "ISSS608 Visual Analytics & Applications"
   navbar:
     left:
+      - text: Hands-on Exercises
+        menu: 
+          - text: Hands-on Exercise 1
+            href: Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html
+          - text: Hands-on Exercise 2
+            href: Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html
+          - text: Hands-on Exercise 3
+            href: Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html
+          - text: Hands-on Exercise 4
+            href: Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html
+          - text: Hands-on Exercise 5
+            href: Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html
+          - text: Hands-on Exercise 6
+            href: Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html
+          - text: Hands-on Exercise 7
+            href: Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html
+          - text: Hands-on Exercise 8
+            href: Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html
+      - text: In-class Exercises
+        menu: 
+          - text: In-class Exercise 1
+            href: In-class-ex/In-class-Ex1/In-class_Ex1.html
+          - text: In-class Exercise 2
+            href: In-class-ex/In-class-Ex2/In-class_Ex2.html
+          - text: In-class Exercise 3
+            href: In-class-ex/In-class-Ex3/In-class_Ex3.html
+          - text: In-class Exercise 4
+            href: In-class-ex/In-class-Ex4/In-class_Ex4.html
+      - text: Take-home Exercises
+        menu: 
+          - text: Take-home Exercise 1
+            href: Take-home-ex/Take-home-Ex1/Take-home_Ex1.html
+          - text: Take-home Exercise 2
+            href: Take-home-ex/Take-home-Ex2/Take-home_Ex2.html
+          - text: Take-home Exercise 3
+            href: Take-home-ex/Take-home-Ex3/Take-home_Ex3.html
+          - text: Take-home Exercise 4
+            href: Take-home-ex/Take-home-Ex4/Take-home_Ex4.html
+    right: 
       - href: index.qmd
         text: Home
       - about.qmd
 
 format:
   html:
-    theme: morph
+    theme: slate
     css: styles.css
     toc: true
 
 editor: visual
-

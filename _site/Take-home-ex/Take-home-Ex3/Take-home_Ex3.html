@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2024-01-01">
 
-<title>ISSS608 Visual Analytics &amp; Applications - ISSS608-VAA</title>
+<title>ISSS608 Visual Analytics &amp; Applications - Take-Home Exercise 3</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,25 +21,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -61,7 +96,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -71,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">ISSS608 Visual Analytics &amp; Applications</span>
     </a>
   </div>
@@ -87,35 +122,35 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 6</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 7</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html" rel="" target="">
+    <a class="dropdown-item" href="../../Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 8</span></a>
   </li>  
     </ul>
@@ -126,19 +161,19 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
         <li>
-    <a class="dropdown-item" href="./In-class-ex/In-class-Ex1/In-class_Ex1.html" rel="" target="">
+    <a class="dropdown-item" href="../../In-class-ex/In-class-Ex1/In-class_Ex1.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class-ex/In-class-Ex2/In-class_Ex2.html" rel="" target="">
+    <a class="dropdown-item" href="../../In-class-ex/In-class-Ex2/In-class_Ex2.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class-ex/In-class-Ex3/In-class_Ex3.html" rel="" target="">
+    <a class="dropdown-item" href="../../In-class-ex/In-class-Ex3/In-class_Ex3.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class-ex/In-class-Ex4/In-class_Ex4.html" rel="" target="">
+    <a class="dropdown-item" href="../../In-class-ex/In-class-Ex4/In-class_Ex4.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 4</span></a>
   </li>  
     </ul>
@@ -149,19 +184,19 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
         <li>
-    <a class="dropdown-item" href="./Take-home-ex/Take-home-Ex1/Take-home_Ex1.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-home-ex/Take-home-Ex1/Take-home_Ex1.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home-ex/Take-home-Ex2/Take-home_Ex2.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-home-ex/Take-home-Ex2/Take-home_Ex2.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home-ex/Take-home-Ex3/Take-home_Ex3.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-home-ex/Take-home-Ex3/Take-home_Ex3.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home-ex/Take-home-Ex4/Take-home_Ex4.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-home-ex/Take-home-Ex4/Take-home_Ex4.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 4</span></a>
   </li>  
     </ul>
@@ -169,11 +204,11 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="../../index.html" rel="" target="">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -188,14 +223,27 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a>
+  <ul class="collapse">
+  <li><a href="#loading-r-package" id="toc-loading-r-package" class="nav-link" data-scroll-target="#loading-r-package">Loading R package</a></li>
+  </ul></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data">Importing Data</a>
+  <ul class="collapse">
+  <li><a href="#wrangling-data" id="toc-wrangling-data" class="nav-link" data-scroll-target="#wrangling-data">Wrangling Data</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ISSS608-VAA</h1>
+<h1 class="title">Take-Home Exercise 3</h1>
 </div>
 
 
@@ -203,17 +251,42 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 1, 2024</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 7, 2024</p>
+    </div>
+  </div>
     
   </div>
   
 
 </header>
 
-<p>Welcome to Imran’s <strong>ISSS608 Visual Analytics &amp; Applications</strong> home page.<br>
-In this website, you will find my coursework for this course.</p>
+<section id="getting-started" class="level1">
+<h1>Getting Started</h1>
+<section id="loading-r-package" class="level2">
+<h2 class="anchored" data-anchor-id="loading-r-package">Loading R package</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="importing-data" class="level1">
+<h1>Importing Data</h1>
+<section id="wrangling-data" class="level2">
+<h2 class="anchored" data-anchor-id="wrangling-data">Wrangling Data</h2>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

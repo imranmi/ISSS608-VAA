@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "ISSS608-VAA",
     "section": "",
-    "text": "Welcome to ISSS608 visual analytics and applications home page.\nIn this website, you will find my coursework for this course."
+    "text": "Welcome to Imran’s ISSS608 Visual Analytics & Applications home page.\nIn this website, you will find my coursework for this course."
   },
   {
     "objectID": "about.html",
@@ -12,5 +12,362 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html",
+    "href": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html#loading-r-package",
+    "href": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html#loading-r-package",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html#wrangling-data",
+    "href": "Hands-on-ex/Hand-on-ex01/Hands-on_Ex1.html#wrangling-data",
+    "title": "Hands-on Exercise 1",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html",
+    "href": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#loading-r-package",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#wrangling-data",
+    "title": "Hands-on Exercise 1",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html",
+    "href": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html",
+    "title": "Hands-on Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html#loading-r-package",
+    "title": "Hands-on Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html#wrangling-data",
+    "title": "Hands-on Exercise 2",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html",
+    "href": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html#loading-r-package",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html#wrangling-data",
+    "title": "Hands-on Exercise 3",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html",
+    "href": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html",
+    "title": "Hands-on Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html#loading-r-package",
+    "title": "Hands-on Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html#wrangling-data",
+    "title": "Hands-on Exercise 4",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html",
+    "href": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html",
+    "title": "Hands-on Exercise 5",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html#loading-r-package",
+    "title": "Hands-on Exercise 5",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex5/Hands-on_Ex5.html#wrangling-data",
+    "title": "Hands-on Exercise 5",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html",
+    "href": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html",
+    "title": "Hands-on Exercise 6",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html#loading-r-package",
+    "title": "Hands-on Exercise 6",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html#wrangling-data",
+    "title": "Hands-on Exercise 6",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html",
+    "href": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html",
+    "title": "Hands-on Exercise 7",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html#loading-r-package",
+    "title": "Hands-on Exercise 7",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html#wrangling-data",
+    "title": "Hands-on Exercise 7",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html",
+    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html",
+    "title": "Hands-on Exercise 8",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#loading-r-package",
+    "title": "Hands-on Exercise 8",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#wrangling-data",
+    "title": "Hands-on Exercise 8",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex1/In-class_Ex1.html",
+    "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html",
+    "title": "In-Class Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex1/In-class_Ex1.html#loading-r-package",
+    "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html#loading-r-package",
+    "title": "In-Class Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex1/In-class_Ex1.html#wrangling-data",
+    "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html#wrangling-data",
+    "title": "In-Class Exercise 1",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
+    "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
+    "title": "In-Class Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#loading-r-package",
+    "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html#loading-r-package",
+    "title": "In-Class Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#wrangling-data",
+    "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html#wrangling-data",
+    "title": "In-Class Exercise 2",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex3/In-class_Ex3.html",
+    "href": "In-class-ex/In-class-Ex3/In-class_Ex3.html",
+    "title": "In-Class Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex3/In-class_Ex3.html#loading-r-package",
+    "href": "In-class-ex/In-class-Ex3/In-class_Ex3.html#loading-r-package",
+    "title": "In-Class Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex3/In-class_Ex3.html#wrangling-data",
+    "href": "In-class-ex/In-class-Ex3/In-class_Ex3.html#wrangling-data",
+    "title": "In-Class Exercise 3",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex4/In-class_Ex4.html",
+    "href": "In-class-ex/In-class-Ex4/In-class_Ex4.html",
+    "title": "In-Class Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex4/In-class_Ex4.html#loading-r-package",
+    "href": "In-class-ex/In-class-Ex4/In-class_Ex4.html#loading-r-package",
+    "title": "In-Class Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex4/In-class_Ex4.html#wrangling-data",
+    "href": "In-class-ex/In-class-Ex4/In-class_Ex4.html#wrangling-data",
+    "title": "In-Class Exercise 4",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html",
+    "href": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html",
+    "title": "Take-Home Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html#loading-r-package",
+    "href": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html#loading-r-package",
+    "title": "Take-Home Exercise 1",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html#wrangling-data",
+    "href": "Take-home-ex/Take-home-Ex1/Take-home_Ex1.html#wrangling-data",
+    "title": "Take-Home Exercise 1",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html",
+    "href": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html",
+    "title": "Take-Home Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html#loading-r-package",
+    "href": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html#loading-r-package",
+    "title": "Take-Home Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html#wrangling-data",
+    "href": "Take-home-ex/Take-home-Ex2/Take-home_Ex2.html#wrangling-data",
+    "title": "Take-Home Exercise 2",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html",
+    "href": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html",
+    "title": "Take-Home Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#loading-r-package",
+    "href": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#loading-r-package",
+    "title": "Take-Home Exercise 3",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#wrangling-data",
+    "href": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#wrangling-data",
+    "title": "Take-Home Exercise 3",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html",
+    "href": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html",
+    "title": "Take-Home Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html#loading-r-package",
+    "href": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html#loading-r-package",
+    "title": "Take-Home Exercise 4",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html#wrangling-data",
+    "href": "Take-home-ex/Take-home-Ex4/Take-home_Ex4.html#wrangling-data",
+    "title": "Take-Home Exercise 4",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
   }
 ]
