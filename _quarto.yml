@@ -50,7 +50,7 @@ website:
 
 format:
   html:
-    theme: slate
+    theme: cerulean
     css: styles.css
     toc: true
 
