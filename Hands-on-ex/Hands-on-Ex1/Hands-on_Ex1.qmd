@@ -49,9 +49,9 @@ summary(exam_data)
 
 # 1.3 Introducing ggplot
 
-ggplot2 is an R package for declaratively creating data-driven graphics based on The Grammar of Graphics. It is also part of the tidyverse family specially designed for visual exploration and communication.
+ggplot2 is an R package for creating data-driven graphics based on The Grammar of Graphics. It is also part of the tidyverse family specially designed for visual exploration and communication.
 
-For more information, visit [ggplot2 link](https://ggplot2.tidyverse.org/)
+For more information, please visit [ggplot2 link](https://ggplot2.tidyverse.org/)
 
 ## 1.3.1 R Graphics VS ggplot
 
@@ -76,7 +76,7 @@ ggplot(data=exam_data, aes(x = MATHS)) +
 ```
 :::
 
-Although the code chunk is simpler when R Graphics is used, according to [Hadley Wickham](http://varianceexplained.org/r/teach_ggplot2_to_beginners/#comment-1745406157), "The transferrable skills from ggplot2 are not the idiosyncracies of plotting syntax, but a powerful way of thinking about visualisation, as a way of mapping between variables and the visual properties of geometric objects that you can perceive".
+Although the code is simpler when R Graphics is used, according to [Hadley Wickham](http://varianceexplained.org/r/teach_ggplot2_to_beginners/#comment-1745406157), "The transferrable skills from ggplot2 are not the idiosyncracies of plotting syntax, but a powerful way of thinking about visualisation, as a way of mapping between variables and the visual properties of geometric objects that you can perceive".
 
 # 1.4 Grammar of Graphics
 
@@ -134,7 +134,7 @@ ggplot(data=exam_data)
 
 The aesthetic mappings take attributes of the data and use them to influence visual characteristics, such as position, colour, size, shape, or transparency. Each visual characteristic can thus encode an aspect of the data and be used to convey information.
 
-Code chunk below adds the aesthetic element into the plot.
+The code below adds the aesthetic element into the plot.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -155,7 +155,7 @@ ggplot(data=exam_data,
 
 ![](images/Geomobjects.jpg)
 
-For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms)
+For a complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms).
 
 ## 1.7.1 Geometric Objects: `geom_bar()`
 
@@ -173,7 +173,7 @@ ggplot(data=exam_data,
 
 In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.
 
-Below, we use `geom_dotplot()` to plot dot plot of math scores.
+Below, we use `geom_dotplot()` to plot a dot plot of math scores.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -193,7 +193,7 @@ We insert 2 additional arguments in `geom_dotplot()`
 
 -   ‘dotsize’ which scales the size of the dots.
 
-The function `scale_y_continuous()` is also added to turn off the y-axis by setting to NULL.
+The function `scale_y_continuous()` is also added to turn off the y-axis by setting it to NULL.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -224,7 +224,7 @@ The default bin is 30.
 
 ## 1.7.4 Modifying a geometric object by changing `geom()`
 
-We modify the previous plot using 3 arguments:-
+We modify the previous plot by using 3 arguments:-
 
 -   *bins* to change the number of bins to 20,
 
@@ -242,7 +242,7 @@ ggplot(data=exam_data,
 
 ## 1.7.5 Modifying a geometric object by changing `aes()`
 
-The code below changes the interior colour of the histogram (i.e. *fill*) by using sub-group of `aes()`.
+The code below changes the interior colour of the histogram (i.e. *fill*) by using a sub-group of `aes()`.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -294,7 +294,7 @@ ggplot(data=exam_data,
 
 [**Notches**](https://sites.google.com/site/davidsstatistics/home/notched-box-plots) are used to help visually assess whether the medians of distributions differ. If the notches do not overlap, it is more than likely that the medians are different.
 
-The code below plots the distribution of Maths scores by gender in notched plot instead of boxplot.
+The code below plots the distribution of Maths scores by gender in notched plots instead of boxplots.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -307,7 +307,7 @@ ggplot(data=exam_data,
 
 Violin plots are a way of comparing multiple data distributions. With ordinary density curves, it is difficult to compare more than just a few distributions because the lines visually interfere with each other. With a violin plot, it’s easier to compare several distributions since they’re placed side by side.
 
-The code below plot the distribution of Maths score by gender in violin plot.
+The code below plots the distribution of Maths score by gender using violin plots.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -342,7 +342,7 @@ ggplot(data=exam_data,
 
 # 1.8 Essential Grammatical Elements in ggplot2: stat
 
-The [Statistics functions](https://ggplot2.tidyverse.org/reference/#stats) statistically transforms data, as a form of summary
+The [Statistics functions](https://ggplot2.tidyverse.org/reference/#stats) statistically transforms data, as a form of summary.
 
 There are two ways to use these functions:
 
@@ -362,7 +362,7 @@ ggplot(data=exam_data,
 
 ## 1.8.2 Working with stat - `stat_summary()`
 
-The code below add mean values by using `stat_summary().`
+The code below adds mean values by using `stat_summary().`
 
 ```{r}
 ggplot(data=exam_data, 
@@ -420,7 +420,7 @@ ggplot(data=exam_data,
 
 # 1.9 Essential Grammatical Elements in ggplot2: Facets
 
-Facetting generates small multiples (sometimes also called trellis plot), each displaying a different subset of the data.
+Facetting generates small multiples (sometimes also called trellis plots), each displaying a different subset of the data.
 
 Facets are an alternative to aesthetics for displaying additional discrete variables.
 
@@ -472,7 +472,7 @@ There are a number of different possible coordinate systems to use:
 
 ## 1.10.1 Working with Coordinate
 
-By default, bar charts in ggplot2 are vertical
+By default, bar charts in ggplot2 are vertical.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -480,7 +480,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-Using `coord_flip()` we can flit the horizontal bar chart to a vertical one.
+Using `coord_flip()` we can flip the horizontal bar chart to a vertical one.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -491,7 +491,7 @@ ggplot(data=exam_data,
 
 ## 1.10.2 Changing the x and y axis range
 
-The scatterplot below is misleading as the x and y axes are not equal
+The scatterplot below is misleading as the x and y axes are not equal.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -530,7 +530,7 @@ The list of themes available can be found at this [link](https://ggplot2.tidyver
 
 ## 1.11.1 Working with Themes
 
-The code below plats a horizontal bar chart using `theme_gray()`.
+The code below plots a horizontal bar chart using `theme_gray()`.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -550,7 +550,7 @@ ggplot(data=exam_data,
   theme_classic()
 ```
 
-We can further customize the charts by adding additional arguments using `theme().`
+We can further customize the chart by adding additional arguments using `theme().`
 
 ```{r}
 ggplot(data = exam_data, 
@@ -562,7 +562,7 @@ ggplot(data = exam_data,
                                          color = "white"))
 ```
 
-# 1.12 Plotting Practise
+# 1.12 Plotting Practice
 
 Some samples of modifications made
 
