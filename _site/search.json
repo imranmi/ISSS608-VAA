@@ -508,7 +508,7 @@
     "href": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#working-with-coordinate",
     "title": "Hands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods",
     "section": "1.10.1 Working with Coordinate",
-    "text": "1.10.1 Working with Coordinate\nBy default, bar charts in ggplot2 are vertical.\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\nUsing coord_flip() we can flip the horizontal bar chart to a vertical one.\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()"
+    "text": "1.10.1 Working with Coordinate\nBy default, bar charts in ggplot2 are vertical.\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar()\n\n\n\n\nUsing coord_flip() we can flip the vertical bar chart to a horizontal one.\n\nggplot(data=exam_data, \n       aes(x=RACE)) +\n  geom_bar() +\n  coord_flip()"
   },
   {
     "objectID": "Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html#changing-the-x-and-y-axis-range",

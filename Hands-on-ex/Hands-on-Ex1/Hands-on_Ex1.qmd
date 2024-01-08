@@ -480,7 +480,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-Using `coord_flip()` we can flip the horizontal bar chart to a vertical one.
+Using `coord_flip()` we can flip the vertical bar chart to a horizontal one.
 
 ```{r}
 ggplot(data=exam_data, 
@@ -564,7 +564,121 @@ ggplot(data = exam_data,
 
 # 1.12 Plotting Practice
 
-Some samples of modifications made
+1.  Trellis Plot VS Box plot. Which graph provides more information visually?
+
+::: panel-tabset
+## Trellis histogram
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS)) +
+  geom_histogram(bins=20) +
+    facet_grid(~ CLASS)
+```
+
+## Box plot by classes
+
+```{r}
+ggplot(data = exam_data, 
+       aes(y = MATHS, 
+           x = CLASS)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun.y="mean",         
+               colour ="red",        
+               size=1.5)               
+```
+:::
+
+::: callout-note
+## Note
+
+Trellis plots using histograms may not provide much information visually as compared to box plots. \
+\
+The box plot enables to quickly see how each class compares to each other. We can quickly see the range of scores, median and mean scores for each class.
+:::
+
+2.  What if we want to further compare the performance of the different genders in Maths?
+
+```{r}
+ggplot(data = exam_data, 
+       aes(y = MATHS, 
+           x = CLASS)) +
+  geom_boxplot() +
+  stat_summary(geom = "point",       
+               fun.y="mean",         
+               colour ="red",        
+               size=1) +  
+  facet_wrap(~ GENDER)
+```
+
+::: callout-note
+## Note
+
+we use `facet_wrap(~ GENDER)`
+:::
+
+3.  What if we want to compare both English and Math scores across the genders?
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+# Plot for Maths
+plot_maths <- ggplot(data = exam_data, aes(x = CLASS, y = MATHS)) +
+  geom_boxplot() +
+  stat_summary(geom = "point", fun = mean, colour ="red", size=1) + 
+  facet_wrap(~ GENDER) +
+  ggtitle("Maths Scores")
+
+# Plot for English
+plot_english <- ggplot(data = exam_data, aes(x = CLASS, y = ENGLISH)) +
+  geom_boxplot() +
+  stat_summary(geom = "point", fun = mean, colour ="blue", size=1) + 
+  facet_wrap(~ GENDER) +
+  ggtitle("English Scores")
+
+# Arranging plots one on top of the other
+grid.arrange(plot_maths, plot_english, ncol = 1)
+
+
+```
+
+::: callout-note
+## Note
+
+In this approach, **`plot_maths`** and **`plot_english`** are two separate ggplot objects for Maths and English, respectively.
+
+The **`grid.arrange()`** function then arranges these plots in a single column (**`ncol = 1`**) layout, effectively stacking them vertically.
+:::
+
+4.  How can we improve on the basic histogram and add vertical lines representing the mean and median Maths scores?
+
+```{r}
+ggplot(data = exam_data, 
+       aes(x = MATHS)) +
+  geom_histogram(bins = 20,            
+                 color = "black",      
+                 fill = "green") +
+  geom_vline(aes(xintercept = mean(MATHS)),
+             col = 'red',
+             size = 1.0,
+             linetype = "dashed")+ 
+  geom_vline(aes(xintercept = median(MATHS)),
+             col = 'black',
+             size = 1.0,
+             linetype = "dashed")
+```
+
+::: callout-note
+## Note
+
+Inserting `aes(xintercept = mean(MATHS))` and `aes(xintercept = median(MATHS))` in both `geom_vline()` tells ggplot to draw vertical lines at the position on the x-axis that corresponds to the mean and median values.
+
+Even if the underlying data in *exam_data* changes the mean and median lines will dynamically adjust accordingly.
+
+More information on `geom_vline()` can be found [here.](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_vline)
+:::
 
 # 1.13 References
 
