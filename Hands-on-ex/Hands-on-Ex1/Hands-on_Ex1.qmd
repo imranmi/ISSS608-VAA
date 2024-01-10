@@ -593,7 +593,7 @@ ggplot(data = exam_data,
 ::: callout-note
 ## Note
 
-Trellis plots using histograms may not provide much information visually as compared to box plots. \
+Trellis plots using histograms may not provide much information visually as compared to box plots.\
 \
 The box plot enables to quickly see how each class compares to each other. We can quickly see the range of scores, median and mean scores for each class.
 :::
@@ -681,6 +681,8 @@ More information on `geom_vline()` can be found [here.](https://www.rdocumentati
 :::
 
 # 1.13 References
+
+-   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01).
 
 -   Hadley Wickham (2023) [**ggplot2: Elegant Graphics for Data Analysis**](https://ggplot2-book.org/). Online 3rd edition.
 
