@@ -620,6 +620,6 @@
     "href": "Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html#creating-a-composite-figure-with-tags",
     "title": "Hands-on Exercise 2 - Beyond ggplot2 fundamentals",
     "section": "2.5.4 Creating a composite figure with tags",
-    "text": "2.5.4 Creating a composite figure with tags\nIn order to identify subplots in text, patchwork also provides auto-tagging capabilities as shown in the figure below.\n\n((plot1 / plot2) | plot3) + \n  plot_annotation(tag_levels = 'I')"
+    "text": "2.5.4 Creating a composite figure with tags\nIn order to identify subplots in text, patchwork also provides auto-tagging capabilities as shown in the figure below.\n\nNumeralsDigitsLetters\n\n\n\n((plot1 / plot2) | plot3) + \n  plot_annotation(tag_levels = 'I')\n\n\n\n\n\n\n\n((plot1 / plot2) | plot3) + \n  plot_annotation(tag_levels = '1')\n\n\n\n\n\n\n\n((plot1 / plot2) | plot3) + \n  plot_annotation(tag_levels = 'A')"
   }
 ]

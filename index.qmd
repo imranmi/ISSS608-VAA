@@ -9,13 +9,13 @@ In this website, you will find my coursework for this module.
 ::: panel-tabset
 ## Expectations
 
-![It can't be that hard...](images/Homepage1 image-01.png)
+![It can't be that hard...](images/Homepage1%20image-01.png)
 
 ## Reality
 
-![What did I sign up for???!!!](images/Homepage2 image-02.png)
+![What did I sign up for???!!!](images/Homepage2%20image-02.png)
 
 ## But eventually....
 
-![Hopefully......](images/Homepage3 image.png)
+![Hopefully......](images/Homepage3%20image.png)
 :::

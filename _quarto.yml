@@ -7,9 +7,9 @@ website:
     left:
       - text: Hands-on Exercises
         menu: 
-          - text: Hands-on Exercise 1
+          - text: Hands-on Exercise 1 - A Layered Grammar of Graphics:ggplot2 methods
             href: Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html
-          - text: Hands-on Exercise 2
+          - text: Hands-on Exercise 2 - Beyond ggplot2 fundamentals
             href: Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html
           - text: Hands-on Exercise 3
             href: Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html

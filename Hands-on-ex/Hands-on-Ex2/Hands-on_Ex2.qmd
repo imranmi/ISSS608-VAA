@@ -405,7 +405,7 @@ plot3 <- ggplot(data=exam_data,
               size=0.5) +  
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+  ggtitle("English scores versus Maths\nscores for Primary 3")
 
 plot3
 ```
@@ -471,10 +471,28 @@ To learn more about patchwork, please refer to this [link.](https://patchwork.da
 
 In order to identify subplots in text, **patchwork** also provides auto-tagging capabilities as shown in the figure below.
 
+::: panel-tabset
+## Numerals
+
 ```{r}
 ((plot1 / plot2) | plot3) + 
   plot_annotation(tag_levels = 'I')
 ```
+
+## Digits
+
+```{r}
+((plot1 / plot2) | plot3) + 
+  plot_annotation(tag_levels = '1')
+```
+
+## Letters
+
+```{r}
+((plot1 / plot2) | plot3) + 
+  plot_annotation(tag_levels = 'A')
+```
+:::
 
 ## 2.5.5 Creating figures with insert
 
@@ -502,7 +520,63 @@ patchwork & theme_economist()
 
 # 2.6 Plotting Practice
 
-Below are some customized plots
+1.  Changing themes, plot and axis title sizes
+
+::: panel-tabset
+## theme_fivethirtyeight
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patchwork <- (plot1 / plot2) | plot3
+
+patchwork & theme_fivethirtyeight() +
+  theme(plot.title=element_text(size =10),
+        axis.title.y=element_text(size = 9,
+                              angle = 0,
+                              vjust=0.9),
+        axis.title.x=element_text(size = 9))
+```
+
+## theme_economist
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patchwork <- (plot1 / plot2) | plot3
+
+patchwork & theme_economist() +
+  theme(plot.title=element_text(size =10),
+        axis.title.y=element_text(size = 9,
+                              angle = 0,
+                              vjust=0.9),
+        axis.title.x=element_text(size = 9))
+```
+
+## theme_wsj
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patchwork <- (plot1 / plot2) | plot3
+
+patchwork & theme_wsj() +
+  theme(plot.title=element_text(size =10),
+        axis.title.y=element_text(size = 9,
+                              angle = 0,
+                              vjust=0.9),
+        axis.title.x=element_text(size = 9))
+```
+:::
+
+::: callout-note
+## Note
+
+To customize individual plot's text sizes or orientation, we will need to change the respective codes for each plot seperately,
+:::
 
 # 2.7 Reference
 
