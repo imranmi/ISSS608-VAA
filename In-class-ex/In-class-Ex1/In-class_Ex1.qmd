@@ -33,11 +33,15 @@ stu_qqq <- read_sas("data/cy08msp_stu_qqq.sas7bdat")
 
 ```
 
+Upon first import, as the student questionaire data file contains data from other countries, we use `filter()` to filter the data file to only Singapore data.
+
 ```{r}
 #| eval: false
 stu_qqq_SG <- stu_qqq %>%
   filter(CNT == "SGP")
 ```
+
+We use `write_rds()` to save the filtered datafile to a seperate file called stu_qqq_SG
 
 ```{r}
 #| eval: false
@@ -45,6 +49,18 @@ write_rds(stu_qqq_SG,
           "data/stu_qqq_SG.rds")
 ```
 
+For our analysis we shall read in data from stu_qqq_SG.rds using `read_rds()`
+
 ```{r}
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
+```
+
+```{r}
+install.packages("instvy")
+
+library("instvy")
+```
+
+```{r}
+help(package="instvy")
 ```

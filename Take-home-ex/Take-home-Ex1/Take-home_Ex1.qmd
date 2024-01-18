@@ -1,6 +1,6 @@
 ---
 title: "Take-Home Exercise 1"
-date: January 1, 2024
+date: January 13, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -9,14 +9,693 @@ execute:
   warning: false
 ---
 
-# Getting Started
+# *Creating data visualisation beyond default*
 
-## Loading R package
+# Setting the Scene
+
+OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several Singapore’s Minister for Education also started an “every school a good school” slogan. The general public, however, strongly belief that there are still disparities that exist, especially between the elite schools and neighborhood school, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.
+
+# The Task
+
+The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.
+
+In this take-home exercise, we will use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
+
+-   the distribution of Singapore students’ performance in mathematics, reading, and science, and
+
+-   the relationship between these performances with schools, gender and socioeconomic status of the students.
+
+# The Data
+
+The [PISA 2022 database](https://www.oecd.org/pisa/data/2022database/) contains the full set of responses from individual students, school principals and parents. There are a total of five data files and their contents are as follows:
+
+-   Student questionnaire data file
+
+-   School questionnaire data file
+
+-   Teacher questionnaire data file
+
+-   Cognitive item data file
+
+-   Questionnaire timing data file
+
+These data files are in SAS and SPSS formats. For the purpose of this assignment, we will use the **Student questionnaire data file** only.
+
+To learn more about PISA 2022 survey, please refer to the [PISA 2022 Technical Report](https://www.oecd.org/pisa/data/pisa2022technicalreport/)
+
+# 1. Getting Started
+
+## 1.1 Loading R packages
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, haven)
 ```
 
-# Importing Data
+## 1.2 Importing PISA data
 
-## Wrangling Data
+The code chunk below uses ['`read_sas()`'](https://haven.tidyverse.org/reference/read_sas.html) of [haven](https://haven.tidyverse.org/) to import PISA data into the R environment.
+
+```{r}
+#| eval: false
+stu_qqq <- read_sas("data/cy08msp_stu_qqq.sas7bdat")
+
+```
+
+Upon first import, as the student questionaire data file contains data from other countries, we use `filter()` to filter the data file to only Singapore data.
+
+```{r}
+#| eval: false
+stu_qqq_SG <- stu_qqq %>%
+  filter(CNT == "SGP")
+```
+
+We use `write_rds()` to save the filtered datafile to a seperate file called stu_qqq_SG
+
+```{r}
+#| eval: false
+write_rds(stu_qqq_SG,
+          "data/stu_qqq_SG.rds")
+```
+
+For our analysis we shall read in data from stu_qqq_SG.rds using `read_rds()`
+
+```{r}
+stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
+```
+
+## 1.3 Installing and Loading R instvy
+
+The R package *intsvy* allows R users to analyse PISA data among other international large-scale assessments. The use of PISA data via R requires data preparation, and *intsvy* offers a data transfer function to import data available in other formats directly into R. *Intsvy* also provides a merge function to merge the student, school, parent, teacher and cognitive databases.
+
+To understand more about the packages available and the Methodolofy to analyse the PISA data files, please refer to this [link.](https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm)
+
+The analytical commands within *intsvy* enables users to derive mean statistics, standard deviations, frequency tables, correlation coefficients and regression estimates.
+
+Additionally, *intsvy* deals with the calculation of point estimates and standard errors that take into account the complex PISA sample design with replicate weights, as well as the rotated test forms with plausible values.
+
+To understand more about the *instvy* package, please refer to this [link.](https://daniel-caro.com/r-intsvy)
+
+```{r}
+#| eval: false
+install.packages("intsvy")
+```
+
+We will load the package using library()
+
+```{r}
+library("intsvy")
+```
+
+# 1.2 Data preparation
+
+Checking the data set structure.
+
+```{r}
+head(stu_qqq_SG)
+```
+
+There are a total of 6,606 rows and 1,279 columns in this data file.
+
+```{r}
+data_dimensions <- dim(stu_qqq_SG)
+
+#Display the number of rows and columns
+data_dimensions
+```
+
+Checking for Na values. There are a large number of NA values in the data file.
+
+```{r}
+sum(is.na(stu_qqq_SG))
+```
+
+Checking for duplicated rows using [`duplicated()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated)`.` There are no duplicated rows in the data file.
+
+```{r}
+stu_qqq_SG[duplicated(stu_qqq_SG),]
+```
+
+We next examine some columns for NA values. For example "PV1MATH", "PV1SCIE", "ESCS" and "PAREDINT".
+
+```{r}
+sum(is.na(stu_qqq_SG$PV1MATH))
+
+sum(is.na(stu_qqq_SG$PV1SCIE))
+
+sum(is.na(stu_qqq_SG$ESCS))
+
+sum(is.na(stu_qqq_SG$PAREDINT))
+```
+
+::: callout-note
+## Note
+
+From our initial checks, it is obvious that there are many columns/variables with missing values.\
+However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from important variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will 'clean' the data for each subsequent EDA visualization.
+:::
+
+::: callout-important
+## Important
+
+The columns in the PISA data set are named in a specific format. For more information on what each Variable label means, please refer to the questionnaire or code book at this [link.](https://www.oecd.org/pisa/data/2022database/)
+
+The variable values are both continuous and discrete.
+:::
+
+## 1.2.1 Working with Plausible Values
+
+PISA reports student performance through *plausible values* (PVs), obtained from *Item Response Theory* models (for details, see Chapter 5 of the PISA Data Analysis Manual: SAS or SPSS, Second Edition or the associated guide “[Scaling of Cognitive Data and Use of Students Performance Estimates”](http://www.oecd.org/pisa/pisaproducts/3_scaling_test.pptx)).
+
+An accurate and efficient way of measuring proficiency estimates in PISA requires five steps:
+
+1.  Compute estimates for each Plausible Values (PV)
+
+2.  Compute *final estimate* by averaging all estimates obtained from (1)
+
+3.  Compute *sampling variance* (unbiased estimate are providing by using only one PV)
+
+4.  Compute *imputation variance* (measurement error variance, estimated for each PV and then average over the set of PVs)
+
+5.  Compute *final standard error* by combining (3) and (4)
+
+For more information, please refer to this [link.](https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm)
+
+To obtain the correct mean scores for Math, Reading and Science, we will use the `pisa.mean.pv()` function from `'instvy' package` like below.
+
+```{r}
+Math_mean_SG <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by="CNT", data=stu_qqq_SG)
+
+Read_mean_SG <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by="CNT", data=stu_qqq_SG)
+
+SCIE_mean_SG <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by="CNT", data=stu_qqq_SG)
+
+
+```
+
+```{r}
+print(Math_mean_SG)
+print(Read_mean_SG)
+print(SCIE_mean_SG)
+```
+
+These means scores can be further corroborated at the following [link (pages 310-315)](https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1).
+
+For a visual of the past performance of the mean scores for Singaporean students, please refer to this [link.](https://oecdch.art/a40de1dbaf/C549)
+
+We will use these calculated mean values from the 10 plausible values as an additional statistic (Mean) for our subsequent visualizations.
+
+# 1.3 Exploratory Data Analysis
+
+## 1.3.1 Distribution of student's performance in Math, Reading and Science
+
+The objective of this visualization is to examine if Scores are normally distributed in general within the student population sampled in the PISA test.
+
+Since there are 10 Plausible Values for the 3 subjects, we shall use the first plausible value, PV1 to visualize the distribution of scores for the subjects.
+
+For the rationale of using one Plausible Value, instead of several or all for our explanatory analysis, please refer to the article on ["How to deal with Plausible Values from International Large-scale assessments."](https://www.mdpi.com/2227-7390/9/13/1579#B34-mathematics-09-01579)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create the histogram plot with an annotated mean line using Math_mean_SG
+plt1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
+  geom_histogram(binwidth = 20, color = "white", fill='lightblue') +
+  labs(x = "PV1 Math Score",
+       y = "Frequency") +
+  geom_vline(xintercept = Math_mean_SG$Mean,
+             col = 'black',
+             size = 0.5,
+             linetype = "dashed") +
+  geom_text(aes(x = Math_mean_SG$Mean, y = 100, label = paste("Mean =", round(Math_mean_SG$Mean, 2))),
+            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+  theme_minimal()
+
+# Create the histogram plot with an annotated mean line using Read_mean_SG
+plt2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
+  geom_histogram(binwidth = 20, color = "white", fill='lightgreen') +
+  labs(x = "PV1 Reading Score",
+       y = "Frequency") +
+  geom_vline(xintercept = Read_mean_SG$Mean,
+             col = 'black',
+             size = 0.5,
+             linetype = "dashed") +
+  geom_text(aes(x = Read_mean_SG$Mean, y = 100, label = paste("Mean =", round(Read_mean_SG$Mean, 2))),
+            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+  theme_minimal()
+
+
+# Create the histogram plot with an annotated mean line using Science_mean_SG
+plt3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
+  geom_histogram(binwidth = 20, color = "white", fill='lightpink') +
+  labs(x = "PV1 Science Score",
+       y = "Frequency") +
+  geom_vline(xintercept = SCIE_mean_SG$Mean,
+             col = 'black',
+             size = 0.5,
+             linetype = "dashed") +
+  geom_text(aes(x = SCIE_mean_SG$Mean, y = 100, label = paste("Mean =", round(SCIE_mean_SG$Mean, 2))),
+            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+  theme_minimal()
+
+# Create a single plot with density plots for Math, Reading, and Science scores
+plt4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
+  geom_density(alpha = 0.5) +
+  geom_density(data = stu_qqq_SG, aes(x = PV1READ, fill = "Reading"), alpha = 0.5) +
+  geom_density(data = stu_qqq_SG, aes(x = PV1SCIE, fill = "Science"), alpha = 0.5) +
+  labs(x = "Scores",
+       y = "Density") +
+  scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
+  guides(fill = FALSE) +  # Remove the legend
+  theme_minimal()
+
+```
+
+::: panel-tabset
+## Math Scores
+
+```{r}
+plt1
+```
+
+## Reading Scores
+
+```{r}
+plt2
+```
+
+## Science Scores
+
+```{r}
+plt3
+```
+
+## Combined scores
+
+```{r}
+plt4
+```
+:::
+
+### Combined Visual of the distribution of scores in general
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(patchwork)
+
+patch1 <- (plt1+plt2) / (plt3+plt4)  + 
+              plot_annotation(
+                title = "Distribution of student performance in Math, Reading and Science")
+
+patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+
+
+```
+
+::: callout-note
+## Observation 1
+
+The distribution of scores resembles normal distribution across all 3 subjects. Singaporean Students have a higher mean score In Mathematics relative to Reading and Science.
+:::
+
+## 1.3.2 Relationship between Scores and Schools
+
+The objective of this visualization is to examine the relationship between scores and the schools sampled in the PISA test.
+
+We use unique() and length() to obtain the number of schools in the data set. There are 164 schools in this data set.
+
+```{r}
+unique_values <- unique(stu_qqq_SG$CNTSCHID)
+
+length(unique_values)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p1 <- ggplot(stu_qqq_SG, aes(x = CNTSCHID, y = PV1MATH)) +
+  geom_point(color = "lightblue", alpha = 0.5) +
+  geom_hline(yintercept = Math_mean_SG$Mean, color = "black", linetype = "dashed") +  
+  annotate("text", x = Inf, y = Math_mean_SG$Mean, label = paste("Mean =", round(Math_mean_SG$Mean, 2)), 
+           hjust = 1, vjust = -1) +  
+  labs(x = "School ID",
+       y = "PV1 Math Score") +
+  theme_minimal()
+
+p2 <- ggplot(stu_qqq_SG, aes(x = CNTSCHID, y = PV1READ)) +
+  geom_point(color = "lightgreen", alpha = 0.5) +
+  geom_hline(yintercept = Read_mean_SG$Mean, color = "black", linetype = "dashed") +  
+  annotate("text", x = Inf, y = Read_mean_SG$Mean, label = paste("Mean =", round(Read_mean_SG$Mean, 2)), 
+           hjust = 1, vjust = -1) +  
+  labs(x = "School ID",
+       y = "PV1 Reading Score") +
+  theme_minimal()
+
+p3 <- ggplot(stu_qqq_SG, aes(x = CNTSCHID, y = PV1SCIE)) +
+  geom_point(color = "lightpink", alpha = 0.5) +
+  geom_hline(yintercept = SCIE_mean_SG$Mean, color = "black", linetype = "dashed") +  
+  annotate("text", x = Inf, y = SCIE_mean_SG$Mean, label = paste("Mean =", round(SCIE_mean_SG$Mean, 2)), 
+           hjust = 1, vjust = -1) +  
+  labs(x = "School ID",
+       y = "PV1 Science Score") +
+  theme_minimal()
+
+```
+
+::: panel-tabset
+## Math Scores
+
+```{r}
+p1
+```
+
+## Reading Scores
+
+```{r}
+p2
+```
+
+## Science Scores
+
+```{r}
+p3
+```
+:::
+
+### Combined Visual of the distribution of scores across Schools
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch2 <- p1/p2/p3 + 
+              plot_annotation(
+                title = "Students seem to be performing equally across Schools")
+
+patch2 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+```
+
+::: callout-note
+## Observation 2
+
+Across the 164 schools, students seem to be performing equally across the 3 subjects. There are no obvious clusters that are different from each other, for example only having good performers or only having poor performers.
+
+Additional analysis could be done to examine if the highest and lowest performing students (in terms of percentile) belong to the same type of schools.
+
+Since this data set only contains students on students, there is no additional information on the type of school and its resources.. Further analysis could incorporate other data sets to build a more complete analysis.
+:::
+
+## 1.3.3 Relationship between Scores and Gender
+
+The objective of this visualization is to examine the relationship between scores and genders within the students sampled in the PISA test.
+
+The gender column of the data set is named as "ST004D01T" with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new gender table as a subset of the data. We will use `instvy.table()` from the `instvy package.`
+
+```{r}
+Gender_Table <-intsvy.table(variable="ST004D01T", by="CNT", data=stu_qqq_SG, config=pisa_conf)
+
+glimpse(Gender_Table)
+
+print(Gender_Table)
+```
+
+### The gender proportion of the student population
+
+We first examine the proportion of Males and Females within the student population.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Convert the gender variable to a factor with the appropriate labels
+Gender_Table$ST004D01T <- factor(Gender_Table$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+# Plot using ggplot
+ggplot(Gender_Table, aes(x = ST004D01T, y = Percentage, fill = ST004D01T)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = paste0(Percentage, "%")), 
+            position = position_dodge(width = 0.9), 
+            vjust = 12.0,  
+            color = "black",  
+            size = 3.5) +
+  labs(title = "The Gender proportion of the Student Population",
+       x = "Gender",
+       y = "Percentage %") +
+  scale_fill_manual(values = c("Female" = "pink", "Male" = "lightblue")) +
+  theme_minimal() +
+  theme(legend.position = "none") # This will remove the legend
+
+```
+
+The student sample population is made of 51.02% males and 48.98% females.
+
+The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by gender.
+
+In the code below, we will create separate tables for the mean scores for each subject by different genders.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Math_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "ST004D01T", data = stu_qqq_SG)
+
+Math_gender$ST004D01T <- factor(Math_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+Read_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "ST004D01T", data = stu_qqq_SG)
+
+Read_gender$ST004D01T <- factor(Read_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+SCIE_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "ST004D01T", data = stu_qqq_SG)
+
+SCIE_gender$ST004D01T <- factor(SCIE_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+
+
+```
+
+```{r}
+print(Math_gender)
+print(Read_gender)
+print(SCIE_gender)
+```
+
+Next we plot the PV1 scores by different genders to examine the performance of different genders across subjects.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create a subset of the data with gender and PV1 score columns
+subset_gender_PV1 <- stu_qqq_SG %>%
+  select(ST004D01T, PV1MATH, PV1SCIE, PV1READ)
+
+# Convert the "ST004D01T" column to a factor 
+subset_gender_PV1$ST004D01T <- factor(subset_gender_PV1$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+# Create the plot using the subset_data
+bxp1 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1MATH, fill = ST004D01T)) +
+  geom_boxplot() +
+  geom_point(data = Math_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = Math_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender",
+       y = "PV1 Math Score") +
+  scale_fill_manual(values = c("Female" = "lightblue", "Male" = "lightblue")) +  
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+
+
+bxp2 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1READ, fill = ST004D01T)) +
+  geom_boxplot() +
+  geom_point(data = Read_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = Read_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender",
+       y = "PV1 Reading Score") +
+  scale_fill_manual(values = c("lightgreen", "lightgreen")) +  # Associate colors with factor levels
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+
+bxp3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D01T)) +
+  geom_boxplot() +
+  geom_point(data = SCIE_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = SCIE_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender",
+       y = "PV1 Science Score") +
+  scale_fill_manual(values = c("lightpink", "lightpink")) +  # Associate colors with factor levels
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+
+```
+
+::: panel-tabset
+## Math Scores
+
+```{r}
+bxp1
+```
+
+## Reading Scores
+
+```{r}
+bxp2
+```
+
+## Science Scores
+
+```{r}
+bxp3
+```
+:::
+
+### Combined Visual of Performance across Genders
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch3 <- bxp1 + bxp2 + bxp3 + 
+              plot_annotation(
+                title = "Male students outperform in Maths and Science")
+
+patch3 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+
+
+
+```
+
+::: callout-note
+## Observation 3
+
+Males students seem to outperform Female students in both Maths and Science with mean scores of 580.59 and 564.81 respectively. Female students seem to outperform Male students in Reading with a mean score of 552.55.
+:::
+
+## 1.3.4 Relationship between Scores and Socioeconomic status of students
+
+The socioeconomic status of students is represented by the "ESCS" score in the PISA data set. The ESCS score is a continuous variable and is calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). A higher ESCS score translates to a "better-off" student.
+
+Further break down on the 3 main components of the ESCS score is shown in the diagram below. For further information on the computation methodology, please refer to the [PISA 2022 Technical report: Chapter 19.](https://www.oecd.org/pisa/data/pisa2022technicalreport/PISA-2022-Technical-Report-Ch-19-PISA-Scaling-Procedures-Construct-Validation-Context-Questionnaire-Data.pdf)
+
+![Computation of ESCS in PISA 2022](images/ESCS.png)
+
+The objective of this visualization is to examine the relationship between scores and a student's socioeconomic status.
+
+First we check for any missing values in the ESCS column using the code below.
+
+```{r}
+# Check for NAs in the 'ESCS' column
+has_nas <- any(is.na(stu_qqq_SG$ESCS))
+
+print(has_nas)
+```
+
+Since there are missing values in the ESCS column, we shall delete the rows with missing ESCS values. We will create a new table with ESCS and the PV1 scores for this visualization.
+
+```{r}
+subset_ESCS_PV1 <- stu_qqq_SG %>%
+  select(ESCS, PV1MATH, PV1SCIE, PV1READ)
+
+#omiting NA values
+subset_ESCS_PV1 <- na.omit(subset_ESCS_PV1)
+```
+
+Using our new table *subset_ESCS_PV1,* we will create scatter plots for ESCS versus each PV1 score for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+c_coeff_ESCS_Math <- cor(subset_ESCS_PV1$ESCS, subset_ESCS_PV1$PV1MATH)
+
+C_plt1 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1MATH)) +
+  geom_point(color = "lightblue") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "black") +
+  geom_text(
+    x = max(subset_ESCS_PV1$ESCS),  
+    y = max(subset_ESCS_PV1$PV1MATH),  
+    label = paste("Corr Coeff:", round(c_coeff_ESCS_Math, 2)),
+    hjust = 1,  # Adjust horizontal justification
+    vjust = 1   # Adjust vertical justification
+  ) +
+  labs(x = "Socio-Economic Status (ESCS)",
+       y = "PV1 Math Score") +
+  theme_minimal()
+
+c_coeff_ESCS_Read <- cor(subset_ESCS_PV1$ESCS, subset_ESCS_PV1$PV1READ)
+
+C_plt2 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1READ)) +
+  geom_point(color = "lightgreen") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "black") +
+  geom_text(
+    x = max(subset_ESCS_PV1$ESCS),  
+    y = max(subset_ESCS_PV1$PV1READ),  
+    label = paste("Corr Coeff:", round(c_coeff_ESCS_Read, 2)),
+    hjust = 1,  # Adjust horizontal justification
+    vjust = 1   # Adjust vertical justification
+  ) +
+  labs(x = "Socio-Economic Status (ESCS)",
+       y = "PV1 Read Score") +
+  theme_minimal()
+
+c_coeff_ESCS_Scie <- cor(subset_ESCS_PV1$ESCS, subset_ESCS_PV1$PV1SCIE)
+
+C_plt3 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1SCIE)) +
+  geom_point(color = "lightpink") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "black") +
+  geom_text(
+    x = max(subset_ESCS_PV1$ESCS),  
+    y = max(subset_ESCS_PV1$PV1SCIE),  
+    label = paste("Corr Coeff:", round(c_coeff_ESCS_Scie, 2)),
+    hjust = 1,  # Adjust horizontal justification
+    vjust = 1   # Adjust vertical justification
+  ) +
+  labs(x = "Socio-Economic Status (ESCS)",
+       y = "PV1 Science Score") +
+  theme_minimal()
+
+```
+
+::: panel-tabset
+## Math Vs ESCS
+
+```{r}
+C_plt1
+```
+
+## Read Vs ESCS
+
+```{r}
+C_plt2
+```
+
+## Science Vs ESCS
+
+```{r}
+C_plt3
+```
+:::
+
+### Combined Scatter plots of PV1 Scores Vs ESCS scores
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch4 <- C_plt1 / C_plt2 / C_plt3 + 
+              plot_annotation(
+                title = "Weak positive relationship between Scores and ESCS")
+
+patch4 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+
+```
+
+::: callout-note
+## Observation 4
+
+There is a weak positive relationship between Scores and Socio-economic statuses. As mentioned, the ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has 'diluted' the accuracy of the score, which could be more prominent for developed countries like Singapore.\
+\
+Further analysis could be conducted on the individual components of the ESCS score to check for their influence on student performance.
+:::
