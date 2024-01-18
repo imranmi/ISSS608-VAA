@@ -407,9 +407,9 @@ patch2 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 2
 
-Across the 164 schools, students seem to be performing equally across the 3 subjects. There are no obvious clusters that are different from each other, for example only having good performers or only having poor performers.
+Across the 164 schools, students seem to be performing equally across the 3 subjects. There are no significant clusters that are different from each other, for example, a large number of schools which only have good scores or only poor scores.
 
-Additional analysis could be done to examine if the highest and lowest performing students (in terms of percentile) belong to the same type of schools.
+Additional analysis could be done to examine if the highest and lowest performing students (in terms of scores) belong to the same type of schools.
 
 Since this data set only contains students on students, there is no additional information on either the type of school or its resources.. Further analysis could incorporate other data sets to build a more complete analysis.
 :::
@@ -832,6 +832,124 @@ In general, students seem to have performed better across all subjects the more 
 Additional analyses taking into account the state of the study environment, both at home and in school, as well as the emotional aspects and motivation of students could be further analysed to derive more complete insights on the factors that could influence performance.
 :::
 
-## Additional EDA
+## 1.3.6 Additional EDA
 
-samples
+### 1) Examining closer into Mean scores per School
+
+The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by the School ID (CNTSCHID).
+
+In the code below, we will create separate tables for the mean scores for each subject by different School Ids.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Schoolid_math <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "CNTSCHID", data = stu_qqq_SG)
+
+Schoolid_read <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "CNTSCHID", data = stu_qqq_SG)
+
+Schoolid_scie <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "CNTSCHID", data = stu_qqq_SG)
+```
+
+We examine the new tables created. In these new tables we are able to extract the number of students and the mean scores per School.
+
+```{r}
+head(Schoolid_math)
+head(Schoolid_read)
+head(Schoolid_scie)
+```
+
+Next, we use the below code to plot bubble plots to examine the number of students and their mean scores for each school. We will also use the `plotly package` for added interactivity.
+
+```{r}
+#| eval: false
+install.packages("plotly")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(plotly)
+
+p_1 <- ggplot(Schoolid_math, aes(x = CNTSCHID, y = Mean)) +
+  geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  labs(title = "Mean Math Scores by School ID",
+    y = "Mean Math Scores", 
+    size = "Number of Students", 
+    color = "Number of Students") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank())  # Remove minor grid lines
+
+# Convert to an interactive plot
+ggplotly(p_1, tooltip = c("x", "y", "size", "color"))
+
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(plotly)
+
+p_2 <- ggplot(Schoolid_read, aes(x = CNTSCHID, y = Mean)) +
+  geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_color_gradient(low = "lightgreen", high = "darkgreen") +
+  labs(title = "Mean Reading Scores by School ID",
+    y = "Mean Reading Scores", 
+    size = "Number of Students", 
+    color = "Number of Students") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank())  # Remove minor grid lines
+
+# Convert to an interactive plot
+ggplotly(p_2, tooltip = c("x", "y", "size", "color"))
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(plotly)
+
+p_3 <- ggplot(Schoolid_scie, aes(x = CNTSCHID, y = Mean)) +
+  geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_color_gradient(low = "lightpink", high = "darkred") +
+  labs(title = "Mean Science Scores by School ID",
+    y = "Mean Science Scores", 
+    size = "Number of Students", 
+    color = "Number of Students") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank())  # Remove minor grid lines
+
+# Convert to an interactive plot
+ggplotly(p_3, tooltip = c("x", "y", "size", "color"))
+```
+
+::: callout-note
+## Observation 6
+
+The ability to extract and assign Mean scores to individual schools enables us to further explore and examine the disparity in performance between schools. For example, looking at the two extremes of score results, we note that Schools (70200001 & 70200003) out perform other schools in all subjects. On the other hand, Schools (7020115 & 70200149) under perform other schools in all subjects.\
+\
+This shows that there are still marked differences between the ''best" schools and the ''worst'' schools. Additional analysis should be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation to fully understand the differences between the scores.
+:::
