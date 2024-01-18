@@ -13,11 +13,11 @@ execute:
 
 # Setting the Scene
 
-OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several Singapore’s Minister for Education also started an “every school a good school” slogan. The general public, however, strongly belief that there are still disparities that exist, especially between the elite schools and neighborhood school, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.
+OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several of Singapore’s ministers for Education also started an “every school a good school” slogan. The general public, however, believes that there are still disparities that exist, especially between "elite" and neighborhood schools, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.
 
 # The Task
 
-The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.
+The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA's global education survey runs every three years to assess education systems worldwide through the testing 15 year old students in the subjects of mathematics, reading, and science.
 
 In this take-home exercise, we will use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
 
@@ -61,7 +61,7 @@ stu_qqq <- read_sas("data/cy08msp_stu_qqq.sas7bdat")
 
 ```
 
-Upon first import, as the student questionaire data file contains data from other countries, we use `filter()` to filter the data file to only Singapore data.
+Upon first import, as the student questionaire data file contains data from other countries, we will use `filter()` to filter the data file to only Singapore data.
 
 ```{r}
 #| eval: false
@@ -87,20 +87,20 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 
 The R package *intsvy* allows R users to analyse PISA data among other international large-scale assessments. The use of PISA data via R requires data preparation, and *intsvy* offers a data transfer function to import data available in other formats directly into R. *Intsvy* also provides a merge function to merge the student, school, parent, teacher and cognitive databases.
 
-To understand more about the packages available and the Methodolofy to analyse the PISA data files, please refer to this [link.](https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm)
+To understand more about the packages available and the methodology to analyse the PISA data files, please refer to this [link.](https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm)
 
-The analytical commands within *intsvy* enables users to derive mean statistics, standard deviations, frequency tables, correlation coefficients and regression estimates.
+The analytical commands within `intsvy` enables users to derive mean statistics, standard deviations, frequency tables, correlation coefficients and regression estimates.
 
-Additionally, *intsvy* deals with the calculation of point estimates and standard errors that take into account the complex PISA sample design with replicate weights, as well as the rotated test forms with plausible values.
+Additionally, `intsvy` deals with the calculation of point estimates and standard errors that take into account the complex PISA sample design with replicate weights, as well as the rotated test forms with plausible values.
 
-To understand more about the *instvy* package, please refer to this [link.](https://daniel-caro.com/r-intsvy)
+To understand more about the `instvy` package, please refer to this [link.](https://daniel-caro.com/r-intsvy)
 
 ```{r}
 #| eval: false
 install.packages("intsvy")
 ```
 
-We will load the package using library()
+We will load the package using `library()`
 
 ```{r}
 library("intsvy")
@@ -150,8 +150,8 @@ sum(is.na(stu_qqq_SG$PAREDINT))
 ::: callout-note
 ## Note
 
-From our initial checks, it is obvious that there are many columns/variables with missing values.\
-However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from important variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will 'clean' the data for each subsequent EDA visualization.
+From our initial checks, we noted that there are many columns/variables with missing values.\
+However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will 'clean' the data for each subsequent EDA visualization.
 :::
 
 ::: callout-important
@@ -198,7 +198,7 @@ print(Read_mean_SG)
 print(SCIE_mean_SG)
 ```
 
-These means scores can be further corroborated at the following [link (pages 310-315)](https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1).
+These means scores can be corroborated at the following [link (pages 310-315)](https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1).
 
 For a visual of the past performance of the mean scores for Singaporean students, please refer to this [link.](https://oecdch.art/a40de1dbaf/C549)
 
@@ -208,7 +208,7 @@ We will use these calculated mean values from the 10 plausible values as an addi
 
 ## 1.3.1 Distribution of student's performance in Math, Reading and Science
 
-The objective of this visualization is to examine if Scores are normally distributed in general within the student population sampled in the PISA test.
+The objective of this visualization is to examine if subject scores are normally distributed in general within the student population sampled in the PISA test.
 
 Since there are 10 Plausible Values for the 3 subjects, we shall use the first plausible value, PV1 to visualize the distribution of scores for the subjects.
 
@@ -317,20 +317,26 @@ patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 1
 
-The distribution of scores resembles normal distribution across all 3 subjects. Singaporean Students have a higher mean score In Mathematics relative to Reading and Science.
+The distribution of scores resembles a normal distribution across all 3 subjects. Singaporean students seem to have a higher mean score In Mathematics relative to Reading and Science.
+
+Further statistical tests like the Anderson-Darling or Shapiro-Wilk tests will need to be conducted to confirm the normality in distribution.
 :::
 
 ## 1.3.2 Relationship between Scores and Schools
 
-The objective of this visualization is to examine the relationship between scores and the schools sampled in the PISA test.
+The objective of this visualization is to examine the relationship between subject scores and the schools sampled in the PISA test.
 
-We use unique() and length() to obtain the number of schools in the data set. There are 164 schools in this data set.
+We will use `unique()` and `length()` to obtain the number of unique schools in the data set.
 
 ```{r}
 unique_values <- unique(stu_qqq_SG$CNTSCHID)
 
 length(unique_values)
 ```
+
+There are 164 unique schools in this data set.
+
+Next, we use the code below to plot our scatter plots.
 
 ```{r}
 #| code-fold: true
@@ -405,14 +411,14 @@ Across the 164 schools, students seem to be performing equally across the 3 subj
 
 Additional analysis could be done to examine if the highest and lowest performing students (in terms of percentile) belong to the same type of schools.
 
-Since this data set only contains students on students, there is no additional information on the type of school and its resources.. Further analysis could incorporate other data sets to build a more complete analysis.
+Since this data set only contains students on students, there is no additional information on either the type of school or its resources.. Further analysis could incorporate other data sets to build a more complete analysis.
 :::
 
 ## 1.3.3 Relationship between Scores and Gender
 
-The objective of this visualization is to examine the relationship between scores and genders within the students sampled in the PISA test.
+The objective of this visualization is to examine the relationship between subject scores and gender within the students sampled in the PISA test.
 
-The gender column of the data set is named as "ST004D01T" with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new gender table as a subset of the data. We will use `instvy.table()` from the `instvy package.`
+The gender column of the data set is named as "ST004D01T" with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new table as a subset of the data. We will use `instvy.table()` from the `instvy package.`
 
 ```{r}
 Gender_Table <-intsvy.table(variable="ST004D01T", by="CNT", data=stu_qqq_SG, config=pisa_conf)
@@ -450,7 +456,7 @@ ggplot(Gender_Table, aes(x = ST004D01T, y = Percentage, fill = ST004D01T)) +
 
 ```
 
-The student sample population is made of 51.02% males and 48.98% females.
+The student sample population is made up of 51.02% males and 48.98% females.
 
 The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by gender.
 
@@ -482,7 +488,7 @@ print(Read_gender)
 print(SCIE_gender)
 ```
 
-Next we plot the PV1 scores by different genders to examine the performance of different genders across subjects.
+Next, we plot the PV1 scores by different genders to examine the performance of different genders across subjects.
 
 ```{r}
 #| code-fold: true
@@ -582,7 +588,7 @@ Further break down on the 3 main components of the ESCS score is shown in the di
 
 ![Computation of ESCS in PISA 2022](images/ESCS.png)
 
-The objective of this visualization is to examine the relationship between scores and a student's socioeconomic status.
+The objective of this visualization is to examine the relationship between subject scores and a student's socioeconomic status.
 
 First we check for any missing values in the ESCS column using the code below.
 
@@ -695,7 +701,137 @@ patch4 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 4
 
-There is a weak positive relationship between Scores and Socio-economic statuses. As mentioned, the ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has 'diluted' the accuracy of the score, which could be more prominent for developed countries like Singapore.\
+There is a weak positive relationship between subject scores and Socioeconomic statuses. The ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has 'diluted' the score, where the effect is more prominent for developed countries like Singapore.\
 \
-Further analysis could be conducted on the individual components of the ESCS score to check for their influence on student performance.
+Further analysis could be conducted on the individual components of the ESCS score to check for their individual influence on student performance.
 :::
+
+## 1.3.5 Relationship between Scores and the years of Education for Parents
+
+As highlighted in the previous analysis, there is a weak positive relationship between student scores and ESCS scores. The objective of this visualization is to examine the relationship between one of the constituents, PAREDINT and student scores.
+
+PAREDINT is the index of the highest education of parents in years, based on the median cumulative years of education completed. The variable values are discrete and ranges from a scale of 3 to 16 years. For more information on this variable, please refer to the [PISA 2022 Technical report: Chapter 19.](https://www.oecd.org/pisa/data/pisa2022technicalreport/PISA-2022-Technical-Report-Ch-19-PISA-Scaling-Procedures-Construct-Validation-Context-Questionnaire-Data.pdf)\
+
+First we check for any missing values in the ESCS column using the code below.
+
+```{r}
+# Check for NAs in the 'PAREDINT' column
+has_nas <- any(is.na(stu_qqq_SG$PAREDINT))
+
+print(has_nas)
+```
+
+Since there are missing values in the PAREDINT column, we shall delete the rows with missing PAREDINT values. We will then create a new table with PAREDINT and the Mean scores of the 10 Plausible Values for this visualization.
+
+The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by the years of Parents education (PARENDINT).
+
+In the code below, we will create separate tables for the mean scores for each subject by different years of Education.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Parents_edu_math <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "PAREDINT", data = stu_qqq_SG)
+
+Parents_edu_read <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "PAREDINT", data = stu_qqq_SG)
+
+Parents_edu_scie <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "PAREDINT", data = stu_qqq_SG)
+
+```
+
+We examine the new tables created.
+
+```{r}
+print(Parents_edu_math)
+print(Parents_edu_read)
+print(Parents_edu_scie)
+```
+
+Since there 57 rows with missing values, we will delete the rows with missing values.
+
+```{r}
+Parents_edu_math <- na.omit(Parents_edu_math)
+Parents_edu_read <- na.omit(Parents_edu_read)
+Parents_edu_scie <- na.omit(Parents_edu_scie)
+```
+
+Next, we use the below code to plot dot plots for each subject.\
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create a dot plot with annotations
+Dp1 <- ggplot(Parents_edu_math, aes(x = as.factor(PAREDINT), y = Mean)) +
+  geom_dotplot(binaxis = "y", stackdir = "center", fill = "black", alpha = 0.7) +
+  geom_line(aes(group = 1), color = "lightblue", size = 1, alpha = 0.5) +
+  geom_text(aes(label = Mean), vjust = -0.5, color = "black", size = 3) +  # Add text labels
+  labs(title = "Math",
+       x = "Education (Yrs)")+ 
+  theme_minimal()
+
+
+Dp2 <- ggplot(Parents_edu_read, aes(x = as.factor(PAREDINT), y = Mean)) +
+  geom_dotplot(binaxis = "y", stackdir = "center", fill = "black", alpha = 0.7) +
+  geom_line(aes(group = 1), color = "lightgreen", size = 1, alpha = 0.5) +
+  geom_text(aes(label = Mean), vjust = -0.5, color = "black", size = 3) +  # Add text labels
+  labs(title = "Reading",
+       x = "Education (Yrs)")+ 
+  theme_minimal()
+
+Dp3 <- ggplot(Parents_edu_scie, aes(x = as.factor(PAREDINT), y = Mean)) +
+  geom_dotplot(binaxis = "y", stackdir = "center", fill = "black", alpha = 0.7) +
+  geom_line(aes(group = 1), color = "lightpink", size = 1, alpha = 0.5) +
+  geom_text(aes(label = Mean), vjust = -0.5, color = "black", size = 3) +  # Add text labels
+  labs(title = "Science",
+       x = "Education (Yrs)")+ 
+  theme_minimal()
+
+```
+
+::: panel-tabset
+## Math Scores
+
+```{r}
+Dp1
+```
+
+## Reading Scores
+
+```{r}
+Dp2
+```
+
+## Science Scores
+
+```{r}
+Dp3
+```
+:::
+
+### Combined dot plots of Subject Mean Scores Vs Parents Education years
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch4 <- (Dp1 + Dp2 + Dp3
+               ) + 
+              plot_annotation(
+                title = "Parents with more education years seem to have children with higher scores")
+
+patch4 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+
+```
+
+::: callout-note
+## Observation 5
+
+In general, students seem to have performed better across all subjects the more their parents have been educated. However this factor alone is insufficient to causate to a better performance.
+
+Additional analyses taking into account the state of the study environment, both at home and in school, as well as the emotional aspects and motivation of students could be further analysed to derive more complete insights on the factors that could influence performance.
+:::
+
+## Additional EDA
+
+samples

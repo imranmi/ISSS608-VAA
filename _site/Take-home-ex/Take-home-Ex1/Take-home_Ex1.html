@@ -260,6 +260,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#combined-scatter-plots-of-pv1-scores-vs-escs-scores" id="toc-combined-scatter-plots-of-pv1-scores-vs-escs-scores" class="nav-link" data-scroll-target="#combined-scatter-plots-of-pv1-scores-vs-escs-scores">Combined Scatter plots of PV1 Scores Vs ESCS scores</a></li>
   </ul></li>
+  <li><a href="#relationship-between-scores-and-the-years-of-education-for-parents" id="toc-relationship-between-scores-and-the-years-of-education-for-parents" class="nav-link" data-scroll-target="#relationship-between-scores-and-the-years-of-education-for-parents">1.3.5 Relationship between Scores and the years of Education for Parents</a>
+  <ul class="collapse">
+  <li><a href="#combined-dot-plots-of-subject-mean-scores-vs-parents-education-years" id="toc-combined-dot-plots-of-subject-mean-scores-vs-parents-education-years" class="nav-link" data-scroll-target="#combined-dot-plots-of-subject-mean-scores-vs-parents-education-years">Combined dot plots of Subject Mean Scores Vs Parents Education years</a></li>
+  </ul></li>
+  <li><a href="#additional-eda" id="toc-additional-eda" class="nav-link" data-scroll-target="#additional-eda">Additional EDA</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -301,11 +306,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="setting-the-scene" class="level1">
 <h1>Setting the Scene</h1>
-<p>OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several Singapore’s Minister for Education also started an “every school a good school” slogan. The general public, however, strongly belief that there are still disparities that exist, especially between the elite schools and neighborhood school, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.</p>
+<p>OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several of Singapore’s ministers for Education also started an “every school a good school” slogan. The general public, however, believes that there are still disparities that exist, especially between “elite” and neighborhood schools, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.</p>
 </section>
 <section id="the-task" class="level1">
 <h1>The Task</h1>
-<p>The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.</p>
+<p>The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA’s global education survey runs every three years to assess education systems worldwide through the testing 15 year old students in the subjects of mathematics, reading, and science.</p>
 <p>In this take-home exercise, we will use appropriate <strong>Exploratory Data Analysis (EDA)</strong> methods and <strong>ggplot2</strong> functions to reveal:</p>
 <ul>
 <li><p>the distribution of Singapore students’ performance in mathematics, reading, and science, and</p></li>
@@ -339,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stu_qqq <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(<span class="st">"data/cy08msp_stu_qqq.sas7bdat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Upon first import, as the student questionaire data file contains data from other countries, we use <code>filter()</code> to filter the data file to only Singapore data.</p>
+<p>Upon first import, as the student questionaire data file contains data from other countries, we will use <code>filter()</code> to filter the data file to only Singapore data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>stu_qqq_SG <span class="ot">&lt;-</span> stu_qqq <span class="sc">%&gt;%</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(CNT <span class="sc">==</span> <span class="st">"SGP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -357,14 +362,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-and-loading-r-instvy" class="level2">
 <h2 class="anchored" data-anchor-id="installing-and-loading-r-instvy">1.3 Installing and Loading R instvy</h2>
 <p>The R package <em>intsvy</em> allows R users to analyse PISA data among other international large-scale assessments. The use of PISA data via R requires data preparation, and <em>intsvy</em> offers a data transfer function to import data available in other formats directly into R. <em>Intsvy</em> also provides a merge function to merge the student, school, parent, teacher and cognitive databases.</p>
-<p>To understand more about the packages available and the Methodolofy to analyse the PISA data files, please refer to this <a href="https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm">link.</a></p>
-<p>The analytical commands within <em>intsvy</em> enables users to derive mean statistics, standard deviations, frequency tables, correlation coefficients and regression estimates.</p>
-<p>Additionally, <em>intsvy</em> deals with the calculation of point estimates and standard errors that take into account the complex PISA sample design with replicate weights, as well as the rotated test forms with plausible values.</p>
-<p>To understand more about the <em>instvy</em> package, please refer to this <a href="https://daniel-caro.com/r-intsvy">link.</a></p>
+<p>To understand more about the packages available and the methodology to analyse the PISA data files, please refer to this <a href="https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm">link.</a></p>
+<p>The analytical commands within <code>intsvy</code> enables users to derive mean statistics, standard deviations, frequency tables, correlation coefficients and regression estimates.</p>
+<p>Additionally, <code>intsvy</code> deals with the calculation of point estimates and standard errors that take into account the complex PISA sample design with replicate weights, as well as the rotated test forms with plausible values.</p>
+<p>To understand more about the <code>instvy</code> package, please refer to this <a href="https://daniel-caro.com/r-intsvy">link.</a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"intsvy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will load the package using library()</p>
+<p>We will load the package using <code>library()</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"intsvy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -454,8 +459,8 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>From our initial checks, it is obvious that there are many columns/variables with missing values.<br>
-However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from important variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will ‘clean’ the data for each subsequent EDA visualization.</p>
+<p>From our initial checks, we noted that there are many columns/variables with missing values.<br>
+However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will ‘clean’ the data for each subsequent EDA visualization.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -509,7 +514,7 @@ Important
 1 SGP 6606 561.43 1.33 99.09 1.1</code></pre>
 </div>
 </div>
-<p>These means scores can be further corroborated at the following <a href="https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1">link (pages 310-315)</a>.</p>
+<p>These means scores can be corroborated at the following <a href="https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1">link (pages 310-315)</a>.</p>
 <p>For a visual of the past performance of the mean scores for Singaporean students, please refer to this <a href="https://oecdch.art/a40de1dbaf/C549">link.</a></p>
 <p>We will use these calculated mean values from the 10 plausible values as an additional statistic (Mean) for our subsequent visualizations.</p>
 </section>
@@ -518,7 +523,7 @@ Important
 <h1>1.3 Exploratory Data Analysis</h1>
 <section id="distribution-of-students-performance-in-math-reading-and-science" class="level2">
 <h2 class="anchored" data-anchor-id="distribution-of-students-performance-in-math-reading-and-science">1.3.1 Distribution of student’s performance in Math, Reading and Science</h2>
-<p>The objective of this visualization is to examine if Scores are normally distributed in general within the student population sampled in the PISA test.</p>
+<p>The objective of this visualization is to examine if subject scores are normally distributed in general within the student population sampled in the PISA test.</p>
 <p>Since there are 10 Plausible Values for the 3 subjects, we shall use the first plausible value, PV1 to visualize the distribution of scores for the subjects.</p>
 <p>For the rationale of using one Plausible Value, instead of several or all for our explanatory analysis, please refer to the article on <a href="https://www.mdpi.com/2227-7390/9/13/1579#B34-mathematics-09-01579">“How to deal with Plausible Values from International Large-scale assessments.”</a></p>
 <div class="cell">
@@ -640,15 +645,16 @@ Observation 1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The distribution of scores resembles normal distribution across all 3 subjects. Singaporean Students have a higher mean score In Mathematics relative to Reading and Science.</p>
+<p>The distribution of scores resembles a normal distribution across all 3 subjects. Singaporean students seem to have a higher mean score In Mathematics relative to Reading and Science.</p>
+<p>Further statistical tests like the Anderson-Darling or Shapiro-Wilk tests will need to be conducted to confirm the normality in distribution.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="relationship-between-scores-and-schools" class="level2">
 <h2 class="anchored" data-anchor-id="relationship-between-scores-and-schools">1.3.2 Relationship between Scores and Schools</h2>
-<p>The objective of this visualization is to examine the relationship between scores and the schools sampled in the PISA test.</p>
-<p>We use unique() and length() to obtain the number of schools in the data set. There are 164 schools in this data set.</p>
+<p>The objective of this visualization is to examine the relationship between subject scores and the schools sampled in the PISA test.</p>
+<p>We will use <code>unique()</code> and <code>length()</code> to obtain the number of unique schools in the data set.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>unique_values <span class="ot">&lt;-</span> <span class="fu">unique</span>(stu_qqq_SG<span class="sc">$</span>CNTSCHID)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -657,6 +663,8 @@ Observation 1
 <pre><code>[1] 164</code></pre>
 </div>
 </div>
+<p>There are 164 unique schools in this data set.</p>
+<p>Next, we use the code below to plot our scatter plots.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -744,15 +752,15 @@ Observation 2
 <div class="callout-body-container callout-body">
 <p>Across the 164 schools, students seem to be performing equally across the 3 subjects. There are no obvious clusters that are different from each other, for example only having good performers or only having poor performers.</p>
 <p>Additional analysis could be done to examine if the highest and lowest performing students (in terms of percentile) belong to the same type of schools.</p>
-<p>Since this data set only contains students on students, there is no additional information on the type of school and its resources.. Further analysis could incorporate other data sets to build a more complete analysis.</p>
+<p>Since this data set only contains students on students, there is no additional information on either the type of school or its resources.. Further analysis could incorporate other data sets to build a more complete analysis.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="relationship-between-scores-and-gender" class="level2">
 <h2 class="anchored" data-anchor-id="relationship-between-scores-and-gender">1.3.3 Relationship between Scores and Gender</h2>
-<p>The objective of this visualization is to examine the relationship between scores and genders within the students sampled in the PISA test.</p>
-<p>The gender column of the data set is named as “ST004D01T” with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new gender table as a subset of the data. We will use <code>instvy.table()</code> from the <code>instvy package.</code></p>
+<p>The objective of this visualization is to examine the relationship between subject scores and gender within the students sampled in the PISA test.</p>
+<p>The gender column of the data set is named as “ST004D01T” with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new table as a subset of the data. We will use <code>instvy.table()</code> from the <code>instvy package.</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>Gender_Table <span class="ot">&lt;-</span><span class="fu">intsvy.table</span>(<span class="at">variable=</span><span class="st">"ST004D01T"</span>, <span class="at">by=</span><span class="st">"CNT"</span>, <span class="at">data=</span>stu_qqq_SG, <span class="at">config=</span>pisa_conf)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -801,7 +809,7 @@ $ Std.err.   &lt;dbl&gt; 0.18, 0.18</code></pre>
 <p><img src="Take-home_Ex1_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The student sample population is made of 51.02% males and 48.98% females.</p>
+<p>The student sample population is made up of 51.02% males and 48.98% females.</p>
 <p>The <code>pisa.mean.pv()</code> function from the <code>instvy package</code> enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by gender.</p>
 <p>In the code below, we will create separate tables for the mean scores for each subject by different genders.</p>
 <div class="cell">
@@ -840,7 +848,7 @@ $ Std.err.   &lt;dbl&gt; 0.18, 0.18</code></pre>
 2      Male 3358 564.81 1.93 102.66 1.30</code></pre>
 </div>
 </div>
-<p>Next we plot the PV1 scores by different genders to examine the performance of different genders across subjects.</p>
+<p>Next, we plot the PV1 scores by different genders to examine the performance of different genders across subjects.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -957,7 +965,7 @@ Observation 3
 <figcaption class="figure-caption">Computation of ESCS in PISA 2022</figcaption>
 </figure>
 </div>
-<p>The objective of this visualization is to examine the relationship between scores and a student’s socioeconomic status.</p>
+<p>The objective of this visualization is to examine the relationship between subject scores and a student’s socioeconomic status.</p>
 <p>First we check for any missing values in the ESCS column using the code below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for NAs in the 'ESCS' column</span></span>
@@ -1083,14 +1091,181 @@ Observation 4
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There is a weak positive relationship between Scores and Socio-economic statuses. As mentioned, the ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has ‘diluted’ the accuracy of the score, which could be more prominent for developed countries like Singapore.<br>
+<p>There is a weak positive relationship between subject scores and Socioeconomic statuses. The ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has ‘diluted’ the score, where the effect is more prominent for developed countries like Singapore.<br>
 <br>
-Further analysis could be conducted on the individual components of the ESCS score to check for their influence on student performance.</p>
+Further analysis could be conducted on the individual components of the ESCS score to check for their individual influence on student performance.</p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="relationship-between-scores-and-the-years-of-education-for-parents" class="level2">
+<h2 class="anchored" data-anchor-id="relationship-between-scores-and-the-years-of-education-for-parents">1.3.5 Relationship between Scores and the years of Education for Parents</h2>
+<p>As highlighted in the previous analysis, there is a weak positive relationship between student scores and ESCS scores. The objective of this visualization is to examine the relationship between one of the constituents, PAREDINT and student scores.</p>
+<p>PAREDINT is the index of the highest education of parents in years, based on the median cumulative years of education completed. The variable values are discrete and ranges from a scale of 3 to 16 years. For more information on this variable, please refer to the <a href="https://www.oecd.org/pisa/data/pisa2022technicalreport/PISA-2022-Technical-Report-Ch-19-PISA-Scaling-Procedures-Construct-Validation-Context-Questionnaire-Data.pdf">PISA 2022 Technical report: Chapter 19.</a><br>
+</p>
+<p>First we check for any missing values in the ESCS column using the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for NAs in the 'PAREDINT' column</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>has_nas <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">is.na</span>(stu_qqq_SG<span class="sc">$</span>PAREDINT))</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(has_nas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Since there are missing values in the PAREDINT column, we shall delete the rows with missing PAREDINT values. We will then create a new table with PAREDINT and the Mean scores of the 10 Plausible Values for this visualization.</p>
+<p>The <code>pisa.mean.pv()</code> function from the <code>instvy package</code> enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by the years of Parents education (PARENDINT).</p>
+<p>In the code below, we will create separate tables for the mean scores for each subject by different years of Education.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>Parents_edu_math <span class="ot">&lt;-</span> <span class="fu">pisa.mean.pv</span>(<span class="at">pvlabel =</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"MATH"</span>), <span class="at">by =</span> <span class="st">"PAREDINT"</span>, <span class="at">data =</span> stu_qqq_SG)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>Parents_edu_read <span class="ot">&lt;-</span> <span class="fu">pisa.mean.pv</span>(<span class="at">pvlabel =</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"READ"</span>), <span class="at">by =</span> <span class="st">"PAREDINT"</span>, <span class="at">data =</span> stu_qqq_SG)</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>Parents_edu_scie <span class="ot">&lt;-</span> <span class="fu">pisa.mean.pv</span>(<span class="at">pvlabel =</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"SCIE"</span>), <span class="at">by =</span> <span class="st">"PAREDINT"</span>, <span class="at">data =</span> stu_qqq_SG)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We examine the new tables created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Parents_edu_math)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  PAREDINT Freq   Mean  s.e.     SD   s.e
+1        3    8 482.25 53.59 131.99 25.91
+2        6   62 500.76 12.97 102.52  9.03
+3        9  127 540.05  8.87  98.63  6.43
+4       12 1470 530.62  3.14 100.32  1.75
+5     14.5 1213 559.85  3.00  97.10  1.95
+6       16 3669 600.47  1.68  97.13  1.37
+7     &lt;NA&gt;   57 485.92 11.61  85.05  9.59</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Parents_edu_read)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  PAREDINT Freq   Mean  s.e.     SD   s.e
+1        3    8 446.46 53.88 131.61 27.34
+2        6   62 464.94 14.40 107.86  9.09
+3        9  127 504.99 10.51 100.06  6.65
+4       12 1470 499.70  3.34 101.95  2.23
+5     14.5 1213 528.11  3.55  95.30  2.75
+6       16 3669 568.16  2.57 102.62  1.69
+7     &lt;NA&gt;   57 438.94 17.63  82.97 10.65</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Parents_edu_scie)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  PAREDINT Freq   Mean  s.e.     SD   s.e
+1        3    8 462.02 49.90 121.12 23.48
+2        6   62 488.47 13.20  94.21  9.75
+3        9  127 527.21  8.34  93.97  6.49
+4       12 1470 519.92  3.06  96.93  2.03
+5     14.5 1213 546.79  2.93  92.34  1.94
+6       16 3669 586.04  1.92  94.28  1.46
+7     &lt;NA&gt;   57 482.18 13.41  83.68 10.67</code></pre>
+</div>
+</div>
+<p>Since there 57 rows with missing values, we will delete the rows with missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>Parents_edu_math <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Parents_edu_math)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>Parents_edu_read <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Parents_edu_read)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>Parents_edu_scie <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(Parents_edu_scie)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we use the below code to plot dot plots for each subject.<br>
+</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dot plot with annotations</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>Dp1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Parents_edu_math, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(PAREDINT), <span class="at">y =</span> Mean)) <span class="sc">+</span></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dotplot</span>(<span class="at">binaxis =</span> <span class="st">"y"</span>, <span class="at">stackdir =</span> <span class="st">"center"</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>), <span class="at">color =</span> <span class="st">"lightblue"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Mean), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  <span class="co"># Add text labels</span></span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Math"</span>,</span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Education (Yrs)"</span>)<span class="sc">+</span> </span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>Dp2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Parents_edu_read, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(PAREDINT), <span class="at">y =</span> Mean)) <span class="sc">+</span></span>
+<span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dotplot</span>(<span class="at">binaxis =</span> <span class="st">"y"</span>, <span class="at">stackdir =</span> <span class="st">"center"</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>), <span class="at">color =</span> <span class="st">"lightgreen"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb79-14"><a href="#cb79-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Mean), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  <span class="co"># Add text labels</span></span>
+<span id="cb79-15"><a href="#cb79-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Reading"</span>,</span>
+<span id="cb79-16"><a href="#cb79-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Education (Yrs)"</span>)<span class="sc">+</span> </span>
+<span id="cb79-17"><a href="#cb79-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb79-18"><a href="#cb79-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-19"><a href="#cb79-19" aria-hidden="true" tabindex="-1"></a>Dp3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Parents_edu_scie, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(PAREDINT), <span class="at">y =</span> Mean)) <span class="sc">+</span></span>
+<span id="cb79-20"><a href="#cb79-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_dotplot</span>(<span class="at">binaxis =</span> <span class="st">"y"</span>, <span class="at">stackdir =</span> <span class="st">"center"</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb79-21"><a href="#cb79-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="dv">1</span>), <span class="at">color =</span> <span class="st">"lightpink"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb79-22"><a href="#cb79-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Mean), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  <span class="co"># Add text labels</span></span>
+<span id="cb79-23"><a href="#cb79-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Science"</span>,</span>
+<span id="cb79-24"><a href="#cb79-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Education (Yrs)"</span>)<span class="sc">+</span> </span>
+<span id="cb79-25"><a href="#cb79-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Math Scores</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Reading Scores</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false">Science Scores</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>Dp1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex1_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>Dp2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex1_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>Dp3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex1_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="combined-dot-plots-of-subject-mean-scores-vs-parents-education-years" class="level3">
+<h3 class="anchored" data-anchor-id="combined-dot-plots-of-subject-mean-scores-vs-parents-education-years">Combined dot plots of Subject Mean Scores Vs Parents Education years</h3>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>patch4 <span class="ot">&lt;-</span> (Dp1 <span class="sc">+</span> Dp2 <span class="sc">+</span> Dp3</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>               ) <span class="sc">+</span> </span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>              <span class="fu">plot_annotation</span>(</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"Parents with more education years seem to have children with higher scores"</span>)</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>patch4 <span class="sc">&amp;</span> <span class="fu">theme</span>( <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),<span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex1_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Observation 5
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In general, students seem to have performed better across all subjects the more their parents have been educated. However this factor alone is insufficient to causate to a better performance.</p>
+<p>Additional analyses taking into account the state of the study environment, both at home and in school, as well as the emotional aspects and motivation of students could be further analysed to derive more complete insights on the factors that could influence performance.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="additional-eda" class="level2">
+<h2 class="anchored" data-anchor-id="additional-eda">Additional EDA</h2>
+<p>samples</p>
+
+
 </section>
 </section>
 
