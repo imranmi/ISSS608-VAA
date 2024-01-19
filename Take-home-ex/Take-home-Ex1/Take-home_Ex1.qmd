@@ -97,7 +97,8 @@ To understand more about the `instvy` package, please refer to this [link.](http
 
 ```{r}
 #| eval: false
-install.packages("intsvy")
+
+#install.packages("intsvy",repos = "http://cran.us.r-project.org")
 ```
 
 We will load the package using `library()`
@@ -863,7 +864,7 @@ Next, we use the below code to plot bubble plots to examine the number of studen
 
 ```{r}
 #| eval: false
-install.packages("plotly")
+#install.packages("plotly")
 ```
 
 ```{r}
@@ -952,4 +953,105 @@ ggplotly(p_3, tooltip = c("x", "y", "size", "color"))
 The ability to extract and assign Mean scores to individual schools enables us to further explore and examine the disparity in performance between schools. For example, looking at the two extremes of score results, we note that Schools (70200001 & 70200003) out perform other schools in all subjects. On the other hand, Schools (7020115 & 70200149) under perform other schools in all subjects.\
 \
 This shows that there are still marked differences between the ''best" schools and the ''worst'' schools. Additional analysis should be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation to fully understand the differences between the scores.
+:::
+
+### 2) Examining the Breakdown of scores per Subject
+
+Previously we had only examined the distribution of marks for the student population across the 3 subjects. We can further examine the break down of scores for each subject. This can help us examine whether there are specific strengths or weaknesses in the student cohort.
+
+First, we use the `pisa.ben.pv()` function from the `instvy package` which calculates student scores from the 10 plausible values and calculates the percentage of students at each proficiency level (Score range) as defined by PISA
+
+In the code below, we will create separate tables for the percentage breakdown of scores for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Math_Breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"MATH"), by="CNT", atlevel=TRUE, data=stu_qqq_SG)
+
+Read_Breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"READ"), by="CNT", atlevel=TRUE, data=stu_qqq_SG)
+
+Scie_Breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"SCIE"), by="CNT", atlevel=TRUE, data=stu_qqq_SG)
+```
+
+We examine the new tables created. In these new tables we are able to extract the percentage breakdown of students scores for our next visualization.
+
+```{r}
+print(Math_Breakdown)
+print(Read_Breakdown)
+print(Scie_Breakdown)
+```
+
+We will plot bar charts for the breakdown of scores for each subject.
+
+::: panel-tabset
+## Math Scores breakdown
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(forcats)
+
+ggplot(Math_Breakdown, aes(x = Percentage, y = fct_reorder(Benchmarks, Percentage))) +
+  geom_bar(stat = "identity", fill = "lightblue", color = "black") +
+  geom_text(aes(label = sprintf("%.2f%%", Percentage)), # This adds the labels
+            position = position_stack(vjust = 0.5), # Adjust vertical position
+            color = "black", # Text color
+            size = 3.5) + # Text size, adjust as needed
+  labs(
+    title = "Distribution of Scores for Math",
+    x = "Percentage of students",
+    y = "Score ranges"
+  ) +
+  theme_minimal()
+```
+
+## Reading Scores breakdown
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(forcats)
+
+ggplot(Read_Breakdown, aes(x = Percentage, y = fct_reorder(Benchmarks, Percentage))) +
+  geom_bar(stat = "identity", fill = "lightgreen", color = "black") +
+  geom_text(aes(label = sprintf("%.2f%%", Percentage)), # This adds the labels
+            position = position_stack(vjust = 0.5), # Adjust vertical position
+            color = "black", # Text color
+            size = 3.5) + # Text size, adjust as needed
+  labs(
+    title = "Distribution of Scores for Reading",
+    x = "Percentage of students",
+    y = "Score ranges"
+  ) +
+  theme_minimal()
+
+```
+
+## Science Scores breakdown
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggplot2)
+library(forcats)
+
+ggplot(Scie_Breakdown, aes(x = Percentage, y = fct_reorder(Benchmarks, Percentage))) +
+  geom_bar(stat = "identity", fill = "lightpink", color = "black") +
+  geom_text(aes(label = sprintf("%.2f%%", Percentage)), # This adds the labels
+            position = position_stack(vjust = 0.5), # Adjust vertical position
+            color = "black", # Text color
+            size = 3.5) + # Text size, adjust as needed
+  labs(
+    title = "Distribution of Scores for Science",
+    x = "Percentage of students",
+    y = "Score ranges"
+  ) +
+  theme_minimal()
+```
 :::

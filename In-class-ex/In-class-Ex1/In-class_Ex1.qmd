@@ -54,13 +54,3 @@ For our analysis we shall read in data from stu_qqq_SG.rds using `read_rds()`
 ```{r}
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 ```
-
-```{r}
-install.packages("instvy")
-
-library("instvy")
-```
-
-```{r}
-help(package="instvy")
-```
