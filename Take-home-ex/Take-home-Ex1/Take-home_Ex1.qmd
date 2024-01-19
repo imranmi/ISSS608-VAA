@@ -877,7 +877,7 @@ library(plotly)
 p_1 <- ggplot(Schoolid_math, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
-  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  scale_color_gradient(low = "skyblue", high = "darkblue") +
   labs(title = "Mean Math Scores by School ID",
     y = "Mean Math Scores", 
     size = "Number of Students", 
@@ -905,7 +905,7 @@ library(plotly)
 p_2 <- ggplot(Schoolid_read, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
-  scale_color_gradient(low = "lightgreen", high = "darkgreen") +
+  scale_color_gradient(low = "yellow", high = "darkorchid") +
   labs(title = "Mean Reading Scores by School ID",
     y = "Mean Reading Scores", 
     size = "Number of Students", 
@@ -957,9 +957,11 @@ This shows that there are still marked differences between the ''best" schools a
 
 ### 2) Examining the Breakdown of scores per Subject
 
-Previously we had only examined the distribution of marks for the student population across the 3 subjects. We can further examine the break down of scores for each subject. This can help us examine whether there are specific strengths or weaknesses in the student cohort.
+Previously we had only examined the distribution of marks for the student population across the 3 subjects (whether resembles normal distribution).
 
-First, we use the `pisa.ben.pv()` function from the `instvy package` which calculates student scores from the 10 plausible values and calculates the percentage of students at each proficiency level (Score range) as defined by PISA
+We can further examine the percentage of students per score range for each subject. This might help us examine whether there are specific strengths or weaknesses in the student cohort.
+
+First, we use the `pisa.ben.pv()` function from the `instvy package` which calculates student scores from the 10 plausible values and calculates the percentage of students at each proficiency level (Score range) as defined by PISA.
 
 In the code below, we will create separate tables for the percentage breakdown of scores for each subject.
 
@@ -974,7 +976,7 @@ Read_Breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"READ"), by="CNT", atlev
 Scie_Breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"SCIE"), by="CNT", atlevel=TRUE, data=stu_qqq_SG)
 ```
 
-We examine the new tables created. In these new tables we are able to extract the percentage breakdown of students scores for our next visualization.
+We examine the new tables created. In these new tables we are able to obtain the percentage breakdown of students per score range for our next visualization.
 
 ```{r}
 print(Math_Breakdown)
@@ -982,7 +984,7 @@ print(Read_Breakdown)
 print(Scie_Breakdown)
 ```
 
-We will plot bar charts for the breakdown of scores for each subject.
+We will plot bar charts for the percentage of students per Score range for each subject.
 
 ::: panel-tabset
 ## Math Scores breakdown
@@ -1054,4 +1056,198 @@ ggplot(Scie_Breakdown, aes(x = Percentage, y = fct_reorder(Benchmarks, Percentag
   ) +
   theme_minimal()
 ```
+:::
+
+Next, we can combine these tables and plots into one plot to show the percentage of students per Score Range for all subjects.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Creating a new combined table
+
+Math_Breakdown$Subject <- 'Math'
+Read_Breakdown$Subject <- 'Reading'
+Scie_Breakdown$Subject <- 'Science'
+
+Combined_Breakdown <- bind_rows(Math_Breakdown, Read_Breakdown, Scie_Breakdown)
+```
+
+The code below enables us to plot the breakdown of scores for all subjects.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Order the Benchmarks factor based on the order it appears in the dataset
+Combined_Breakdown <- Combined_Breakdown %>%
+  mutate(Benchmarks = fct_inorder(Benchmarks))
+
+# Now plot using ggplot
+ggplot(Combined_Breakdown, aes(x = Benchmarks, y = Percentage, fill = Subject)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
+  labs(title = "For lower Score ranges, students do better in Reading",
+       x = "Score Range",
+       y = "Percentage of Students") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # To make the x labels readable
+```
+
+::: callout-note
+## Observation 7
+
+1\) 63.14 % of students scored 544.68 and above for Math\
+2) 52.45% of students scored 544.68 and above for Reading\
+3) 59.65 % of students scored 544.68 and above for Science\
+\
+If we were to select a baseline score as 544.68, we can see that students generally do better in Math relative to Science and Reading.
+
+While individual plots are useful to visualize the break down of students across scores, we can also combine them into a single bar plot to obtain insights on relative performance. From the combined plot, we can see that at lower score ranges, students seem to do better in Reading relative to Math and Science. However, at higher score ranges, students do worse in Reading relative to Math and Science.
+:::
+
+### 3) Violin plots for Gender performance across subjects
+
+Previously we had used box plots to visualize the difference in performance between the genders across subjects. The code below 'switches' to violin plots instead.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create the plot using the subset_data
+vx_plot1 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1MATH, fill = ST004D01T)) +
+  geom_violin(trim = FALSE) + # Use geom_violin instead of geom_boxplot
+  geom_point(data = Math_gender, aes(x = ST004D01T, y = Mean), color = "black", size = 1.5) +
+  geom_text(data = Math_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender", y = "PV1 Math Score") +
+  scale_fill_manual(values = c("Female" = "lightblue", "Male" = "lightblue")) +
+  theme_minimal() +
+  theme(legend.position = "none") # Remove the legend
+
+vx_plot2 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1READ, fill = ST004D01T)) +
+  geom_violin(trim = FALSE) + # Use geom_violin instead of geom_boxplot
+  geom_point(data = Read_gender, aes(x = ST004D01T, y = Mean), color = "black", size = 1.5) +
+  geom_text(data = Read_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender", y = "PV1 Reading Score") +
+  scale_fill_manual(values = c("Female" = "lightgreen", "Male" = "lightgreen")) +
+  theme_minimal() +
+  theme(legend.position = "none") # Remove the legend
+
+vx_plot3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D01T)) +
+  geom_violin(trim = FALSE) + # Use geom_violin instead of geom_boxplot
+  geom_point(data = SCIE_gender, aes(x = ST004D01T, y = Mean), color = "black", size = 1.5) +
+  geom_text(data = SCIE_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Gender", y = "PV1 Science Score") +
+  scale_fill_manual(values = c("Female" = "lightpink", "Male" = "lightpink")) +
+  theme_minimal() +
+  theme(legend.position = "none") # Remove the legend
+
+```
+
+We will use the code below to do a composite plot for all 3 subjects
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch5 <- vx_plot1 + vx_plot2 + vx_plot3 + 
+              plot_annotation(
+                title = "Male students outperform in Maths and Science")
+
+patch5 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+```
+
+::: callout-note
+## Note
+
+Violin plots may provide a fuller picture of the data distribution, revealing density and multimodality that box plots may obscure. This could be useful for detecting data patterns and clusters.
+
+Violin plots could also emphasize the concentration of data points and potential outliers, showcasing the entire range of the data including peaks, valleys, and tails that may not be evident from box plots.
+:::
+
+### 4) Relationship between Scores and the times spent on studying or homework before or after school
+
+The objective of this visualization is to examine the relationship between student scores and the time spent on studying or on homework (STUDYHMW).
+
+The variable "STUDYHMW" measures how many times during a typical school week students studied for school or homework before going to school and/or after leaving school. Values on this index range from 0 (no studying) to 10 (10 or more times of studying per week).
+
+First we check for any missing values in the STUDYHMW column using the code below.
+
+```{r}
+# Check for NAs in the 'STUDYHMW' column
+has_nas <- any(is.na(stu_qqq_SG$STUDYHMW))
+
+print(has_nas)
+
+```
+
+Since there are missing values in the STUDYHMW column, we shall delete the rows with missing values. We will then create a new table with STUDYHMW and the Mean scores of the 10 Plausible Values for this visualization.
+
+The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by the time spent on studying (STUDYHMW).
+
+In the code below, we will create separate tables for the mean scores for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+homework_math <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "STUDYHMW", data = stu_qqq_SG)
+
+homework_read <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "STUDYHMW", data = stu_qqq_SG)
+
+homework_scie <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "STUDYHMW", data = stu_qqq_SG)
+```
+
+We examine the new tables created.
+
+```{r}
+print(homework_math)
+```
+
+Since there 46 rows with missing values, we will delete the rows with missing values.
+
+```{r}
+homework_math <- na.omit(homework_math)
+homework_read <- na.omit(homework_read)
+homework_scie <- na.omit(homework_scie)
+```
+
+Next, we can combine these tables to be able to plot one graph to show the mean scores across the time spent on homework and studying, for all subjects.
+
+```{r}
+homework_math$Subject <- 'Math'
+homework_read$Subject <- 'Reading'
+homework_scie$Subject <- 'Science'
+
+Combined_homework <- bind_rows(homework_math, homework_read, homework_scie)
+```
+
+The code below enables us to plot the breakdown of scores for all subjects.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Order the Benchmarks factor based on the order it appears in the dataset
+Combined_homework <- Combined_homework %>%
+  mutate(STUDYHMW = fct_inorder(STUDYHMW))
+
+# Now plot using ggplot
+ggplot(Combined_homework, aes(x = STUDYHMW, y = Mean, fill = Subject)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
+  labs(title = "Students who study more may not necessarily score higher",
+       x = "Number of times in a week",
+       y = "Mean Scores") +
+  theme_minimal() 
+  
+```
+
+::: callout-note
+## Observation 8
+
+From the combined plot, it appears that the optimal number of times to study in a week is 5 times for all subjects. More times spent on homework and/or studying does not seem to translate to higher scores for this PISA test. However this factor alone is insufficient to conclude causality, and we should do additional analysis on other factors that may impact a student's ability to prepare for this test.
 :::
