@@ -1,6 +1,6 @@
 ---
 title: "Take-home Exercise 1b"
-date: January 1, 2024
+date: January 13, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
