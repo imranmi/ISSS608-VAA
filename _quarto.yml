@@ -35,9 +35,9 @@ website:
             href: In-class-ex/In-class-Ex4/In-class_Ex4.html
       - text: Take-home Exercises
         menu: 
-          - text: Take-home Exercise 1
+          - text: Take-home Exercise 1 - Detailed
             href: Take-home-ex/Take-home-Ex1/Take-home_Ex1.html
-          - text: Take-home Exercise 1a
+          - text: Take-home Exercise 1a - 5 EDAs
             href: Take-home-ex/Take-home-Ex1a/Take-home_Ex1a.html
           - text: Take-home Exercise 1b
             href: Take-home-ex/Take-home-Ex1b/Take-home_Ex1b.html
