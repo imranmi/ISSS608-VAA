@@ -1,6 +1,6 @@
 ---
 title: "In-Class Exercise 2"
-date: January 1, 2024
+date: January 20, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -19,4 +19,4 @@ pacman::p_load(tidyverse)
 
 # Importing Data
 
-## Wrangling Data
+## Working with Tableau

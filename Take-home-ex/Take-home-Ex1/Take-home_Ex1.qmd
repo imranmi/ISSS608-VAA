@@ -98,7 +98,7 @@ To understand more about the `instvy` package, please refer to this [link.](http
 ```{r}
 #| eval: false
 
-#install.packages("intsvy",repos = "http://cran.us.r-project.org")
+install.packages("intsvy",repos = "http://cran.us.r-project.org")
 ```
 
 We will load the package using `library()`
@@ -136,31 +136,29 @@ Checking for duplicated rows using [`duplicated()`](https://www.rdocumentation.o
 stu_qqq_SG[duplicated(stu_qqq_SG),]
 ```
 
-We next examine some columns for NA values. For example "PV1MATH", "PV1SCIE", "ESCS" and "PAREDINT".
+We next examine some columns for NA values. For example "PV1MATH" and "ESCS".
 
 ```{r}
 sum(is.na(stu_qqq_SG$PV1MATH))
 
-sum(is.na(stu_qqq_SG$PV1SCIE))
-
 sum(is.na(stu_qqq_SG$ESCS))
-
-sum(is.na(stu_qqq_SG$PAREDINT))
 ```
 
 ::: callout-note
 ## Note
 
-From our initial checks, we noted that there are many columns/variables with missing values.\
-However, rather than checking for all missing values, and deleting them; we will continue to maintain the original data file. This will enable us to maintain the integrity of the data set which is crucial for us to be able to compute and derive statistics from variables like Plausible Values for test scores in Math, Reading and Science. Subsequently we will 'clean' the data for each subsequent EDA visualization.
+From our initial checks, we noted that there are several variables with missing values.\
+Rather than checking and deleting all missing values, we will continue to maintain the original data file.
+
+This will enable us to use several functions in the `instvy` package to compute and derive statistics from variables like Plausible Values. Subsequently we will prepare subsets from the data file for each EDA visualization.
 :::
 
 ::: callout-important
 ## Important
 
-The columns in the PISA data set are named in a specific format. For more information on what each Variable label means, please refer to the questionnaire or code book at this [link.](https://www.oecd.org/pisa/data/2022database/)
+The columns in the PISA data set are named in a specific format. For more information on what each Variable means and how it is derived or calculated, please refer to the questionnaire or code book at this [link.](https://www.oecd.org/pisa/data/2022database/)
 
-The variable values are both continuous and discrete.
+Variable values are both continuous and discrete.
 :::
 
 ## 1.2.1 Working with Plausible Values
@@ -181,7 +179,7 @@ An accurate and efficient way of measuring proficiency estimates in PISA require
 
 For more information, please refer to this [link.](https://www.oecd.org/pisa/data/httpoecdorgpisadatabase-instructions.htm)
 
-To obtain the correct mean scores for Math, Reading and Science, we will use the `pisa.mean.pv()` function from `'instvy' package` like below.
+For example, in order to obtain single mean scores in Math, Reading and Science for the student cohort, we can use the `pisa.mean.pv()` function from `'instvy' package` like below.
 
 ```{r}
 Math_mean_SG <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by="CNT", data=stu_qqq_SG)
@@ -193,17 +191,19 @@ SCIE_mean_SG <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by="CNT", data=
 
 ```
 
+Below is an example of a single mean score for Math for the student cohort.
+
 ```{r}
 print(Math_mean_SG)
 print(Read_mean_SG)
 print(SCIE_mean_SG)
 ```
 
-These means scores can be corroborated at the following [link (pages 310-315)](https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1).
+These mean scores values can be corroborated at the following [link (pages 310-315)](https://read.oecd-ilibrary.org/education/pisa-2022-results-volume-i_bc9c7189-en#page1).
 
 For a visual of the past performance of the mean scores for Singaporean students, please refer to this [link.](https://oecdch.art/a40de1dbaf/C549)
 
-We will use these calculated mean values from the 10 plausible values as an additional statistic (Mean) for our subsequent visualizations.
+We will use these calculated mean values from the 10 plausible values as a statistic (Mean) for some of our visualizations.
 
 # 1.3 Exploratory Data Analysis
 
@@ -213,7 +213,9 @@ The objective of this visualization is to examine if subject scores are normally
 
 Since there are 10 Plausible Values for the 3 subjects, we shall use the first plausible value, PV1 to visualize the distribution of scores for the subjects.
 
-For the rationale of using one Plausible Value, instead of several or all for our explanatory analysis, please refer to the article on ["How to deal with Plausible Values from International Large-scale assessments."](https://www.mdpi.com/2227-7390/9/13/1579#B34-mathematics-09-01579)
+For an example of precedence of using only one Plausible Value, please refer to the article on ["How to deal with Plausible Values from International Large-scale assessments."](https://www.mdpi.com/2227-7390/9/13/1579#B34-mathematics-09-01579)
+
+We will use the below code to plot our histograms to show the distribution of scores across subjects.
 
 ```{r}
 #| code-fold: true
@@ -229,7 +231,7 @@ plt1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
              size = 0.5,
              linetype = "dashed") +
   geom_text(aes(x = Math_mean_SG$Mean, y = 100, label = paste("Mean =", round(Math_mean_SG$Mean, 2))),
-            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+            color = "black", hjust = -0.1, vjust = 1.0) +  # Adjust label position
   theme_minimal()
 
 # Create the histogram plot with an annotated mean line using Read_mean_SG
@@ -242,7 +244,7 @@ plt2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
              size = 0.5,
              linetype = "dashed") +
   geom_text(aes(x = Read_mean_SG$Mean, y = 100, label = paste("Mean =", round(Read_mean_SG$Mean, 2))),
-            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+            color = "black", hjust = -0.1, vjust = 1.0) +  # Adjust label position
   theme_minimal()
 
 
@@ -256,7 +258,7 @@ plt3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
              size = 0.5,
              linetype = "dashed") +
   geom_text(aes(x = SCIE_mean_SG$Mean, y = 100, label = paste("Mean =", round(SCIE_mean_SG$Mean, 2))),
-            color = "black", hjust = -0.1, vjust = 5.2) +  # Adjust label position
+            color = "black", hjust = -0.1, vjust = 1.0) +  # Adjust label position
   theme_minimal()
 
 # Create a single plot with density plots for Math, Reading, and Science scores
@@ -272,33 +274,9 @@ plt4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
 
 ```
 
-::: panel-tabset
-## Math Scores
-
-```{r}
-plt1
-```
-
-## Reading Scores
-
-```{r}
-plt2
-```
-
-## Science Scores
-
-```{r}
-plt3
-```
-
-## Combined scores
-
-```{r}
-plt4
-```
-:::
-
 ### Combined Visual of the distribution of scores in general
+
+We will use patchwork to create a composite plot.
 
 ```{r}
 #| code-fold: true
@@ -318,7 +296,7 @@ patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 1
 
-The distribution of scores resembles a normal distribution across all 3 subjects. Singaporean students seem to have a higher mean score In Mathematics relative to Reading and Science.
+The distribution of scores seem to resemble a normal distribution across all 3 subjects. Singaporean students seem to have a higher mean score In Mathematics relative to Reading and Science.
 
 Further statistical tests like the Anderson-Darling or Shapiro-Wilk tests will need to be conducted to confirm the normality in distribution.
 :::
@@ -372,27 +350,9 @@ p3 <- ggplot(stu_qqq_SG, aes(x = CNTSCHID, y = PV1SCIE)) +
 
 ```
 
-::: panel-tabset
-## Math Scores
-
-```{r}
-p1
-```
-
-## Reading Scores
-
-```{r}
-p2
-```
-
-## Science Scores
-
-```{r}
-p3
-```
-:::
-
 ### Combined Visual of the distribution of scores across Schools
+
+We will use patchwork to create a composite plot.
 
 ```{r}
 #| code-fold: true
@@ -419,45 +379,7 @@ Since this data set only contains students on students, there is no additional i
 
 The objective of this visualization is to examine the relationship between subject scores and gender within the students sampled in the PISA test.
 
-The gender column of the data set is named as "ST004D01T" with values of 1=Female and 2=Male. Instead of renaming the column and values in the data set, we can create and assign a new table as a subset of the data. We will use `instvy.table()` from the `instvy package.`
-
-```{r}
-Gender_Table <-intsvy.table(variable="ST004D01T", by="CNT", data=stu_qqq_SG, config=pisa_conf)
-
-glimpse(Gender_Table)
-
-print(Gender_Table)
-```
-
-### The gender proportion of the student population
-
-We first examine the proportion of Males and Females within the student population.
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-# Convert the gender variable to a factor with the appropriate labels
-Gender_Table$ST004D01T <- factor(Gender_Table$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
-
-# Plot using ggplot
-ggplot(Gender_Table, aes(x = ST004D01T, y = Percentage, fill = ST004D01T)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  geom_text(aes(label = paste0(Percentage, "%")), 
-            position = position_dodge(width = 0.9), 
-            vjust = 12.0,  
-            color = "black",  
-            size = 3.5) +
-  labs(title = "The Gender proportion of the Student Population",
-       x = "Gender",
-       y = "Percentage %") +
-  scale_fill_manual(values = c("Female" = "pink", "Male" = "lightblue")) +
-  theme_minimal() +
-  theme(legend.position = "none") # This will remove the legend
-
-```
-
-The student sample population is made up of 51.02% males and 48.98% females.
+The gender column of the data set is named as "ST004D01T" with values of 1=Female and 2=Male.
 
 The `pisa.mean.pv()` function from the `instvy package` enables us to calculate the mean scores from the 10 Plausible Values and enables us to further group by gender.
 
@@ -483,10 +405,11 @@ SCIE_gender$ST004D01T <- factor(SCIE_gender$ST004D01T, levels = c(1, 2), labels 
 
 ```
 
+Below is how the new tables look like for mean Math score grouped by gender. We can use the mean statistic here as an additional statistic for our box plots.
+
 ```{r}
 print(Math_gender)
-print(Read_gender)
-print(SCIE_gender)
+
 ```
 
 Next, we plot the PV1 scores by different genders to examine the performance of different genders across subjects.
@@ -539,27 +462,9 @@ bxp3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D0
 
 ```
 
-::: panel-tabset
-## Math Scores
-
-```{r}
-bxp1
-```
-
-## Reading Scores
-
-```{r}
-bxp2
-```
-
-## Science Scores
-
-```{r}
-bxp3
-```
-:::
-
 ### Combined Visual of Performance across Genders
+
+We will use the code below to create a composite plot for our box plots.
 
 ```{r}
 #| code-fold: true
@@ -578,7 +483,7 @@ patch3 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 3
 
-Males students seem to outperform Female students in both Maths and Science with mean scores of 580.59 and 564.81 respectively. Female students seem to outperform Male students in Reading with a mean score of 552.55.
+Male students seem to outperform Female students in both Maths and Science with mean scores of 580.59 and 564.81 respectively. Female students seem to outperform Male students in Reading with a mean score of 552.55.
 :::
 
 ## 1.3.4 Relationship between Scores and Socioeconomic status of students
@@ -600,7 +505,7 @@ has_nas <- any(is.na(stu_qqq_SG$ESCS))
 print(has_nas)
 ```
 
-Since there are missing values in the ESCS column, we shall delete the rows with missing ESCS values. We will create a new table with ESCS and the PV1 scores for this visualization.
+Since there are missing values in the ESCS column, we shall delete the rows with missing ESCS values. We will create a new subset with ESCS and the PV1 scores for this visualization.
 
 ```{r}
 subset_ESCS_PV1 <- stu_qqq_SG %>%
@@ -610,7 +515,7 @@ subset_ESCS_PV1 <- stu_qqq_SG %>%
 subset_ESCS_PV1 <- na.omit(subset_ESCS_PV1)
 ```
 
-Using our new table *subset_ESCS_PV1,* we will create scatter plots for ESCS versus each PV1 score for each subject.
+Using our new table *subset_ESCS_PV1,* we will create scatter plots for ESCS versus each PV1 score for each subject using the code below.
 
 ```{r}
 #| code-fold: true
@@ -665,27 +570,9 @@ C_plt3 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1SCIE)) +
 
 ```
 
-::: panel-tabset
-## Math Vs ESCS
-
-```{r}
-C_plt1
-```
-
-## Read Vs ESCS
-
-```{r}
-C_plt2
-```
-
-## Science Vs ESCS
-
-```{r}
-C_plt3
-```
-:::
-
 ### Combined Scatter plots of PV1 Scores Vs ESCS scores
+
+We will use patchwork to create a composite plot for our scatter plots.
 
 ```{r}
 #| code-fold: true
@@ -740,12 +627,10 @@ Parents_edu_scie <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "PARED
 
 ```
 
-We examine the new tables created.
+We examine the one of the new tables, Parents_edu_math.
 
 ```{r}
 print(Parents_edu_math)
-print(Parents_edu_read)
-print(Parents_edu_scie)
 ```
 
 Since there 57 rows with missing values, we will delete the rows with missing values.
@@ -790,27 +675,9 @@ Dp3 <- ggplot(Parents_edu_scie, aes(x = as.factor(PAREDINT), y = Mean)) +
 
 ```
 
-::: panel-tabset
-## Math Scores
-
-```{r}
-Dp1
-```
-
-## Reading Scores
-
-```{r}
-Dp2
-```
-
-## Science Scores
-
-```{r}
-Dp3
-```
-:::
-
 ### Combined dot plots of Subject Mean Scores Vs Parents Education years
+
+We will use the code below to create a composite plot.
 
 ```{r}
 #| code-fold: true
@@ -828,7 +695,9 @@ patch4 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-note
 ## Observation 5
 
-In general, students seem to have performed better across all subjects the more their parents have been educated. However this factor alone is insufficient to causate to a better performance.
+In general, students seem to have performed better across all subjects the more their parents have been educated. However this factor alone is likely insufficient to cause a better performance.
+
+Also, there is a slight drop off in mean scores from 9-12 years of Parents Education
 
 Additional analyses taking into account the state of the study environment, both at home and in school, as well as the emotional aspects and motivation of students could be further analysed to derive more complete insights on the factors that could influence performance.
 :::
@@ -856,8 +725,7 @@ We examine the new tables created. In these new tables we are able to extract th
 
 ```{r}
 head(Schoolid_math)
-head(Schoolid_read)
-head(Schoolid_scie)
+
 ```
 
 Next, we use the below code to plot bubble plots to examine the number of students and their mean scores for each school. We will also use the `plotly package` for added interactivity.
@@ -980,8 +848,6 @@ We examine the new tables created. In these new tables we are able to obtain the
 
 ```{r}
 print(Math_Breakdown)
-print(Read_Breakdown)
-print(Scie_Breakdown)
 ```
 
 We will plot bar charts for the percentage of students per Score range for each subject.

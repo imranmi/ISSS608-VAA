@@ -37,6 +37,10 @@ website:
         menu: 
           - text: Take-home Exercise 1
             href: Take-home-ex/Take-home-Ex1/Take-home_Ex1.html
+          - text: Take-home Exercise 1a
+            href: Take-home-ex/Take-home-Ex1a/Take-home_Ex1a.html
+          - text: Take-home Exercise 1b
+            href: Take-home-ex/Take-home-Ex1b/Take-home_Ex1b.html
           - text: Take-home Exercise 2
             href: Take-home-ex/Take-home-Ex2/Take-home_Ex2.html
           - text: Take-home Exercise 3
