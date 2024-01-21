@@ -20,3 +20,5 @@ pacman::p_load(tidyverse)
 # Importing Data
 
 ## Wrangling Data
+
+The next segment of this exercise consists of improving existing visualizations ie Data Viz makeover.

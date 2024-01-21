@@ -230,7 +230,7 @@ ggplotly(p_3, tooltip = c("x", "y", "size", "color"))
 
 The ability to extract and assign Mean scores to individual schools enables us to further explore and examine the disparity in performance between schools. For example, looking at the two extremes of score results, we note that Schools (70200001 & 70200003) out perform other schools in all subjects. On the other hand, Schools (7020115 & 70200149) under perform other schools in all subjects.\
 \
-This shows that there are still marked differences between the ‘’best” schools and the’‘worst’’ schools. Additional analysis should be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation to fully understand the differences between the scores.
+This seems to indicate that there are still marked differences between the ‘’best” schools and the’‘worst’’ schools. Additional analysis could be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation in order to fully understand the reason behind the difference in the scores.
 :::
 
 # 3) Relationship Between Gender and Scores
@@ -322,13 +322,13 @@ patch6 <- rp1 / rp2 / rp3 +
               plot_annotation(
                 title = "Male students seem to perform better in Math and Science")
 
-patch6 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+patch6 & theme(panel.grid.major = element_blank(),)
 ```
 
 ::: callout-tip
 ## Observation 3
 
-Males students seem to outperform Female students in both Maths and Science with mean scores of 580.59 and 564.81 respectively. Female students seem to outperform Male students in Reading with a mean score of 552.55.
+Males students seem to outperform Female students in both Maths and Science. Female students seem to outperform Male students in Reading.
 :::
 
 # 4) Relationship between Scores and Socioeconomic status of students
@@ -481,11 +481,5 @@ ggplot(Combined_Breakdown, aes(x = Benchmarks, y = Percentage, fill = Subject)) 
 ::: callout-tip
 ## Observation 5
 
-1\) 63.14 % of students scored 544.68 and above for Math\
-2) 52.45% of students scored 544.68 and above for Reading\
-3) 59.65 % of students scored 544.68 and above for Science\
-\
-If we were to select a baseline score as 544.68, we can see that students generally do better in Math relative to Science and Reading.
-
-While individual plots are useful to visualize the break down of students across scores, we can also combine them into a single bar plot to obtain insights on relative performance. From the combined plot, we can see that at lower score ranges, students seem to do better in Reading relative to Math and Science. However, at higher score ranges, students do worse in Reading relative to Math and Science.
+Combined bar plots can allow us to obtain insights on relative performance. For example, for scores below 544.68, we can see that at lower score ranges, students seem to do better in Reading relative to Math and Science. However, at higher score ranges, students do worse in Reading relative to Math and Science.
 :::
