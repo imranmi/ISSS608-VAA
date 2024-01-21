@@ -167,6 +167,10 @@ Next, we use the below code to plot bubble plots to examine the number of studen
 
 library(plotly)
 
+best_sch_math <- Schoolid_math %>% filter(Mean == max(Mean))
+worst_sch_math <- Schoolid_math %>% filter(Mean == min(Mean))
+
+
 p_1 <- ggplot(Schoolid_math, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
@@ -182,6 +186,12 @@ p_1 <- ggplot(Schoolid_math, aes(x = CNTSCHID, y = Mean)) +
         panel.grid.major = element_blank(),  # Remove major grid lines
         panel.grid.minor = element_blank())  # Remove minor grid lines
 
+# Annotate the best and worst mean scores
+p_1 <- p_1 + 
+  geom_text(data = best_sch_math, aes(label = "Best", y = Mean + 12), vjust = 1, hjust=-1) +
+  geom_text(data = worst_sch_math, aes(label = "Worst", y = Mean - 12), vjust = 1)
+
+
 # Convert to an interactive plot
 ggplotly(p_1, tooltip = c("x", "y", "size", "color"))
 ```
@@ -192,6 +202,8 @@ ggplotly(p_1, tooltip = c("x", "y", "size", "color"))
 #| code-fold: true
 #| code-summary: "Show the code"
 
+best_sch_read <- Schoolid_read %>% filter(Mean == max(Mean))
+worst_sch_read <- Schoolid_read %>% filter(Mean == min(Mean))
 
 p_2 <- ggplot(Schoolid_read, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
@@ -208,6 +220,11 @@ p_2 <- ggplot(Schoolid_read, aes(x = CNTSCHID, y = Mean)) +
         panel.grid.major = element_blank(),  # Remove major grid lines
         panel.grid.minor = element_blank())  # Remove minor grid lines
 
+# Annotate the best and worst mean scores
+p_2 <- p_2 + 
+  geom_text(data = best_sch_read, aes(label = "Best", y = Mean + 12), vjust = 1, hjust=-1) +
+  geom_text(data = worst_sch_read, aes(label = "Worst", y = Mean - 12), vjust = 1)
+
 # Convert to an interactive plot
 ggplotly(p_2, tooltip = c("x", "y", "size", "color"))
 ```
@@ -217,6 +234,9 @@ ggplotly(p_2, tooltip = c("x", "y", "size", "color"))
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+
+best_sch_scie <- Schoolid_scie %>% filter(Mean == max(Mean))
+worst_sch_scie <- Schoolid_scie %>% filter(Mean == min(Mean))
 
 
 p_3 <- ggplot(Schoolid_scie, aes(x = CNTSCHID, y = Mean)) +
@@ -234,6 +254,11 @@ p_3 <- ggplot(Schoolid_scie, aes(x = CNTSCHID, y = Mean)) +
         panel.grid.major = element_blank(),  # Remove major grid lines
         panel.grid.minor = element_blank())  # Remove minor grid lines
 
+# Annotate the best and worst mean scores
+p_3 <- p_3 + 
+  geom_text(data = best_sch_scie, aes(label = "Best", y = Mean + 12), vjust = 1, hjust=-1) +
+  geom_text(data = worst_sch_scie, aes(label = "Worst", y = Mean - 12), vjust = 1)
+
 # Convert to an interactive plot
 ggplotly(p_3, tooltip = c("x", "y", "size", "color"))
 ```
@@ -242,9 +267,9 @@ ggplotly(p_3, tooltip = c("x", "y", "size", "color"))
 ::: callout-tip
 ## Observation 2
 
-The ability to extract and assign Mean scores to individual schools enables us to further explore and examine the disparity in performance between schools. For example, looking at the two extremes of score results, we note that Schools (70200001 & 70200003) out perform other schools in all subjects. On the other hand, Schools (7020115 & 70200149) under perform other schools in all subjects.\
-\
-This seems to indicate that there are still marked differences between the ‘’best” schools and the’‘worst’’ schools. Additional analysis could be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation in order to fully understand the reason behind the difference in the scores.
+The ability to extract and assign Mean scores to individual schools enables us to further explore and examine the disparity in performance between schools. For example, looking at the two extremes of score results, we note that Schools (70200001 & 70200003) out perform other schools in Math and Science. On the other hand, Schools (7020115 & 70200149) under perform other schools in Math and Science.
+
+This seems to indicate that there are still marked differences between the ‘’best” schools and the’‘worst’’ schools. Additional analysis could be done to identify the differences between these two sets of schools in terms of resources, teaching quality, and students attitudes or motivation etc, in order to fully understand the reason behind the difference in the scores.
 :::
 
 # 3) Relationship Between Gender and Scores
