@@ -9,6 +9,20 @@ execute:
   warning: false
 ---
 
+# Setting the Scene
+
+OECD education director Andreas Schleicher shared in a BBC article that “Singapore managed to achieve excellence without wide differences between children from wealthy and disadvantaged families.” (2016) Furthermore, several of Singapore’s ministers for Education also started an “every school a good school” slogan. The general public, however, believes that there are still disparities that exist, especially between "elite" and neighborhood schools, between students from families with higher socioeconomic status and those with relatively lower socioeconomic status and immigration and non-immigration families.
+
+# The Task
+
+The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA's global education survey runs every three years to assess education systems worldwide through the testing 15 year old students in the subjects of mathematics, reading, and science.
+
+In this take-home exercise, we will use appropriate **Exploratory Data Analysis (EDA)** methods and **ggplot2** functions to reveal:
+
+-   the distribution of Singapore students’ performance in mathematics, reading, and science, and
+
+-   the relationship between these performances with schools, gender and socioeconomic status of the students.
+
 # Getting Started
 
 Loading R packages
@@ -53,8 +67,8 @@ We will use the code below to plot histograms to show the distribution of scores
 # Create the histogram plot with an annotated mean line using Math_mean_SG
 plt1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
   geom_histogram(binwidth = 20, color = "white", fill='lightblue') +
-  labs(x = "PV1 Math Score",
-       y = "Frequency") +
+  labs(x = "Math Scores",
+       y = "Count") +
   geom_vline(xintercept = Math_mean_SG$Mean,
              col = 'black',
              size = 0.5,
@@ -66,8 +80,8 @@ plt1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
 # Create the histogram plot with an annotated mean line using Read_mean_SG
 plt2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
   geom_histogram(binwidth = 20, color = "white", fill='lightgreen') +
-  labs(x = "PV1 Reading Score",
-       y = "Frequency") +
+  labs(x = "Reading Scores",
+       y = "Count") +
   geom_vline(xintercept = Read_mean_SG$Mean,
              col = 'black',
              size = 0.5,
@@ -80,8 +94,8 @@ plt2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
 # Create the histogram plot with an annotated mean line using Science_mean_SG
 plt3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
   geom_histogram(binwidth = 20, color = "white", fill='lightpink') +
-  labs(x = "PV1 Science Score",
-       y = "Frequency") +
+  labs(x = "Science Scores",
+       y = "Count") +
   geom_vline(xintercept = SCIE_mean_SG$Mean,
              col = 'black',
              size = 0.5,
@@ -95,7 +109,7 @@ plt4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
   geom_density(alpha = 0.5) +
   geom_density(data = stu_qqq_SG, aes(x = PV1READ, fill = "Reading"), alpha = 0.5) +
   geom_density(data = stu_qqq_SG, aes(x = PV1SCIE, fill = "Science"), alpha = 0.5) +
-  labs(x = "Scores",
+  labs(x = "Subject Scores",
        y = "Density") +
   scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
   guides(fill = FALSE) +  # Remove the legend
@@ -157,7 +171,7 @@ p_1 <- ggplot(Schoolid_math, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
   scale_color_gradient(low = "skyblue", high = "darkblue") +
-  labs(title = "Mean Math Scores by School ID",
+  labs(title = "Mean Math Scores per School",
     y = "Mean Math Scores", 
     size = "Number of Students", 
     color = "Number of Students") +
@@ -183,7 +197,7 @@ p_2 <- ggplot(Schoolid_read, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
   scale_color_gradient(low = "yellow", high = "darkorchid") +
-  labs(title = "Mean Reading Scores by School ID",
+  labs(title = "Mean Reading Scores per School",
     y = "Mean Reading Scores", 
     size = "Number of Students", 
     color = "Number of Students") +
@@ -209,7 +223,7 @@ p_3 <- ggplot(Schoolid_scie, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(size = Freq, color = Freq), alpha = 0.5) +
   scale_size_area(max_size = 10) +
   scale_color_gradient(low = "lightpink", high = "darkred") +
-  labs(title = "Mean Science Scores by School ID",
+  labs(title = "Mean Science Scores per School",
     y = "Mean Science Scores", 
     size = "Number of Students", 
     color = "Number of Students") +
@@ -363,7 +377,7 @@ C_plt1 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1MATH)) +
     vjust = 1   # Adjust vertical justification
   ) +
   labs(x = "Socio-Economic Status (ESCS)",
-       y = "PV1 Math Score") +
+    y = "Math Scores") +
   theme_minimal()
 
 c_coeff_ESCS_Read <- cor(subset_ESCS_PV1$ESCS, subset_ESCS_PV1$PV1READ)
@@ -379,7 +393,7 @@ C_plt2 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1READ)) +
     vjust = 1   # Adjust vertical justification
   ) +
   labs(x = "Socio-Economic Status (ESCS)",
-       y = "PV1 Read Score") +
+    y = "Reading Scores") +
   theme_minimal()
 
 c_coeff_ESCS_Scie <- cor(subset_ESCS_PV1$ESCS, subset_ESCS_PV1$PV1SCIE)
@@ -395,7 +409,7 @@ C_plt3 <- ggplot(subset_ESCS_PV1, aes(x = ESCS, y = PV1SCIE)) +
     vjust = 1   # Adjust vertical justification
   ) +
   labs(x = "Socio-Economic Status (ESCS)",
-       y = "PV1 Science Score") +
+       y = "Science Scores") +
   theme_minimal()
 
 ```
@@ -416,7 +430,7 @@ patch4 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 ::: callout-tip
 ## Observation 4
 
-There is a weak positive relationship between subject scores and Socioeconomic statuses. The ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS). It could be likely that the larger number of constituents has ‘diluted’ the score, where the effect is more prominent for developed countries like Singapore.
+There is a weak positive relationship between subject scores and Socioeconomic statuses. The ESCS score is a composite score calculated from three indicators: highest parental occupation status (HISEI), highest education of parents in years (PAREDINT), and home possessions (HOMEPOS).
 
 Further analysis could be conducted on the individual components of the ESCS score to check for their individual influence on student performance.
 :::
@@ -469,13 +483,21 @@ Combined_Breakdown <- Combined_Breakdown %>%
 
 # Now plot using ggplot
 ggplot(Combined_Breakdown, aes(x = Benchmarks, y = Percentage, fill = Subject)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +  # Dodge position for the bars
+  geom_text(
+    aes(label = sprintf("%.1f%%", Percentage)),  # This will format the label to have 1 decimal place and a percentage sign
+    position = position_dodge(width = 0.9),  # Match the position of the text with the dodged bars
+    vjust = -0.25,   
+    size = 2  
+  ) +
   scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
   labs(title = "For lower Score ranges, students seem to do better in Reading",
        x = "Score Range",
        y = "Percentage of Students") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # To make the x labels readable
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 ```
 
 ::: callout-tip
