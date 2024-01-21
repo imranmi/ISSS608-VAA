@@ -950,14 +950,26 @@ Combined_Breakdown <- Combined_Breakdown %>%
   mutate(Benchmarks = fct_inorder(Benchmarks))
 
 # Now plot using ggplot
-ggplot(Combined_Breakdown, aes(x = Benchmarks, y = Percentage, fill = Subject)) +
-  geom_bar(stat = "identity", position = "dodge") +
+p <- ggplot(Combined_Breakdown, aes(x = Benchmarks, y = Percentage, fill = Subject)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +  # Dodge position for the bars
+  geom_text(
+    aes(label = sprintf("%.1f%%", Percentage)),  # This will format the label to have 1 decimal place and a percentage sign
+    position = position_dodge(width = 0.9),  # Match the position of the text with the dodged bars
+    vjust = -0.25,   
+    size = 2  
+  ) +
   scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
-  labs(title = "For lower Score ranges, students do better in Reading",
+  labs(title = "For lower Score ranges, students seem to do better in Reading",
        x = "Score Range",
        y = "Percentage of Students") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # To make the x labels readable
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Convert to interactive plotly object
+p_interactive <- ggplotly(p, tooltip = c("x", "y", "fill", "text"))
+
+# Print the interactive plot
+p_interactive
 ```
 
 ::: callout-note
@@ -1102,13 +1114,19 @@ Combined_homework <- Combined_homework %>%
   mutate(STUDYHMW = fct_inorder(STUDYHMW))
 
 # Now plot using ggplot
-ggplot(Combined_homework, aes(x = STUDYHMW, y = Mean, fill = Subject)) +
+p2 <- ggplot(Combined_homework, aes(x = STUDYHMW, y = Mean, fill = Subject)) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
   labs(title = "Students who study more may not necessarily score higher",
        x = "Number of times in a week",
        y = "Mean Scores") +
   theme_minimal() 
+
+# Convert to interactive plotly object
+p_interactive2 <- ggplotly(p2, tooltip = c("x", "y", "fill", "text"))
+
+# Print the interactive plot
+p_interactive2
   
 ```
 
