@@ -1,6 +1,6 @@
 ---
-title: "Hands-on Exercise 3"
-date: January 1, 2024
+title: "Hands-on Exercise 3b"
+date: January 22, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -13,8 +13,7 @@ execute:
 
 ## Loading R package
 
-```{r}
-pacman::p_load(tidyverse)
+```{r} pacman::p_load(tidyverse)}
 ```
 
 # Importing Data

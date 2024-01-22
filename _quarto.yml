@@ -11,8 +11,10 @@ website:
             href: Hands-on-ex/Hands-on-Ex1/Hands-on_Ex1.html
           - text: Hands-on Exercise 2 - Beyond ggplot2 fundamentals
             href: Hands-on-ex/Hands-on-Ex2/Hands-on_Ex2.html
-          - text: Hands-on Exercise 3
-            href: Hands-on-ex/Hands-on-Ex3/Hands-on_Ex3.html
+          - text: Hands-on Exercise 3a - Programming Interactive Data Visualisation with R
+            href: Hands-on-ex/Hands-on-Ex3a/Hands-on_Ex3a.html
+          - text: Hands-on Exercise 3b
+            href: Hands-on-ex/Hands-on-Ex3b/Hands-on_Ex3b.html
           - text: Hands-on Exercise 4
             href: Hands-on-ex/Hands-on-Ex4/Hands-on_Ex4.html
           - text: Hands-on Exercise 5
