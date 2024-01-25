@@ -1,6 +1,6 @@
 ---
-title: "Take-Home Exercise 2"
-date: January 1, 2024
+title: "Take-Home Exercise 2 : DataVis Makeover"
+date: January 22, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -9,14 +9,693 @@ execute:
   warning: false
 ---
 
-# Getting Started
+::: callout-important
+## DataVis Makeover
 
-## Loading R package
+Remaking a peer’s original design by improving the clarity and aesthetics of charts and/or by creating an alternative design if needed.
+:::
+
+# 1. The Task
+
+In this take-home exercise, we are required to:
+
+-   select one of the Take-home Exercise 1 prepared by our classmates,
+
+-   critique the submission in terms of clarity and aesthetics,
+
+-   prepare a sketch for the alternative design by using the data visualization design principles and best practices we have learned in Lesson 1 and 2, and
+
+-   remake the original design by using ggplot2, ggplot2 extensions and tidyverse packages.
+
+# 2. Data Preparation
+
+I will follow the data preparation steps done by the original author of the selector graphs. The steps are listed below for easy reference. As this is not the focus of the exercise, I will not go into the minute details of preparation.
+
+## 2.1 Loading R packages
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, haven, ggrepel, ggthemes, hrbrthemes, patchwork, intsvy, ggdist, ggridges,colorspace, plotly)
 ```
 
-# Importing Data
+## 2.2 Importing the Data set
 
-## Wrangling Data
+```{r}
+stu_qqq_SG <- 
+  read_rds("data/stu_qqq_SG.rds")
+```
+
+## 2.3 Removing missing values and Converting data types
+
+Rows with missing values for ESCS were removed before further analysis.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+stu_qqq_SG_clean <- stu_qqq_SG[complete.cases(stu_qqq_SG[, "ESCS"]), ]
+```
+
+CNTSCHID and CNTSTUID's data types were changed to character.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+stu_qqq_SG_clean$CNTSCHID <- as.character(stu_qqq_SG_clean$CNTSCHID)
+stu_qqq_SG_clean$CNTSTUID <- as.character(stu_qqq_SG_clean$CNTSTUID)
+```
+
+## 2.4 Binning Variable ESCS
+
+The ESCS variable was binned into quantiles using the [mutate()](https://dplyr.tidyverse.org/reference/mutate.html) and [cut()](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut) function
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+stu_qqq_SG_clean <- stu_qqq_SG_clean %>%
+  mutate(ESCS_recoded = cut(ESCS,breaks=quantile(ESCS,c(0,0.25,0.5,0.75,1)),labels=c("Very Low","Low","Medium","High"),include.lowest=TRUE))
+```
+
+## 2.5 Recoding ST004D01T (Gender) variable
+
+Variable ST004D01T, was recoded to labels to “Female” and “Male” respectively.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+stu_qqq_SG_clean$ST004D01T <- recode(stu_qqq_SG_clean$ST004D01T, "1" = "Female", "2" = "Male")
+```
+
+# 3. Visualization Critique and Remake
+
+The graphs created by the author will be reviewed and improved in terms of clarity and aesthetics.
+
+## 3.1 General distribution of students’ performance in Math, Science and Reading
+
+The author had created a data folder path to save any data files generated:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+data_folder_path <- file.path(getwd(), "data")
+```
+
+The code below is used to determine the Mean and Standard Deviation of PV values across the population of students that took the assessment, and merge the values via a [rbind()](https://dplyr.tidyverse.org/reference/bind.html) function (with a [relocate()](https://dplyr.tidyverse.org/reference/relocate.html) function to bring the newly formed “subject” column to the front of the dataframe) to form a table indicating the Mean and Standard Deviation of PV values per subject
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pvmathgeneral <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"MATH"), data=stu_qqq_SG_clean,export=FALSE,name="pvmath_general",folder=data_folder_path)
+
+pvmathgeneral$subject <- "Math"
+
+pvreadgeneral <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"), data=stu_qqq_SG_clean,export=FALSE,name="pvread_general",folder=data_folder_path)
+
+pvreadgeneral$subject <- "Reading"
+
+pvsciegeneral <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"), data=stu_qqq_SG_clean,export=FALSE,name="pvscie_general",folder=data_folder_path)
+
+pvsciegeneral$subject <- "Science"
+
+mergedgeneral <- rbind(pvmathgeneral,pvreadgeneral,pvsciegeneral)
+mergedgeneral %>% relocate(subject)
+```
+
+The graphical representation of the general distribution of Math, Reading and Science scores was generated using the code below.
+
+::: panel-tabset
+## The original plot
+
+![](images/clipboard-3818993272.png)
+
+## The code
+
+```{r}
+#| eval: false
+
+p1<- ggplot(mergedgeneral, aes(x = subject, y = Mean,colour=subject)) +
+  geom_boxplot(width = 0.5, position = position_dodge(width = 0.75),lwd=0.5,show.legend=FALSE) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 18,
+    size = 5,
+    aes(colour=subject),
+    position = position_dodge(width = 0.75)) +
+  geom_errorbar(
+    aes(ymin = Mean - SD, ymax = Mean + SD),
+    width = 0.5,
+    size=0.8,
+    position = position_dodge(width = 0.5)
+  ) +
+  labs(title = "Scores across Math, Reading and Science across all 15-year olds who took PISA 2022 in SGP") +
+  ylab("Scores") +
+  xlab("Subject")+
+  scale_y_continuous(limits = c(0, 1000), breaks = seq(0, 1000, by = 50))+
+  coord_flip() +
+  theme_minimal(base_size = 12)
+p1
+```
+:::
+
+### 3.1.1 Clarity
+
+The author had concluded that "15-year olds in Singapore performed best in Math, followed by Science and lastly Reading". We can see this clearly in the graph.
+
+But, the author had labelled this EDA as "General distribution of students’ performance in Math, Science and Reading", however the graph instead shows a range of scores across the 3 subjects.
+
+First we understand the table from which the author had generated the graph.
+
+```{r}
+print(mergedgeneral)
+```
+
+The *mergedgeneral* subset table only has 3 observations out of 6 variables. Therefore it is clear that this table cannot be used to plot the distribution of student scores across the 3 subjects.
+
+We can break up the original code and examine the evolution of the plots.
+
+```{r}
+ggplot(mergedgeneral, aes(x = subject, y = Mean,colour=subject)) +
+  geom_boxplot(width = 0.5, position = position_dodge(width = 0.75),lwd=0.5,show.legend=FALSE) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 18,
+    size = 5,
+    aes(colour=subject),
+    position = position_dodge(width = 0.75))
+```
+
+```{r}
+ggplot(mergedgeneral, aes(x = subject, y = Mean,colour=subject)) +
+geom_errorbar(
+    aes(ymin = Mean - SD, ymax = Mean + SD),
+    width = 0.5,
+    size=0.8,
+    position = position_dodge(width = 0.5)
+  ) 
+```
+
+Therefore I would conclude that the code used is not able to plot a **Distribution** of student scores across subjects and that this EDA should be re-labelled as the "Range of student scores across Math, Reading and Science", instead.
+
+### 3.1.2 Aesthetics
+
+-   The use of colors to represent each subject helps identify each subject clearly.
+
+-   Legend or Axis labels:- As there is already a legend on the right which identifies subjects by colour, the Y axis labels seem redundant.
+
+-   The manual setting of the axis via the code below could be further refined and shortened. Because of the large scale, the graph appears too elongated.
+
+```{r}
+#| eval: false
+scale_y_continuous(limits = c(0, 1000), breaks = seq(0, 1000, by = 50))
+```
+
+-   The author could instead annotate the mean, max and min scores. This would enable us to remove the background grid lines and would make the X axis tick marks unnecessary. Even with the background grid lines and X axis tick marks, I am unable to decipher the actual mean, max and min scores clearly.
+
+-   The X axis should stop at zero, as there are no negative scores.
+
+-   Since Math, Reading and Science are clearly labelled in the Y axis, the label "Subject" can be removed.
+
+### 3.1.3 Sketch of Proposed Design
+
+Rough sketch of proposed design is shown below.
+
+### 3.1.4 Remake
+
+We have established that the original plot is unable to exhibit the distribution of student scores across subjects.
+
+Therefore, I will extract data from the original data set and use the code below to re-make the original graph into Density plots for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+mean_pv1math <- mean(stu_qqq_SG$PV1MATH)
+median_pv1math <- median(stu_qqq_SG$PV1MATH)
+mean_pv1read <- mean(stu_qqq_SG$PV1READ)
+median_pv1read <- median(stu_qqq_SG$PV1READ)
+mean_pv1scie <- mean(stu_qqq_SG$PV1SCIE)
+median_pv1scie <- median(stu_qqq_SG$PV1SCIE)
+
+
+p_1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
+  geom_density(fill = 'lightblue', color = "black", alpha = 0.5) + 
+  coord_cartesian(xlim = c(0, 1000)) +
+  labs(x = "Math Scores", y = "Density") + # Change label to 'Density'
+  geom_vline(xintercept = mean_pv1math, color = 'black', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = mean_pv1math, y = 0.0025, label = paste("Mean:", round(mean_pv1math, 2))), # Adjust y position for text
+    color = "black", hjust = 1.5, size = 3
+  ) +
+  geom_vline(xintercept = median_pv1math, color = 'red', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = median_pv1math, y = 0.0025, label = paste("Median:", round(median_pv1math, 2))), # Adjust y position for text
+    color = "red", hjust = -0.45, size = 3
+  ) +
+  theme_minimal()
+
+p_2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
+  geom_density(fill = 'lightgreen', color = "black", alpha = 0.5) + 
+  coord_cartesian(xlim = c(0, 1000)) +
+  labs(x = "Reading Scores", y = "Density") + 
+  geom_vline(xintercept = mean_pv1read, color = 'black', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = mean_pv1read, y = 0.0025, label = paste("Mean:", round(mean_pv1read, 2))), # Adjust y position for text
+    color = "black", hjust = 1.5, size = 3
+  ) +
+  geom_vline(xintercept = median_pv1read, color = 'red', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = median_pv1read, y = 0.0025, label = paste("Median:", round(median_pv1read, 2))), # Adjust y position for text
+    color = "red", hjust = -0.45, size = 3
+  ) +
+  theme_minimal()
+
+p_3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
+  geom_density(fill = 'lightpink', color = "black", alpha = 0.5) + 
+  coord_cartesian(xlim = c(0, 1000)) +
+  labs(x = "Science Scores", y = "Density") + 
+  geom_vline(xintercept = mean_pv1scie, color = 'black', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = mean_pv1scie, y = 0.0025, label = paste("Mean:", round(mean_pv1scie, 2))), # Adjust y position for text
+    color = "black", hjust = 1.5, size = 3
+  ) +
+  geom_vline(xintercept = median_pv1scie, color = 'red', size = 0.65, linetype = "dashed") +
+  geom_text(
+    aes(x = median_pv1scie, y = 0.0025, label = paste("Median:", round(median_pv1scie, 2))), # Adjust y position for text
+    color = "red", hjust = -0.45, size = 3
+  ) +
+  theme_minimal()
+
+
+p_4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
+  geom_density(alpha = 0.5) +
+  geom_density(data = stu_qqq_SG, aes(x = PV1READ, fill = "Reading"), alpha = 0.5) +
+  geom_density(data = stu_qqq_SG, aes(x = PV1SCIE, fill = "Science"), alpha = 0.5) +
+  labs(x = "Combined Scores",
+       y = "Density") +
+  scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
+  guides(fill = FALSE) +  # Remove the legend
+  theme_minimal()
+```
+
+I will create a composite graph for all the density plots using the code below
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch1 <- (p_1 + p_2) / (p_3 + p_4)  + 
+              plot_annotation(
+                title = "Distribution of student performance in Math, Reading and Science",
+                subtitle = "All subjects exihibit a slight left-skewed distribution" )
+
+patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+```
+
+## 3.2 Distribution of students’ performance in Math, Science and Reading across school
+
+The author has used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package, to obtain the composite Mean and Standard Deviation values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each school.
+
+The code below generates the composite PV values.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pvmathsch <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"MATH"),by= "CNTSCHID", data=stu_qqq_SG_clean,export=FALSE,name="pvmath_bysch",folder=data_folder_path)
+
+pvreadsch <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),by= "CNTSCHID", data=stu_qqq_SG_clean,export=FALSE,name="pvread_bysch",folder=data_folder_path)
+
+pvsciesch <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),by= "CNTSCHID", data=stu_qqq_SG_clean,export=FALSE,name="pvscie_bysch",folder=data_folder_path)
+```
+
+The author then generated individual plots to display the distribution of mean Math, Reading and Science scores across schools.
+
+The code chunks are as follows:
+
+::: panel-tabset
+## The Original plot
+
+![](images/clipboard-1617135863.png)
+
+## The code
+
+```{r}
+#| eval: false
+
+p2<- ggplot(pvmathsch, aes(x = as.factor(CNTSCHID), y = Mean)) +
+  geom_boxplot(width = 0.5, position = position_dodge(width = 0.75),lwd=1.5) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 18,
+    size = 5,
+    position = position_dodge(width = 0.75),
+    color = "red"
+  ) +
+  geom_errorbar(
+    aes(ymin = Mean - SD, ymax = Mean + SD),
+    width = 0.8,
+    size=1,
+    position = position_dodge(width = 10)
+  ) +
+  labs(title = "Math Scores by School") +
+  ylab("Math Score") +
+  xlab("School ID")+
+  scale_y_continuous(limits=c(0,1000),breaks = seq(0, 1000, by=100))+
+  coord_flip() +
+  theme_minimal(base_size=20)             
+```
+:::
+
+### 3.2.1 Clarity
+
+From the original code, the author had initiated a series of box plots across the 3 subjects to represent the mean scores by each school id (164 schools).
+
+The author had concluded that the plot indicated that "*most schools have PV scores ranging from 400 to 700 in Math, Reading, and Science*".
+
+The author also identified that School IDs 70200149 and 70200115 "*showed lower scores in Math, Reading, and Science compared to other schools*". And that schools IDs 70200001 and 70200002 "*consistently performed better in all three segments*".
+
+Initially I had interpreted this visualization to represent the range of student scores for all subjects per school (Max, min and mean scores). This is because of the author's conclusion above and the use of the title "Math/Reading/Science scores by school".
+
+However, upon closer examination of the code below, the author had included an error bar with Mean +/- one standard deviation.
+
+```{r}
+#geom_errorbar(
+    #aes(ymin = Mean - SD, ymax = Mean + SD),
+    #width = 0.8,
+    #size=1,
+    #position = position_dodge(width = 10)
+
+```
+
+Therefore I would conclude that this plot is actually comparing the mean scores across different schools.
+
+Examining the subset used for the plot in more detail.
+
+```{r}
+print(head(pvmathsch))
+```
+
+The data set has been grouped by School ID and contains variables like Frequency ( number of students, per school) and the overall mean score per school ID. Hence I would conclude that this subset is not able to plot the range of scores per school, and can only be used to display the mean scores per school ID.
+
+While this subset and plot can be useful to help analyse the disparity in the performance between schools, I think that the visualization can be remade into a simpler version to enable the reader to quickly identify the disparity in school performance.
+
+### 3.2.2 Aesthetics
+
+-   The use of a vertically long graph to compare the means across school IDs is useful to identify the rough range of mean scores overall, but it is visually difficult to quickly identify the schools with the top and bottom mean scores.
+
+-   The title of the graphs are misleading and should be re-labelled to "Mean Scores" instead.
+
+-   Since the graphs are already well labelled, and identifies the different subjects clearly, the use of different colors per subject would not be necessary.
+
+-   Since there are 164 schools, the use of a vertically long format makes it difficult to read the Y-axis labels.
+
+-   Since the school ids in the Y-axis are sequenced the same, it would be sufficient to only label the Y-axis one time only.
+
+### 3.2.3 Sketch of Proposed Design
+
+Rough sketch of proposed design is shown below.
+
+### 3.2.4 Remake
+
+We have established that the original plot, while useful to identify the differences in school performance, does not enable to reader to quickly capture the information from the data points.
+
+Therefore, I will use the same data set used by the author but design a new graph to improve on the original intention.
+
+I will use the code below to re-make the original graph into Bubble plots for each subject. For this remake, I have kept things simple, and just used color as a means to differentiate the mean scores.
+
+I have also added reference lines to show the 10th and 90th percentile scores to easily identify the schools in those two opposite categories.
+
+Lastly, I have also added annotations to quickly identify the top 5 and bottom 5 schools with the best and worst mean scores.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(ggrepel)
+
+# Identify the top 5 and bottom 5 schools
+top_5 <- pvmathsch %>% 
+  arrange(desc(Mean)) %>%
+  slice(1:5)
+
+bottom_5 <- pvmathsch %>% 
+  arrange(Mean) %>%
+  slice(1:5)
+
+# Base plot with points colored by the mean score
+p1 <- ggplot(pvmathsch, aes(x = CNTSCHID, y = Mean)) +
+  geom_point(aes(color = Mean), alpha = 0.5, size = 7) +
+  scale_color_gradient(low = "red", high = "green") +
+  labs(title = "Mean Math Scores per School",
+       x = "School ID",
+       y = "Mean Math Scores") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank())  # Remove minor grid lines
+
+# Annotate the top 5 and bottom 5 schools
+p1 <- p1 +
+  geom_text_repel(
+    data = top_5, 
+    aes(label = CNTSCHID, y = Mean), 
+    color = "blue", 
+    size = 3, 
+    nudge_y = 12,   # Adjust nudge_y if necessary to move text up or down
+    direction = "y"
+  ) +
+  geom_text_repel(
+    data = bottom_5, 
+    aes(label = CNTSCHID, y = Mean), 
+    color = "blue", 
+    size = 3, 
+    nudge_y = -12,  # Adjust nudge_y if necessary to move text up or down
+    direction = "y"
+  )
+
+# Calculate the 10th and 90th percentiles
+percentile10 <- quantile(pvmathsch$Mean, probs = 0.10, na.rm = TRUE)
+percentile90 <- quantile(pvmathsch$Mean, probs = 0.90, na.rm = TRUE)
+
+# Add horizontal lines for the 10th and 90th percentiles to your plot
+p1 <- p1 + 
+  geom_hline(yintercept = percentile10, linetype = "dashed", color = "blue", size = 0.5) +
+  geom_hline(yintercept = percentile90, linetype = "dashed", color = "blue", size = 0.5) +
+  geom_text(aes(x = Inf, y = percentile10, label = paste("10th Percentile:", round(percentile10, 2))), 
+            hjust = 1.05, vjust = 0, color = "blue", size = 3) +
+  geom_text(aes(x = Inf, y = percentile90, label = paste("90th Percentile:", round(percentile90, 2))), 
+            hjust = 1.05, vjust = 1, color = "blue", size = 3)
+
+p1
+
+```
+
+Lastly, for interactivity, we can also use `ggplotly()` to convert this to an interactive graph. With the added interactivity, the reader can use the tooltip function to gain more information on the specific data points.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+library(plotly)
+
+# Convert to an interactive plot
+ggplotly(p1, tooltip = c("x", "y"))
+```
+
+::: callout-note
+## Note
+
+Some of the previous annotations generated in the static plot may not appear after turning it into an interactive plot. Hence, we can use both static and interactive plots together if needed. For example, static charts to quickly summarize and communication information to reader, and an interactive charts for readers to drill down in more detail, eg zooming to certain segments, identifying specific data point details etc.
+:::
+
+## 3.3 Distribution of students’ performance in Math, Science and Reading by gender
+
+The author had used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each gender.
+
+The code below was used to generate the composite PV values for Math, Reading and Science by gender.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pvmathgenderonly <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"MATH"),c("ST004D01T"), data=stu_qqq_SG_clean,export=FALSE,name="pvmath_bygenderonly",folder=data_folder_path)
+
+pvreadgenderonly <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),c("ST004D01T"), data=stu_qqq_SG_clean,export=FALSE,name="pvread_bygenderonly",folder=data_folder_path)
+
+pvsciegenderonly <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),c("ST004D01T"), data=stu_qqq_SG_clean,export=FALSE,name="pvscie_bygenderonly",folder=data_folder_path)
+```
+
+The author then generated individual plots to display the distribution of Math, Reading and Science scores by gender.
+
+::: panel-tabset
+## The Original plot
+
+![](images/clipboard-3304529458.png)
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(pvmathgenderonly, aes(x = as.factor(ST004D01T), y = Mean,fill=ST004D01T)) +
+  geom_boxplot(width = 0.5, position = position_dodge(width = 0.75),lwd=0.5,show.legend=FALSE) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 18,
+    size = 5,
+    aes(colour=ST004D01T),
+    position = position_dodge(width = 0.75)) +
+  geom_errorbar(
+    aes(ymin = Mean - SD, ymax = Mean + SD,color=ST004D01T),
+    width = 0.5,
+    size=0.8,
+    position = position_dodge(width = 0.5)
+  ) +
+  labs(title = "Math Scores by Gender") +
+  ylab("Math Score") +
+  xlab("Gender")+
+  scale_y_continuous(limits = c(0, 1000), breaks = seq(0, 1000, by = 100))+
+  scale_fill_discrete(name = "Gender") +
+  scale_color_discrete(name = "Gender") +
+  coord_flip() +
+  theme_gray()
+```
+:::
+
+### 3.3.1 Clarity
+
+From the original code, the author had initiated a series of box plots across the 3 subjects to represent the mean scores by gender.
+
+The author had concluded that the plots indicated that "*males are observed to perform slightly better in Math and Science, whereas females are slightly stronger in Reading*".
+
+Initially I had interpreted this visualization to represent the range of student scores for all subjects per gender (Max, min and mean scores). This is because of the author's conclusion above and the use of the title "Math/Reading/Science scores by Gender".
+
+However, upon closer examination of the code below, the author had included an error bar with Mean +/- one standard deviation.
+
+```{r}
+#geom_errorbar(
+    #aes(ymin = Mean - SD, ymax = Mean + SD,color=ST004D01T),
+    #width = 0.5,
+    #size=0.8,
+    #position = position_dodge(width = 0.5)
+```
+
+Therefore I would conclude that this plot is actually comparing the mean subject scores across different genders.
+
+Examining the subset used for the plot in more detail.
+
+```{r}
+print(pvmathgenderonly)
+```
+
+The data set segregates the different genders and their mean scores. Hence I would conclude that this subset is not able to plot the range of scores per gender, and can only be used to compare the mean scores for genders across the 3 subjects.
+
+While this subset and plot can be useful to help compare the mean subject scores between genders, I think that the visualization can done differently to enable the reader to obtain more information in the performance between genders.
+
+### 3.3.2 Aesthetics
+
+-   The title of the graphs are misleading and should be re-labelled to "Mean Scores" instead.
+
+-   Since the graphs are already well labelled in the x and y axis, and identifies the different genders clearly, the use of different colors per gender and the legend would not be necessary.
+
+-   Y axis title "Gender" is not necessary, as "males" and "females" are already labelled.
+
+-   The author could instead annotate the mean scores. This would enable us to remove the background grid lines and would make the X axis tick marks unnecessary. Even with the background grid lines and X axis tick marks, I am unable to decipher the actual mean scores clearly.
+
+### 3.3.3 Sketch of Proposed Design
+
+Rough sketch of proposed design is shown below.
+
+### 3.3.4 Remake
+
+We have established that the original plot is unable to exhibit the full range of subject scores across genders.
+
+Therefore, I will extract data from the original data set to create new subsets for the new plots using the code below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Math_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "ST004D01T", data = stu_qqq_SG)
+
+Math_gender$ST004D01T <- factor(Math_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+Read_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "ST004D01T", data = stu_qqq_SG)
+
+Read_gender$ST004D01T <- factor(Read_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+SCIE_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "ST004D01T", data = stu_qqq_SG)
+
+SCIE_gender$ST004D01T <- factor(SCIE_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+```
+
+Next, I will use the code below to create new box plots for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create a subset of the data with gender and PV1 score columns
+subset_gender_PV1 <- stu_qqq_SG %>%
+  select(ST004D01T, PV1MATH, PV1SCIE, PV1READ)
+
+# Convert the "ST004D01T" column to a factor 
+subset_gender_PV1$ST004D01T <- factor(subset_gender_PV1$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+# Create the plot using the subset_data
+bxp1 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1MATH, fill = ST004D01T)) +
+  geom_boxplot() +
+  coord_cartesian(ylim = c(0, 1000)) +
+  geom_point(data = Math_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = Math_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Math",
+       y = "Scores") +
+  scale_fill_manual(values = c("Female" = "lightblue", "Male" = "lightblue")) +  
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+
+
+bxp2 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1READ, fill = ST004D01T)) +
+  geom_boxplot() +
+  coord_cartesian(ylim = c(0, 1000)) +
+  geom_point(data = Read_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = Read_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Reading",
+       y = "Scores") +
+  scale_fill_manual(values = c("lightgreen", "lightgreen")) +  # Associate colors with factor levels
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+
+bxp3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D01T)) +
+  geom_boxplot() +
+  coord_cartesian(ylim = c(0, 1000)) +
+  geom_point(data = SCIE_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
+  geom_text(data = SCIE_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
+            color = "black", vjust = -0.5, size = 3.5) +
+  labs(x = "Science",
+       y = "Scores") +
+  scale_fill_manual(values = c("lightpink", "lightpink")) +  # Associate colors with factor levels
+  theme_minimal() +
+  theme(legend.position = "none")  # Remove the legend
+```
+
+I will use the code below to create a composite graph.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+patch3 <- bxp1 + bxp2 + bxp3 + 
+              plot_annotation(
+                title = "Male students outperform in Maths and Science",
+                subtitle = "Female students outperform in Reading")
+
+patch3 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+```
