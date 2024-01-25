@@ -28,7 +28,7 @@ First, write a code chunk to check, install and launch the following R packages:
 -   [**patchwork**](https://patchwork.data-imaginist.com/) for combining multiple ggplot2 graphs into one figure.
 
 ```{r}
-pacman::p_load(ggiraph, plotly, 
+pacman::p_load(ggiraph, plotly, listviewer,
                patchwork, DT, tidyverse) 
 ```
 
@@ -120,7 +120,7 @@ The specific content or box for the tooltip can be customized using a list objec
 exam_data$tooltip <- c(paste0(     
   "Name = ", exam_data$ID,         
   "\n Class = ", exam_data$CLASS,
-  "\n Class = ", exam_data$RACE)) 
+  "\n Race = ", exam_data$RACE)) 
 
 p1 <- ggplot(data=exam_data, 
        aes(x = ENGLISH)) +
@@ -839,7 +839,89 @@ Things to learn from the code chunk:
 
 # 3.9 Plotting Practice
 
-Below are some sample practice plots based on the lessons learnt in this Hands on Exercise
+Below are some sample practice plots based on the lessons learnt in this Hands on Exercise.
+
+1\) Interactive Histogram.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+tooltip_css <- "background-color:blue; #<<
+font-style:bold; color:white;" #<<
+
+exam_data$tooltip1 <- c(paste0(     
+  "Name = ", exam_data$ID,         
+  "\n Class = ", exam_data$CLASS,
+  "\n Race = ", exam_data$RACE)) 
+
+
+h <- ggplot(data=exam_data, 
+       aes(x = ENGLISH)) +
+  geom_histogram_interactive(
+    aes(tooltip = exam_data$tooltip1),
+    stackgroups = TRUE, 
+    binwidth = 1) +
+  scale_y_continuous(NULL, 
+                     breaks = NULL)
+girafe(
+  ggobj = h,
+  width_svg = 6,
+  height_svg = 6*0.618,
+  options = list(    #<<
+    opts_tooltip(    #<<
+      css = tooltip_css)) #<<
+)                              
+```
+
+2\) Combining tooltip and hover effect
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p6 <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_bar_interactive(              
+    aes(tooltip = CLASS, 
+        data_id = CLASS),              
+    stackgroups = TRUE,                  
+    binwidth = 1) +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p6,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "fill: #800080;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
+```
+
+3\) setting colors and shapes for interactive plot via `plot_ly()` method.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# First, make sure 'RACE' is a factor with the levels in the order you want
+exam_data$RACE <- factor(exam_data$RACE, levels = c("Chinese", "Indian", "Malay", "Others"))
+
+# Now, map the levels of RACE to the symbols
+symbol_numbers <- c(0, 1, 2, 3)  # This should correspond to the levels of RACE
+
+# Generate the plot
+plot_ly(data = exam_data, 
+        x = ~ENGLISH, 
+        y = ~MATHS, 
+        color = ~RACE,
+        symbol = ~RACE,  # This will map the levels of RACE to different symbols
+        marker = list(symbols = symbol_numbers)  # Define the symbol numbers
+)
+
+```
 
 # 3.10 References
 

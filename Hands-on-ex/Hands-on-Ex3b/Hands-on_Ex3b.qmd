@@ -335,11 +335,7 @@ bp
 ```
 :::
 
-# 3.5 Plotting Practise
-
-Below are some sample practice plots based on the lessons learnt in this Hands on Exercise
-
-# 3.6 References
+# 3.5 References
 
 -   [Getting Started](https://gganimate.com/articles/gganimate.html)
 
