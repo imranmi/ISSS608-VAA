@@ -7,6 +7,7 @@ execute:
   eval: true
   echo: true
   warning: false
+bibliography: references.bib
 ---
 
 ::: callout-important
@@ -160,43 +161,33 @@ p1
 
 ### 3.1.1 Clarity
 
-The author had concluded that "15-year olds in Singapore performed best in Math, followed by Science and lastly Reading". We can see this clearly in the graph.
+The author had concluded that "15-year olds in Singapore performed best in Math, followed by Science and lastly Reading". We can see this somewhat clearly in the graph.
 
-But, the author had labelled this EDA as "General distribution of students’ performance in Math, Science and Reading", however the graph instead shows a range of scores across the 3 subjects.
+The author had labelled this visualization as "General distribution of students’ performance in Math, Science and Reading", however the graph seem to show a range of scores across the 3 subjects.
 
-First we understand the table from which the author had generated the graph.
+From the original code, the author had initiated a series of box plots across the 3 subjects to represent the mean scores across.
+
+However, upon closer examination of the code below, the author had included an error bar with Mean +/- one standard deviation.
+
+```{r}
+#geom_errorbar(
+    #aes(ymin = Mean - SD, ymax = Mean + SD),
+    #width = 0.5,
+    #size=0.8,
+    #position = position_dodge(width = 0.5)
+```
+
+Therefore I would conclude that this plot is actually comparing the mean subject scores across subjects.
+
+Examining the subset used for the plot in more detail.
 
 ```{r}
 print(mergedgeneral)
 ```
 
-The *mergedgeneral* subset table only has 3 observations out of 6 variables. Therefore it is clear that this table cannot be used to plot the distribution of student scores across the 3 subjects.
+The *mergedgeneral* subset table only has 3 observations out of 6 variables.
 
-We can break up the original code and examine the evolution of the plots.
-
-```{r}
-ggplot(mergedgeneral, aes(x = subject, y = Mean,colour=subject)) +
-  geom_boxplot(width = 0.5, position = position_dodge(width = 0.75),lwd=0.5,show.legend=FALSE) +
-  stat_summary(
-    fun = mean,
-    geom = "point",
-    shape = 18,
-    size = 5,
-    aes(colour=subject),
-    position = position_dodge(width = 0.75))
-```
-
-```{r}
-ggplot(mergedgeneral, aes(x = subject, y = Mean,colour=subject)) +
-geom_errorbar(
-    aes(ymin = Mean - SD, ymax = Mean + SD),
-    width = 0.5,
-    size=0.8,
-    position = position_dodge(width = 0.5)
-  ) 
-```
-
-Therefore I would conclude that the code used is not able to plot a **Distribution** of student scores across subjects and that this EDA should be re-labelled as the "Range of student scores across Math, Reading and Science", instead.
+Therefore I would conclude that the code used is not able to plot a **Distribution** of student scores across subjects and that this EDA should be re-labelled as the "Overall mean scores across Math, Reading and Science", instead.
 
 ### 3.1.2 Aesthetics
 
@@ -225,7 +216,9 @@ Rough sketch of proposed design is shown below.
 
 We have established that the original plot is unable to exhibit the distribution of student scores across subjects.
 
-Therefore, I will extract data from the original data set and use the code below to re-make the original graph into Density plots for each subject.
+First, I will use the code below to extract data from the original data set to get our reference lines (mean and median.
+
+In terms of data, I will use the PV1 scores which are available for all students.
 
 ```{r}
 #| code-fold: true
@@ -238,9 +231,17 @@ median_pv1read <- median(stu_qqq_SG$PV1READ)
 mean_pv1scie <- mean(stu_qqq_SG$PV1SCIE)
 median_pv1scie <- median(stu_qqq_SG$PV1SCIE)
 
+```
+
+Next, I will use the code below to re-make the original graph into Histograms with Density plots for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 p_1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
-  geom_density(fill = 'lightblue', color = "black", alpha = 0.5) + 
+  geom_histogram(aes(y = ..density..), binwidth = 20, color = "black", fill='lightblue') +
+  geom_density(color = "purple") + 
   coord_cartesian(xlim = c(0, 1000)) +
   labs(x = "Math Scores", y = "Density") + # Change label to 'Density'
   geom_vline(xintercept = mean_pv1math, color = 'black', size = 0.65, linetype = "dashed") +
@@ -256,7 +257,8 @@ p_1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
   theme_minimal()
 
 p_2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
-  geom_density(fill = 'lightgreen', color = "black", alpha = 0.5) + 
+  geom_histogram(aes(y = ..density..), binwidth = 20, color = "black", fill='lightgreen') +
+  geom_density(color = "purple") + 
   coord_cartesian(xlim = c(0, 1000)) +
   labs(x = "Reading Scores", y = "Density") + 
   geom_vline(xintercept = mean_pv1read, color = 'black', size = 0.65, linetype = "dashed") +
@@ -272,7 +274,8 @@ p_2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
   theme_minimal()
 
 p_3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
-  geom_density(fill = 'lightpink', color = "black", alpha = 0.5) + 
+  geom_histogram(aes(y = ..density..), binwidth = 20, color = "black", fill='lightpink') +
+  geom_density(color = "purple") +  
   coord_cartesian(xlim = c(0, 1000)) +
   labs(x = "Science Scores", y = "Density") + 
   geom_vline(xintercept = mean_pv1scie, color = 'black', size = 0.65, linetype = "dashed") +
@@ -287,7 +290,6 @@ p_3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
   ) +
   theme_minimal()
 
-
 p_4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
   geom_density(alpha = 0.5) +
   geom_density(data = stu_qqq_SG, aes(x = PV1READ, fill = "Reading"), alpha = 0.5) +
@@ -297,9 +299,10 @@ p_4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
   scale_fill_manual(values = c("Math" = "lightblue", "Reading" = "lightgreen", "Science" = "lightpink")) +
   guides(fill = FALSE) +  # Remove the legend
   theme_minimal()
+
 ```
 
-I will create a composite graph for all the density plots using the code below
+Finally, using the code below, I will create a composite graph for all the histograms and density plots using the code below.
 
 ```{r}
 #| code-fold: true
@@ -450,6 +453,7 @@ p1 <- ggplot(pvmathsch, aes(x = CNTSCHID, y = Mean)) +
   geom_point(aes(color = Mean), alpha = 0.5, size = 7) +
   scale_color_gradient(low = "red", high = "green") +
   labs(title = "Mean Math Scores per School",
+       subtitle = "5 Schools with the Best & Worst mean scores",
        x = "School ID",
        y = "Mean Math Scores") +
   theme_minimal() +
@@ -617,24 +621,7 @@ We have established that the original plot is unable to exhibit the full range o
 
 Therefore, I will extract data from the original data set to create new subsets for the new plots using the code below.
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-Math_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"MATH"), by = "ST004D01T", data = stu_qqq_SG)
-
-Math_gender$ST004D01T <- factor(Math_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
-
-Read_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"READ"), by = "ST004D01T", data = stu_qqq_SG)
-
-Read_gender$ST004D01T <- factor(Read_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
-
-SCIE_gender <- pisa.mean.pv(pvlabel = paste0("PV",1:10,"SCIE"), by = "ST004D01T", data = stu_qqq_SG)
-
-SCIE_gender$ST004D01T <- factor(SCIE_gender$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
-```
-
-Next, I will use the code below to create new box plots for each subject.
+In terms of data, I will use the PV1 scores which are available for all students.
 
 ```{r}
 #| code-fold: true
@@ -646,6 +633,35 @@ subset_gender_PV1 <- stu_qqq_SG %>%
 
 # Convert the "ST004D01T" column to a factor 
 subset_gender_PV1$ST004D01T <- factor(subset_gender_PV1$ST004D01T, levels = c(1, 2), labels = c("Female", "Male"))
+
+Math_gender <- subset_gender_PV1 %>%
+  group_by(ST004D01T) %>%  # Group by gender column
+  summarise(
+    Freq = n(),             # Count the frequency of each gender
+    Mean = mean(PV1MATH, na.rm = TRUE)  # Calculate the mean of PV1MATH, removing NA values
+  )
+
+Read_gender <- subset_gender_PV1 %>%
+  group_by(ST004D01T) %>%  # Group by gender column
+  summarise(
+    Freq = n(),             # Count the frequency of each gender
+    Mean = mean(PV1READ, na.rm = TRUE)  # Calculate the mean of PV1READ, removing NA values
+  )
+
+SCIE_gender <- subset_gender_PV1 %>%
+  group_by(ST004D01T) %>%  # Group by gender column
+  summarise(
+    Freq = n(),             # Count the frequency of each gender
+    Mean = mean(PV1SCIE, na.rm = TRUE)  # Calculate the mean of PV1SCIE, removing NA values
+  )
+```
+
+Next, I will use the code below to create new box plots for each subject.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 
 # Create the plot using the subset_data
 bxp1 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1MATH, fill = ST004D01T)) +
@@ -699,3 +715,156 @@ patch3 <- bxp1 + bxp2 + bxp3 +
 
 patch3 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
 ```
+
+## 3.4 Distribution of Math, Reading and Science scores by socioeconomic status
+
+The author had previously created a new variable, “ESCS_recoded”, which bins the socio-economic (ESCS) score into four quantiles - “Very Low”, “Low”, “Medium” and “High”. The author had used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” and grouped by the ESCS.
+
+The code below was used to generate the composite PV values for Math, Reading and Science.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pvmathescs <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"MATH"),c("ESCS_recoded"), data=stu_qqq_SG_clean,export=FALSE,name="pvmathescs",folder=data_folder_path)
+
+pvreadescs <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),c("ESCS_recoded"), data=stu_qqq_SG_clean,export=FALSE,name="pvreadescs",folder=data_folder_path)
+
+pvscieescs <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),c("ESCS_recoded"), data=stu_qqq_SG_clean,export=FALSE,name="pvscieescs",folder=data_folder_path)
+```
+
+The author then used the below code to generate individual plots to display the distribution of Math, Reading and Science scores across schools by socioeconomic status.
+
+::: panel-tabset
+## The Original plot
+
+![](images/clipboard-1075189504.png)
+
+## The code
+
+```{r}
+#| eval: false
+
+ggplot(pvscieescs, aes(x = ESCS_recoded, y = Mean,fill=ESCS_recoded))+
+  geom_boxplot(width = 0.5, position = position_dodge(width = 0.5),lwd=0.5,show.legend=FALSE) +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 10,
+    size = 2,
+    aes(colour=ESCS_recoded),
+    position = position_dodge(width = 0.75)) +
+  geom_errorbar(
+    aes(ymin = Mean - SD, ymax = Mean + SD,color=ESCS_recoded),
+    width = 0.5,
+    size=1,
+    position = position_dodge(width = 0.5)
+  ) +
+  labs(title = "Science Scores by Socioeconomic Status") +
+  ylab("Science Score") +
+  xlab("Socioeconomic Status")+
+  scale_y_continuous(limits=c(0,1000),breaks = seq(0, 1000, by=200))+
+  coord_flip() +
+  theme_minimal(base_size=10)
+
+```
+:::
+
+### 3.4.1 Clarity
+
+From the original code, the author had initiated a series of box plots across the 3 subjects to represent the mean scores by the 4 quantiles of the ESCS score.
+
+The author had concluded that the plots indicated that *"students with higher socioeconomic statuses perform better than peers with lower socioeconomic statuses in all three subjects".*
+
+Initially I had interpreted this visualization to represent the range of student scores for all subjects per economic status (ESCS score). This is because of the author’s conclusion above and the use of the title “Math/Reading/Science scores by Socioeconomic status”.
+
+However, upon closer examination of the code below, the author had included an error bar with Mean +/- one standard deviation.
+
+```{r}
+#geom_errorbar(
+    #aes(ymin = Mean - SD, ymax = Mean + SD,color=ESCS_recoded),
+    #width = 0.5,
+    #size=1,
+    #position = position_dodge(width = 0.5)
+```
+
+Therefore I would conclude that this plot is actually comparing the mean subject scores across different groupings of ESCS score.
+
+Examining the subset used for the plot in more detail.
+
+```{r}
+print(pvscieescs)
+```
+
+The data set segregates the 4 different ESCS quantiles and their mean scores. Hence I would conclude that this subset is not able to plot the range of scores per ESCS segment, and can only be used to compare the mean scores across the 4 quantiles.
+
+While this subset and plots can be useful to help compare the mean subject scores between the different ESCS quantiles, I think that a different set of data and visualization can be used to communicate more information about the relationship between subject scores and socioeconomic statuses.
+
+Additionally, the **binning** of the ESCS score, while helpful to identify disparities between students of different socioeconomic segment, may itself be limited in usefulness, for the following reasons:-
+
+-   Binning the ESCS scores adds in an element of subjectivity. For example, why should there be 4 segments of socioeconomic statuses instead of 3, or 6?
+
+-   Upon deciding the number of socioeconomic segments, is it truly applicable for all countries? For example, would a "Low segment" in Singapore be equivalent to a "Low segment" in a country in Sub-Saharan Africa?
+
+### 3.4.2 Aesthetics
+
+-   The title of the graphs are misleading and should be re-labelled to “Mean Scores” instead.
+
+-   Since the graphs are already well labelled in the x and y axis, and identifies the different socioeconomic segments clearly, the use of different colors per segment and the legend would not be necessary.
+
+-   The author could instead annotate the mean scores. This would enable us to remove the background grid lines and would make the X axis tick marks unnecessary. Even with the background grid lines and X axis tick marks, I am unable to decipher the actual mean scores clearly.
+
+### 3.4.3 Sketch of Proposed Design
+
+Rough sketch of proposed design is shown below.
+
+### 3.4.4 Remake
+
+As mentioned, I would prefer not to bin the ESCS scores. Therefore I will use scatter plots to communicate the relationships between the ESCS score and subject scores.
+
+Drawing inspiration from Prof Kam's [Lesson 3](https://isss608-ay2023-24jan.netlify.app/outline/lesson03_outline) and well as additional useful references, I will proceed to plot [Scatter plots with Marginal Histograms.](https://things-about-r.tumblr.com/post/124004085689/scatter-plots-with-marginal-densities-an-example)
+
+In terms of data, I will use the PV1 scores which are available for all students.
+
+For this visualization, I will use the [ggstatplot package](https://cran.r-project.org/web/packages/ggstatsplot/index.html). [@patil2021]
+
+For more information on this package and how it can be used to create graphics from statistical tests included in the plots themselves, please [refer to this link.](https://joss.theoj.org/papers/10.21105/joss.03167)
+
+```{r}
+library(ggstatsplot)
+```
+
+Creating new data subset for visualization.
+
+```{r}
+subset_ESCS_PV1 <- stu_qqq_SG %>%
+  select(ESCS, PV1MATH, PV1SCIE, PV1READ)
+
+#omiting NA values
+subset_ESCS_PV1 <- na.omit(subset_ESCS_PV1)
+```
+
+We will use the code below from `ggstatplot package` to generate the plot.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggscatterstats(
+  data = subset_ESCS_PV1,                                          
+  x = ESCS,                                                  
+  y = PV1MATH,
+  xlab = "Socioeconomic score (ESCS)",
+  ylab = "Math scores",
+  marginal = TRUE,
+  marginal.type = "histogram",
+  centrality.para = "mean",
+  margins = "both",
+  title = "Relationship between Socio-economic and Math scores",
+  messages = FALSE
+)
+```
+
+The benefit of this plot is that it shows both the correlation between the two variables as well as their respective distributions, and includes important statictics like the Pearson coefficient.
+
+From the plot above, the pearson coefficient of 0.42 indicates that there is a weak positive relationship between ESCS scores and Math scores. Math scores resemble a normal distribution, while ESCS scores resemble a left-skewed distribution.
