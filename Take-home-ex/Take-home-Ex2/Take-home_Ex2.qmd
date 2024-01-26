@@ -459,8 +459,8 @@ p1 <- ggplot(pvmathsch, aes(x = CNTSCHID, y = Mean)) +
   theme_minimal() +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
-        panel.grid.major = element_blank(),  # Remove major grid lines
-        panel.grid.minor = element_blank())  # Remove minor grid lines
+        panel.grid.major = element_blank())  # Remove major grid lines
+       
 
 # Annotate the top 5 and bottom 5 schools
 p1 <- p1 +
