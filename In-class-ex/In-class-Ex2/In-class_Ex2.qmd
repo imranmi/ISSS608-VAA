@@ -1,6 +1,6 @@
 ---
 title: "In-Class Exercise 2"
-date: January 20, 2024
+date: January 27, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -8,6 +8,8 @@ execute:
   echo: true
   warning: false
 ---
+
+# Interactivity in Graphs
 
 # Getting Started
 

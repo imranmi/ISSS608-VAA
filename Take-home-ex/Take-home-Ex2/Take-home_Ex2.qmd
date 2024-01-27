@@ -247,12 +247,12 @@ p_1 <- ggplot(stu_qqq_SG, aes(x = PV1MATH)) +
   geom_vline(xintercept = mean_pv1math, color = 'black', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = mean_pv1math, y = 0.0025, label = paste("Mean:", round(mean_pv1math, 2))), # Adjust y position for text
-    color = "black", hjust = 1.5, size = 3
+    color = "black", hjust = 1.75, size = 3
   ) +
   geom_vline(xintercept = median_pv1math, color = 'red', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = median_pv1math, y = 0.0025, label = paste("Median:", round(median_pv1math, 2))), # Adjust y position for text
-    color = "red", hjust = -0.45, size = 3
+    color = "red", hjust = -0.75, size = 3
   ) +
   theme_minimal()
 
@@ -264,12 +264,12 @@ p_2 <- ggplot(stu_qqq_SG, aes(x = PV1READ)) +
   geom_vline(xintercept = mean_pv1read, color = 'black', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = mean_pv1read, y = 0.0025, label = paste("Mean:", round(mean_pv1read, 2))), # Adjust y position for text
-    color = "black", hjust = 1.5, size = 3
+    color = "black", hjust = 1.75, size = 3
   ) +
   geom_vline(xintercept = median_pv1read, color = 'red', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = median_pv1read, y = 0.0025, label = paste("Median:", round(median_pv1read, 2))), # Adjust y position for text
-    color = "red", hjust = -0.45, size = 3
+    color = "red", hjust = -0.75, size = 3
   ) +
   theme_minimal()
 
@@ -281,12 +281,12 @@ p_3 <- ggplot(stu_qqq_SG, aes(x = PV1SCIE)) +
   geom_vline(xintercept = mean_pv1scie, color = 'black', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = mean_pv1scie, y = 0.0025, label = paste("Mean:", round(mean_pv1scie, 2))), # Adjust y position for text
-    color = "black", hjust = 1.5, size = 3
+    color = "black", hjust = 1.75, size = 3
   ) +
   geom_vline(xintercept = median_pv1scie, color = 'red', size = 0.65, linetype = "dashed") +
   geom_text(
     aes(x = median_pv1scie, y = 0.0025, label = paste("Median:", round(median_pv1scie, 2))), # Adjust y position for text
-    color = "red", hjust = -0.45, size = 3
+    color = "red", hjust = -0.75, size = 3
   ) +
   theme_minimal()
 
@@ -307,11 +307,15 @@ Finally, using the code below, I will create a composite graph for all the histo
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
 
 patch1 <- (p_1 + p_2) / (p_3 + p_4)  + 
               plot_annotation(
                 title = "Distribution of student performance in Math, Reading and Science",
-                subtitle = "All subjects exihibit a slight left-skewed distribution" )
+                subtitle = "All subjects exhibit a slight left-skewed distribution" )
 
 patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
 ```
@@ -436,6 +440,10 @@ Lastly, I have also added annotations to quickly identify the top 5 and bottom 5
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| fig-width: 8
+#| fig-height: 6
+#| column: body-outset-right
+
 
 library(ggrepel)
 
@@ -668,38 +676,117 @@ bxp1 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1MATH, fill = ST004D0
   geom_boxplot() +
   coord_cartesian(ylim = c(0, 1000)) +
   geom_point(data = Math_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
-  geom_text(data = Math_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
-            color = "black", vjust = -0.5, size = 3.5) +
-  labs(x = "Math",
-       y = "Scores") +
+  geom_text(data = Math_gender, 
+          aes(x = ST004D01T, y = Mean, label = paste("Mean:", round(Mean, 2))), 
+          color = "black", hjust = -0.2, vjust =4, size = 2.75) +
+  labs(x = "Gender",
+       y = "Math Scores") +
   scale_fill_manual(values = c("Female" = "lightblue", "Male" = "lightblue")) +  
   theme_minimal() +
-  theme(legend.position = "none")  # Remove the legend
+  theme(legend.position = "none") 
 
 
 bxp2 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1READ, fill = ST004D01T)) +
   geom_boxplot() +
   coord_cartesian(ylim = c(0, 1000)) +
   geom_point(data = Read_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
-  geom_text(data = Read_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
-            color = "black", vjust = -0.5, size = 3.5) +
-  labs(x = "Reading",
-       y = "Scores") +
+  geom_text(data = Math_gender, 
+          aes(x = ST004D01T, y = Mean, label = paste("Mean:", round(Mean, 2))), 
+          color = "black", hjust = -0.2, vjust = 4.25, size = 2.75) +
+  labs(x = "Gender",
+       y = "Reading Scores") +
   scale_fill_manual(values = c("lightgreen", "lightgreen")) +  # Associate colors with factor levels
   theme_minimal() +
-  theme(legend.position = "none")  # Remove the legend
+  theme(legend.position = "none") 
+  
 
 bxp3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D01T)) +
   geom_boxplot() +
   coord_cartesian(ylim = c(0, 1000)) +
   geom_point(data = SCIE_gender, aes(x = ST004D01T, y = Mean), color = "blue", size = 1.5) +
-  geom_text(data = SCIE_gender, aes(x = ST004D01T, y = Mean, label = round(Mean, 2)), 
-            color = "black", vjust = -0.5, size = 3.5) +
-  labs(x = "Science",
-       y = "Scores") +
+  geom_text(data = Math_gender, 
+          aes(x = ST004D01T, y = Mean, label = paste("Mean:", round(Mean, 2))), 
+          color = "black", hjust = -0.2, vjust = 4, size = 2.75) +
+  labs(x = "Gender",
+       y = "Science Scores") +
   scale_fill_manual(values = c("lightpink", "lightpink")) +  # Associate colors with factor levels
   theme_minimal() +
-  theme(legend.position = "none")  # Remove the legend
+  theme(legend.position = "none") 
+  
+```
+
+Besides, showing the differences in performance by using box plots, I will also plot ridgeline plots, segmented into 4 quantiles, to display the difference in performance between genders across the subjects.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+rp1 <- ggplot(subset_gender_PV1,
+       aes(x = PV1MATH, 
+           y = ST004D01T, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  scale_x_continuous(
+    name = NULL,
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 10)  
+  )  +
+  labs(title = "Math Scores\nacross genders")
+
+rp2 <- ggplot(subset_gender_PV1,
+       aes(x = PV1READ, 
+           y = ST004D01T, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  scale_x_continuous(
+    name = NULL,
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 10)  
+  )  +
+  labs(title = "Reading Scores \nacross genders")
+
+rp3 <- ggplot(subset_gender_PV1,
+       aes(x = PV1SCIE, 
+           y = ST004D01T, 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE,
+    alpha = 0.5 ) +
+  scale_fill_viridis_d(name = "Quartiles") +
+  scale_x_continuous(
+    name = NULL,
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 10)  
+  ) +
+  labs(title = "Science Scores\nacross genders")
 ```
 
 I will use the code below to create a composite graph.
@@ -707,13 +794,17 @@ I will use the code below to create a composite graph.
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| fig-width: 8
+#| fig-height: 10
+#| column: body-outset-right
 
-patch3 <- bxp1 + bxp2 + bxp3 + 
+
+patch3 <- (rp1+ bxp1)/(rp2+bxp2)/(rp3+bxp3) + 
               plot_annotation(
                 title = "Male students outperform in Maths and Science",
                 subtitle = "Female students outperform in Reading")
 
-patch3 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank(),)
+patch3 & theme(panel.grid.major = element_blank(),)
 ```
 
 ## 3.4 Distribution of Math, Reading and Science scores by socioeconomic status
@@ -849,6 +940,9 @@ We will use the code below from `ggstatplot package` to generate the plot.
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| fig-width: 8
+#| fig-height: 6
+#| column: body-outset-right
 
 ggscatterstats(
   data = subset_ESCS_PV1,                                          
