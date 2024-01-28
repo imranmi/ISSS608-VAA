@@ -91,7 +91,7 @@ The graphs created by the author will be evaluated and improvements in terms of 
 
 ## 3.1 General distribution of students’ performance in Math, Science and Reading
 
-The author had created a data folder path to save any data files generated:
+First, the author had created a data folder path to save any data files generated:
 
 ```{r}
 #| code-fold: true
@@ -100,7 +100,7 @@ The author had created a data folder path to save any data files generated:
 data_folder_path <- file.path(getwd(), "data")
 ```
 
-The code below is used to determine the Mean and Standard Deviation of PV values across the population of students that took the assessment, and merge the values via a [rbind()](https://dplyr.tidyverse.org/reference/bind.html) function (with a [relocate()](https://dplyr.tidyverse.org/reference/relocate.html) function to bring the newly formed “subject” column to the front of the dataframe) to form a table indicating the Mean and Standard Deviation of PV values per subject
+The code below uses the `instvy package` to determine the composite Means and Standard Deviations of PV values across the population of students that took the assessment.
 
 ```{r}
 #| code-fold: true
@@ -122,14 +122,14 @@ mergedgeneral <- rbind(pvmathgeneral,pvreadgeneral,pvsciegeneral)
 mergedgeneral %>% relocate(subject)
 ```
 
-The graphical representation of the general distribution of Math, Reading and Science scores was generated using the code below.
+A plot to show the general distribution of Math, Reading and Science scores was generated using the code below.
 
 ::: panel-tabset
 ## The original plot
 
 ![](images/clipboard-3818993272.png)
 
-The author had created a series of box plots across the 3 subjects to represent Student scores across the 3 subjects.
+The author had created a series of box plots across the 3 subjects to represent the distribution of Student scores across the 3 subjects.
 
 ## The code
 
@@ -163,26 +163,28 @@ p1
 
 ### 3.1.1 Evaluation
 
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Assessment Criteria | Critique/Feedback                                                                                                                                                                                   | Possible Improvements                                                                                                                                                                                                                                    |
-+=====================+=====================================================================================================================================================================================================+==========================================================================================================================================================================================================================================================+
-| **Clarity**         | 1.  Graph is titled as “General distribution of students’ performance in Math, Science and Reading”, however the code indicates that mean scores +/- one standard deviation were generated instead. | 1.  The code and subset used is not suitable to plot a **Distribution** of student scores across subjects. I will extract a new subset for the revised visualization. This will then plot the distribution of student scores for the different subjects. |
-|                     |                                                                                                                                                                                                     |                                                                                                                                                                                                                                                          |
-|                     | 2.  The data subset used for this plot only has 3 observations and 6 variables. It is actually the overall mean score for the student cohort across the subjects.                                   |                                                                                                                                                                                                                                                          |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Aesthetics**      | 1.  There is already a legend which identifies subjects by colour, thus making the Y axis labels seem redundant.                                                                                    | 1.  To remove either the legend of Axis label, to minimize non-data ink.                                                                                                                                                                                 |
-|                     |                                                                                                                                                                                                     |                                                                                                                                                                                                                                                          |
-|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the "lack of range" in the mean scores, the plot appears too elongated.                                             | 2.  Shorten the X-axis, or extract new data points to populate the correct range of scores.                                                                                                                                                              |
-|                     |                                                                                                                                                                                                     |                                                                                                                                                                                                                                                          |
-|                     | 3.  Unable to decipher the actual mean scores even with the granularity in X-axis tick marks.                                                                                                       | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                                                                                            |
-|                     |                                                                                                                                                                                                     |                                                                                                                                                                                                                                                          |
-|                     | 4.  Since the subjects are clearly labelled in the Y axis, the label “Subject” can be removed.                                                                                                      | 4.  To remove the label "Subject".                                                                                                                                                                                                                       |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Assessment Criteria | Critique/Feedback                                                                                                                                                                                     | Possible Improvements                                                                                                                                                                                                                                                                |
++=====================+=======================================================================================================================================================================================================+======================================================================================================================================================================================================================================================================================+
+| **Clarity**         | 1.  Although the original plot enables me to visualize the differences in scores across subjects, I am unclear as to which score this is showing. ie is it PV1, average of PV values?                 | 1.  The code and subset used is not suitable to plot a **Distribution** of student scores across subjects. I will extract a new subset with all PV1 scores at the individual student level. This will be used to plot the distribution of student scores for the different subjects. |
+|                     |                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                      |
+|                     | 2.  Graph is titled as “Scores across Math, Reading and Science”, however the code indicates that mean scores +/- one standard deviation were generated instead.                                      |                                                                                                                                                                                                                                                                                      |
+|                     |                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                      |
+|                     | 3.  The data subset used for this plot only has 3 observations and 6 variables. Upon inspecting the data set, it is actually the composite mean score for each subject for the entire student cohort. |                                                                                                                                                                                                                                                                                      |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Aesthetics**      | 1.  There is already a legend on the right which identifies subjects by colour, thus making the Y axis labels seem redundant.                                                                         | 1.  To remove the legend or Y-Axis labels, to minimize non-data ink.                                                                                                                                                                                                                 |
+|                     |                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                      |
+|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the "shortness" of the box plots/error bars, the graph appears too elongated.                                         | 2.  Shorten the X-axis, or extract new data points to populate the correct range of scores.                                                                                                                                                                                          |
+|                     |                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                      |
+|                     | 3.  Unable to decipher the actual scores even with the granularity in X-axis tick marks.                                                                                                              | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                                                                                                                        |
+|                     |                                                                                                                                                                                                       |                                                                                                                                                                                                                                                                                      |
+|                     | 4.  Since the subjects are clearly labelled in the Y axis, the label “Subject” can be removed, to minimize non-data ink.                                                                              | 4.  To remove the label "Subject".                                                                                                                                                                                                                                                   |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ::: callout-note
 ## Observation
 
-Upon closer examination of the code below, the author had included an error bar with Mean +/- one standard deviation.
+Upon closer examination of the code used, the author had included an error bar with Mean +/- one standard deviation.
 
 ```{r}
 #geom_errorbar(
@@ -206,22 +208,24 @@ The *mergedgeneral* subset table only has 3 observations and 6 variables.
 ::: callout-note
 ## Conclusion
 
-The code and subset used will not be able to plot a **Distribution** of student scores across subjects.
+The code and subset used by the author will not be able to plot a **Distribution** of student scores across subjects.
 
-I will use PV1 scores which are available for all students to create new plots to visualize the distribution of scores.
+I will revert to the original large data set to extract and use PV1 scores which are available for all students to create new plots to visualize the distribution of scores.
 :::
 
 ### 3.1.2 Sketch of Proposed Design
 
 Rough sketch of proposed design is shown below.
 
+![](images/clipboard-1970715586.png)
+
 ### 3.1.3 Remake
 
-Since the original data sub set and code is unable to exhibit the distribution of student scores across subjects.
+The original data sub set and plot is unable to exhibit the distribution of student scores across subjects, due to the lack of scores at an individual student level.
 
-First, I will use the code below to extract data from the original data set to get our reference lines (mean and median.
+First, I will use the code below derive some reference lines (mean and median) for our histograms.
 
-In terms of data, I will use the PV1 scores which are available for all students.
+To populate the distribution of scores for the student cohort, I will use PV1 scores, which are available for all students.
 
 ```{r}
 #| code-fold: true
@@ -236,7 +240,7 @@ median_pv1scie <- median(stu_qqq_SG$PV1SCIE)
 
 ```
 
-Next, I will use the code below to extract data points from the original large data set to re-make the original graph into Histograms with Density plots for each subject.
+Next, I will use the code below and extract data points (PV1 scores) from the original large data set to create Histograms with Density plots for each subject.
 
 ```{r}
 #| code-fold: true
@@ -305,7 +309,7 @@ p_4 <- ggplot(stu_qqq_SG, aes(x = PV1MATH, fill = "Math")) +
 
 ```
 
-Finally, using the code below, I will create a composite graph for all the histograms and density plots using the code below.
+Finally, using the code below, I will create a composite graph for all the histograms and density plots.
 
 ```{r}
 #| code-fold: true
@@ -328,14 +332,14 @@ patch1 & theme( axis.text.y = element_blank(),panel.grid.major = element_blank()
 
 The revised plot consists of a patchwork of 3 histograms with density curves, and a combined density curve overlay for the 3 subjects.\
 \
-Reference lines for the mean and median scores are also added to enable readers to infer the skewness of the distribution of student scores.\
+Reference lines for the mean and median scores are added to enable readers to infer the skewness of the distribution of student scores.\
 \
-The revised will enable readers to quickly infer the nature of the distributions of the subject scores.
+The revised plot will enable readers to quickly infer the nature of the distributions of the subject scores for the student cohort.
 :::
 
-## 3.2 Distribution of students’ performance in Math, Science and Reading across school
+## 3.2 Distribution of students’ performance in Math, Science and Reading across schools
 
-The author has used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package, to obtain the composite Mean and Standard Deviation values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each school.
+The author has used the [`pisa.mean.pv`](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [`intsvy`](https://daniel-caro.com/r-intsvy)`package`, to obtain the composite Mean and Standard Deviation values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each school.
 
 The code below generates the composite PV values.
 
@@ -350,9 +354,7 @@ pvreadsch <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),by= "CNTSCHID", data=
 pvsciesch <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),by= "CNTSCHID", data=stu_qqq_SG_clean,export=FALSE,name="pvscie_bysch",folder=data_folder_path)
 ```
 
-The author then generated individual plots to display the distribution of mean Math, Reading and Science scores across schools.
-
-The code chunks are as follows:
+A plot to show the distribution of students performance in Math, Reading and Science scores across schools was generated using the code below.
 
 ::: panel-tabset
 ## The Original plot
@@ -393,19 +395,23 @@ p2<- ggplot(pvmathsch, aes(x = as.factor(CNTSCHID), y = Mean)) +
 
 ### 3.2.1 Evaluation
 
-+---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Assessment Criteria | Critique/Feedback                                                                                                                                                       | Possible Improvements                                                                                                                                                                                                                                                                    |
-+=====================+=========================================================================================================================================================================+==========================================================================================================================================================================================================================================================================================+
-| **Clarity**         | 1.  Graph is titled as “Subject Scores by school", however the code indicates that mean scores +/- one standard deviation were generated instead.                       | 1.  The subset can still be used, but the code will need to be changed for the revised visualization. This new visualization will retain the original intent to show the different mean scores for all the 164 schools in order to visualize the relative performance in the subjects.   |
-|                     |                                                                                                                                                                         |                                                                                                                                                                                                                                                                                          |
-|                     | 2.  The data subset used for this visualization only has 164 observations and 6 variables. This subset is basically the overall mean subject scores for each school.    |                                                                                                                                                                                                                                                                                          |
-+---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Aesthetics**      | 1.  The use of a vertically long plot to compare the scores across schools makes it visually difficult compare differences between schools, and identify any clusters.  | 1.  To revise the design of a vertically long format and re-make a horizontally compact visualization, by using bubble plots.                                                                                                                                                            |
-|                     |                                                                                                                                                                         |                                                                                                                                                                                                                                                                                          |
-|                     | 2.  Since there are 164 schools, the use of a vertically long format makes it difficult to read the Y-axis labels.                                                      | 2.  To minimize axis labels, we can drop axis labels for school id, and only directly annotate the top & bottom 5 schools instead.                                                                                                                                                       |
-|                     |                                                                                                                                                                         |                                                                                                                                                                                                                                                                                          |
-|                     | 3.  The plot is patched side by side, resulting in the Y-axis being repeated 3 times. The order of the School IDs are all the same.                                     | 3.  To remove the 2 other repetitive Y-axes to minimize non-data ink.                                                                                                                                                                                                                    |
-+---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Assessment Criteria | Critique/Feedback                                                                                                                                                                                                 | Possible Improvements                                                                                                                                                                                                                                                                      |
++=====================+===================================================================================================================================================================================================================+============================================================================================================================================================================================================================================================================================+
+| **Clarity**         | 1.  Although the original plot enables me to visualize the differences in scores across schools, I am unclear as to which score this is showing. ie Is it showing me the range of student scores by school ID?    | 1.  The original subset can still be used, but the code will need to be changed for the revised visualization. This new visualization will retain the original intent to show the different mean scores for each of the 164 schools in visualize the relative performance across subjects. |
+|                     |                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                            |
+|                     | 2.  Graph is titled as “Subject Scores by school", however the code indicates that mean scores +/- one standard deviation were generated instead.                                                                 |                                                                                                                                                                                                                                                                                            |
+|                     |                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                            |
+|                     | 3.  The data subset used for this visualization only has 164 observations and 6 variables. Upon inspecting the data set, this subset is basically the composite mean subject scores for each school.              |                                                                                                                                                                                                                                                                                            |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Aesthetics**      | 1.  The use of a vertically long plot to compare the scores across schools makes it visually challenging and difficult to spot differences in scores, and identify any clusters.                                  | 1.  To revise the design of a vertically long format and re-make it to a horizontally compact visualization, by using bubble plots.                                                                                                                                                        |
+|                     |                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                            |
+|                     | 2.  Since there are 164 schools, the use of a vertically long format makes it difficult to read the school IDs on the Y-axis. ie too many schools to make identification off the Y-axis easy.                     | 2.  To minimize axis labels, we can drop axis labels for school id, and only identify and directly annotate the top & bottom 5 schools instead.                                                                                                                                            |
+|                     |                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                            |
+|                     | 3.  The distance between the X-axis, which shows the scores is too far apart from the box plots. I am unable to decipher what are the actual scores or score range for each box plot.                             | 3.  To remove the 2 other repetitive Y-axes to minimize non-data ink.                                                                                                                                                                                                                      |
+|                     |                                                                                                                                                                                                                   |                                                                                                                                                                                                                                                                                            |
+|                     | 4.  The graph is patched side by side, resulting in the Y-axis being repeated 3 times. The order of the School IDs are all the same, hence this creates additional non-data ink, that makes the graph too "busy". |                                                                                                                                                                                                                                                                                            |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Examining the subset used for the original plot in more detail.
 
@@ -420,22 +426,22 @@ The *pvmathsch* subset table only has 164 observations and 6 variables.
 
 The data subset can only be used to visualize the mean scores per school ID.
 
-The original plot is not suitable to effectively help readers understand the disparity in performances between schools.
+The original graph is not of a suitable design to help readers easily and quickly understand the disparity in performances between schools.
 
-We will need to use a new compact visualization to enable the reader to quickly identify the disparity in school performance.
+I will use a new compact visualization to enable the reader to quickly identify the disparity in school performance.
 :::
 
 ### 3.2.2 Sketch of Proposed Design
 
 Rough sketch of proposed design is shown below.
 
+![](images/clipboard-150633865.png)
+
 ### 3.2.3 Remake
 
 The original plot does not enable to reader to quickly capture information from the data points.
 
-Therefore, I will use the same data set used by the author but design a new graph to improve on the original intention.
-
-I will use the code below to re-make the original graph into Bubble plots for each subject. For this remake, I will employ color as a means to differentiate the mean scores.
+Using the exact same data set as the author, I will use the code below to re-make the original graph into Bubble plots for each subject. For this remake, I will employ color as a means to differentiate the mean scores.
 
 I have also added reference lines to show the 10th and 90th percentile scores to easily identify the schools in those two opposite categories.
 
@@ -513,16 +519,16 @@ p1
 ::: callout-tip
 ## Revised Plot
 
-The use of colour can help readers to quickly differentiate the scores between schools. \
+The use of colour can help readers quickly differentiate the scores between schools.\
 \
 I have annotated school IDs for the top and bottom 5 schools for readers to quickly identify the "best" and "worst" schools.
 
-I have also added reference lines for the 10th and 90th Percentile. Here we can quickly see that while most of the 164 schools attain the same range of mean scores, there are a sizeable number of well-performing schools.
+I have also added reference lines for the 10th and 90th Percentile. Here we can quickly see that while most of the 164 schools attain the same range of mean scores, there are a number of schools that outperform the rest.
 
-Annotating all the 164 school IDs will add too much ink to the plot. Hence, we can consider having another interactive plot (below) for a more detailed examination.
+Annotating all the 164 school IDs will add too much ink to the plot. Hence, we can consider having another interactive plot (below) for readers to examine the data points in more detail.
 :::
 
-For interactivity, I have used `ggplotly()` to convert this to an interactive graph. With the added interactivity, readers can use the tooltip function to gain more information on the data points.
+For interactivity, I have used `ggplotly()` to convert this to an interactive graph. With the added interactivity, readers can use the tooltip function to get more information on the data points.
 
 ```{r}
 #| code-fold: true
@@ -537,12 +543,12 @@ ggplotly(p1, tooltip = c("x", "y"))
 ::: callout-note
 ## Note
 
-Some of the previous annotations generated in the static plot may not appear after turning it into an interactive plot. Hence, we can use both static and interactive plots together if needed. For example, static charts to quickly summarize and communication information to reader, and an interactive charts for readers to drill down in more detail, eg zooming to certain segments, identifying specific data point details etc.
+Some of the previous annotations generated in the static plot may not appear after turning it into an interactive plot. Hence, we can use both static and interactive plots together if needed. For example, static charts to quickly summarize and communicate information to reader, and an interactive plot for readers to drill down in more detail, eg use of zoom, identifying specific data points via tooltip etc.
 :::
 
 ## 3.3 Distribution of students’ performance in Math, Science and Reading by gender
 
-The author had used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each gender.
+The author had used the [`pisa.mean.pv`](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [`intsvy`](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each gender.
 
 The code below was used to generate the composite PV values for Math, Reading and Science by gender.
 
@@ -557,14 +563,14 @@ pvreadgenderonly <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),c("ST004D01T")
 pvsciegenderonly <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),c("ST004D01T"), data=stu_qqq_SG_clean,export=FALSE,name="pvscie_bygenderonly",folder=data_folder_path)
 ```
 
-The author then generated individual plots to display the distribution of Math, Reading and Science scores by gender.
+A plot to display the distribution of Math, Reading and Science scores by gender was generated using the code below.
 
 ::: panel-tabset
 ## The Original plot
 
 ![](images/clipboard-3304529458.png)
 
-The author had initiated a series of box plots across the 3 subjects to represent the subject scores by gender.
+The author had created a series of box plots across the 3 subjects to represent the subject scores by gender.
 
 ## The code
 
@@ -599,19 +605,23 @@ ggplot(pvmathgenderonly, aes(x = as.factor(ST004D01T), y = Mean,fill=ST004D01T))
 
 ### 3.3.1 Evaluation
 
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Assessment Criteria | Critique/Feedback                                                                                                                                                                             | Possible Improvements                                                                                                                                                                                                                                                  |
-+=====================+===============================================================================================================================================================================================+========================================================================================================================================================================================================================================================================+
-| **Clarity**         | 1.  Graph is titled as “Subject Scores by Gender”, however the code indicates that mean scores +/- one standard deviation were generated instead.                                             | 1.  The code and subset used is not suitable to plot a range of scores for each gender across subjects. I will extract a new subset for the revised visualization. This will plot the distribution and range of scores for the different genders across all subjects.  |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                                        |
-|                     | 2.  The data subset used for the plot only has 2 observations and 6 variables. This subset is actually the overall mean score for each gender across the subjects.                            | 2.  The new visualization will need to enable readers to quickly differentiate the performance between genders across subjects.                                                                                                                                        |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Aesthetics**      | 1.  The graphs are already well labelled in the x and y axes, and identifies the different genders clearly. The use of different colors per gender together with the legend is not necessary. | 1.  To remove either the legend since there are only two categories of gender and they are already differentiated by colour.                                                                                                                                           |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                                        |
-|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the “lack of range” in the mean scores, the plot appears too elongated.                                       | 2.  Shorten the X-axis, or extract new data points to correctly populate the range of scores.                                                                                                                                                                          |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                                        |
-|                     | 3.  Unable to decipher the actual mean scores even with the granularity in X-axis tick marks.                                                                                                 | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                                                                                                          |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Assessment Criteria | Critique/Feedback                                                                                                                                                                                                       | Possible Improvements                                                                                                                                                                              |
++=====================+=========================================================================================================================================================================================================================+====================================================================================================================================================================================================+
+| **Clarity**         | 1.  Although the original plot enables me to visualize the differences in scores between the genders, I am unclear as to which score this is showing. Is it showing me the range of PV1 scores or average of PV values? | 1.  The code and subset used is not suitable to plot a range of scores for each gender across subjects.                                                                                            |
+|                     |                                                                                                                                                                                                                         |                                                                                                                                                                                                    |
+|                     | 2.  Graph is titled as “Subject Scores by Gender”, however the code indicates that mean scores +/- one standard deviation were generated instead.                                                                       | 2.  I will extract a new subset with all PV1 scores at the individual student level. This will be used to plot the distribution and range of scores for the different genders across all subjects. |
+|                     |                                                                                                                                                                                                                         |                                                                                                                                                                                                    |
+|                     | 3.  The data subset used for the plot only has 2 observations and 6 variables. Upon inspecting the data set, this subset is actually the composite mean score for each gender across the subjects.                      |                                                                                                                                                                                                    |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Aesthetics**      | 1.  The graphs are already well labelled in the x and y axes, and identifies the different genders clearly. The use of different colors per gender together with the legend is not necessary.                           | 1.  To remove the legend since there are only two categories of gender and they are already differentiated by colour.                                                                              |
+|                     |                                                                                                                                                                                                                         |                                                                                                                                                                                                    |
+|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the “shortness” of the box plots/error bars, the graph appears too elongated.                                                           | 2.  Shorten the X-axis, or extract new data points to correctly populate the range of scores.                                                                                                      |
+|                     |                                                                                                                                                                                                                         |                                                                                                                                                                                                    |
+|                     | 3.  Unable to decipher the actual scores even with the granularity in X-axis tick marks.                                                                                                                                | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                                      |
+|                     |                                                                                                                                                                                                                         |                                                                                                                                                                                                    |
+|                     |                                                                                                                                                                                                                         | 4.  The new visualization will need to enable readers to quickly differentiate the performance between genders across subjects.                                                                    |
++---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ::: callout-note
 ## Observation
@@ -640,7 +650,7 @@ The *pvmathgenderonly* data set only has 2 observations and 6 variables.
 ::: callout-note
 ## Conclusion
 
-This data set can only be used to compare the mean scores for genders across the 3 subjects.
+This data set can only be used to compare the overall mean scores for genders across the 3 subjects.
 
 The visualization needs to be done differently to enable the reader to obtain more information regarding the performance between genders.
 
@@ -653,9 +663,11 @@ I will use PV1 scores which are available for all students to create new plots t
 
 Rough sketch of proposed design is shown below.
 
+![](images/clipboard-774416978.png)
+
 ### 3.3.3 Remake
 
-The original plot is unable to exhibit the full range and distribution of subject scores across genders.
+The original data subset and plot is unable to exhibit the full range and distribution of subject scores across genders, due to the lack of scores at an individual student level.
 
 Therefore, I will extract data from the original data set to create new subsets for the new plots using the code below.
 
@@ -694,7 +706,7 @@ SCIE_gender <- subset_gender_PV1 %>%
   )
 ```
 
-Next, I will use the code below to create new box plots for each subject. This will show the range of scores for the genders.
+Next, I will use the code below to create new box plots for each subject. This will show the range of scores for the genders in different subjects.
 
 ```{r}
 #| code-fold: true
@@ -745,7 +757,7 @@ bxp3 <- ggplot(subset_gender_PV1, aes(x = ST004D01T, y = PV1SCIE, fill = ST004D0
   
 ```
 
-Besides, showing the differences in performance using box plots, I will also plot ridgeline plots, segmented into 4 quantiles, to display the distribution and difference in subject scores between genders across the subjects.
+Besides showing the differences in scores through box plots, I will also plot ridgeline plots, segmented into 4 quantiles, to display the distribution and difference in subject scores between genders across the subjects.
 
 ```{r}
 #| code-fold: true
@@ -842,14 +854,14 @@ patch3 & theme(panel.grid.major = element_blank(),)
 
 The revised plot consists of a patchwork of ridgeline plots and box plots for each subject.
 
-The ridgeline plot been further segmented into 4 quantiles, differentiated by colour. This not only provides insights into the distribution of the scores but also enables readers to quickly the differences in performance.
+The ridgeline plot been further segmented into 4 quantiles, differentiated by colour. This not only provides insights into the distribution of the scores but also enables readers to quickly understand the differences in performance between genders.
 
-The box plots, further help readers to visualize the differences in scores between genders. The range of scores can be see along with the mean scores.
+The box plots, further help readers to understand the differences in scores between genders. The range of scores can be seen along with the mean scores.
 :::
 
 ## 3.4 Distribution of Math, Reading and Science scores by socioeconomic status
 
-The author had previously created a new variable, “ESCS_recoded”, which bins the socio-economic (ESCS) score into four quantiles - “Very Low”, “Low”, “Medium” and “High”. The author had used the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” and grouped by the ESCS.
+The author had previously created a new variable, “ESCS_recoded”, which bins the socio-economic (ESCS) score into four quantiles - “Very Low”, “Low”, “Medium” and “High”. The author had used the [`pisa.mean.pv`](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [`intsvy`](https://daniel-caro.com/r-intsvy)`package` to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” and grouped by the ESCS score.
 
 The code below was used to generate the composite PV values for Math, Reading and Science.
 
@@ -864,14 +876,14 @@ pvreadescs <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),c("ESCS_recoded"), d
 pvscieescs <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),c("ESCS_recoded"), data=stu_qqq_SG_clean,export=FALSE,name="pvscieescs",folder=data_folder_path)
 ```
 
-The author then used the below code to generate individual plots to display the distribution of Math, Reading and Science scores across schools by socioeconomic status.
+A plot to display the distribution of Math, Reading and Science scores across schools by socioeconomic status was generated using the code below.
 
 ::: panel-tabset
 ## The Original plot
 
 ![](images/clipboard-1075189504.png)
 
-The author had created a series of box plots across the 3 subjects to represent the mean scores by the 4 binned categories of the ESCS score (High, Medium, Low, Very Low.
+The author had created a series of box plots to represent the scores across the 4 categories of the ESCS score (High, Medium, Low, Very Low).
 
 ## The code
 
@@ -905,21 +917,21 @@ ggplot(pvscieescs, aes(x = ESCS_recoded, y = Mean,fill=ESCS_recoded))+
 
 ### 3.4.1 Evaluation
 
-+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Assessment Criteria | Critique/Feedback                                                                                                                                                                     | Possible Improvements                                                                                                                                                          |
-+=====================+=======================================================================================================================================================================================+================================================================================================================================================================================+
-| **Clarity**         | 1.  Graph is titled as “Subject Scores by Socioeconomic Status”, however the code indicates that mean scores +/- one standard deviation were generated instead.                       | 1.  The code and subset used is not suitable to plot a range or distribution of scores for each ESCS score category.                                                           |
-|                     |                                                                                                                                                                                       |                                                                                                                                                                                |
-|                     | 2.  The data subset used for the plots only has 4 observations and 6 variables. It is actually just the overall mean scores for each of the newly binned ESCS score category.         | 2.  I will extract a new subset for the revised visualization. This will plot the relationship between the two original continuous variables (subject scores and ESCS score).  |
-|                     |                                                                                                                                                                                       |                                                                                                                                                                                |
-|                     |                                                                                                                                                                                       | 3.  The new visualization will need to enable readers to quickly infer the relationships between subject scores and socioeconomic statuses.                                    |
-+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Aesthetics**      | 1.  The axes are already well labelled in and identifies the different socioeconomic segments clearly, the use of different colors per segment together with legend is not necessary. | 1.  To remove the legend since they are already differentiated by colour and identifiable through the Y-axis labels.                                                           |
-|                     |                                                                                                                                                                                       |                                                                                                                                                                                |
-|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the “lack of range” in the mean scores, the plot appears too elongated.                               | 2.  Shorten the X-axis, or extract new data points to correctly populate the range of scores.                                                                                  |
-|                     |                                                                                                                                                                                       |                                                                                                                                                                                |
-|                     | 3.  Even with the background grid lines and X axis tick marks, I am unable to decipher the actual mean scores clearly.                                                                | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                  |
-+---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Assessment Criteria | Critique/Feedback                                                                                                                                                                                                     | Possible Improvements                                                                                                                                                                                                                                |
++=====================+=======================================================================================================================================================================================================================+======================================================================================================================================================================================================================================================+
+| **Clarity**         | 1.  Although the original plot enables me to visualize the differences in scores between Etegories, I am unclear as to which score this is showing. Is it showing me the range of PV1 scores or average of PV values? | 1.  The code and subset used is not suitable to plot a range or distribution of scores for each ESCS score category.                                                                                                                                 |
+|                     |                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                      |
+|                     | 2.  Graph is titled as “Subject Scores by Socioeconomic Status”, however the code indicates that mean scores +/- one standard deviation were generated instead.                                                       | 2.  I will extract a new subset with all PV1 scores at the individual student level together with ESCS scores per student. I will then plot the relationship between the two continuous variables (subject scores and ESCS score) via scatter plots. |
+|                     |                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                      |
+|                     | 3.  The data subset used for the plots only has 4 observations and 6 variables. Upon inspecting the data set, this is actually just the overall mean scores for each of the newly binned ESCS score category.         | 3.  A scatter plots will enable readers to quickly infer the relationships between subject scores and socioeconomic statuses.                                                                                                                        |
++---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Aesthetics**      | 1.  The Y-axis is already well labelled and identifies the different socioeconomic segments clearly, the use of different colors per segment together with legend is not necessary.                                   | 1.  To remove the legend since the ESCS segments are already differentiated by colour and identifiable through the Y-axis labels.                                                                                                                    |
+|                     |                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                      |
+|                     | 2.  The scale for the X-axis is from 0 to 1000, in increments of 50. Because of the “shortness” of the box plots/error bars, the graph appears too elongated.                                                         | 2.  Shorten the X-axis, or extract new data points to correctly populate the range of scores.                                                                                                                                                        |
+|                     |                                                                                                                                                                                                                       |                                                                                                                                                                                                                                                      |
+|                     | 3.  Even with the background grid lines and X axis tick marks, I am unable to decipher the actual scores clearly.                                                                                                     | 3.  To annotate the mean scores onto the plot, so that we can remove the background grid lines and X-axis tick marks and reduce non-data ink.                                                                                                        |
++---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ::: callout-note
 ## Observation
@@ -934,7 +946,7 @@ Upon closer examination of the code below, the author had included an error bar 
     #position = position_dodge(width = 0.5)
 ```
 
-This plot can only be used to compare the mean subject scores across different groupings of ESCS score.
+Hence the original plot can only be used to compare the mean subject scores across different ESCS segments.
 :::
 
 Examining the subset used for the original plot in more detail.
@@ -948,9 +960,9 @@ The data subset used for the plots only has 4 observations and 6 variables.
 ::: callout-note
 ## Conclusion
 
-This subset and the code used is not able to plot the range of scores per ESCS segment, and can only be used to compare the mean scores across the 4 quantiles.
+This subset and the code used is not able to plot the range of scores per ESCS segment, and can only be used to compare the composite mean scores of each of the 4 ESCS segments.
 
-Although this subset and plots is sufficient to compare the mean subject scores between the different ESCS categories, a different set of data and visualizations can be used to communicate more information about the relationship between subject scores and socioeconomic statuses.
+Although it is useful to compare the mean scores between different ESCS segments, a different set of data and plots can be used instead to communicate more information about the strength or weakness of the relationship between subject scores and socioeconomic statuses.
 :::
 
 Additionally, the **binning** of the ESCS score, while helpful may be limited in usefulness, for the following reasons:-
@@ -963,15 +975,17 @@ Additionally, the **binning** of the ESCS score, while helpful may be limited in
 
 Rough sketch of proposed design is shown below.
 
+![](images/clipboard-3423147912.png)
+
 ### 3.4.4 Remake
 
-Instead of binning the ESCS score and effectively transforming to a categorical type, I would prefer to keep this as a continuous variable.
+Instead of binning the ESCS score and transforming it to a categorical type, I will keep the ESCS score as a continuous variable.
 
-I will use scatter plots to visualize the relationships between the socioeconomic statuses and subject scores.
+I will use scatter plots to visualize the strength or weaknesses of the relationships between the socioeconomic statuses and subject scores.
 
 Drawing inspiration from Prof Kam's [Lesson 3](https://isss608-ay2023-24jan.netlify.app/outline/lesson03_outline) and well as additional useful references, I will proceed to plot [Scatter plots with Marginal Histograms.](https://things-about-r.tumblr.com/post/124004085689/scatter-plots-with-marginal-densities-an-example)
 
-In terms of data, I will use the PV1 scores which are available for all students.
+In terms of data, I will use the PV1 scores which at the individual student level.
 
 For this visualization, I will use the [ggstatplot package](https://cran.r-project.org/web/packages/ggstatsplot/index.html). [@patil2021]
 
@@ -984,6 +998,8 @@ library(ggstatsplot)
 Creating new data subset for visualization.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 subset_ESCS_PV1 <- stu_qqq_SG %>%
   select(ESCS, PV1MATH, PV1SCIE, PV1READ)
 
@@ -1018,18 +1034,18 @@ ggscatterstats(
 ::: callout-tip
 ## Revised Plot
 
-The benefit of this plot is that it shows both the correlation between the two variables as well as their respective distributions, and includes important statictics like the Pearson coefficient.
+The benefit of this plot is that it shows both the correlation between the two continous variables as well as their respective distributions, and includes important statistics like the Pearson coefficient.
 
 From the plot above, the pearson coefficient of 0.42 indicates that there is a weak positive relationship between ESCS scores and Math scores.
 
-The marginal histograms for both variables enables readers to additional infer the distribution of these variables. For example, Math scores resemble a normal distribution, while ESCS scores resemble a left-skewed distribution.
+The marginal histograms for both variables also enables readers to additionally infer the distribution of these variables. For example, Math scores resemble a normal distribution, while ESCS scores resemble a left-skewed distribution.
 :::
 
 ## 3.5 Distribution of students’ performance in Math, Science and Reading by gender across schools
 
 The author had intended to analyse whether there are differences in performances in Math, Reading and Science between genders at a more granular level - within schools.
 
-The author had use the [pisa.mean.pv](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [intsvy](https://daniel-caro.com/r-intsvy) package to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each school and by gender.
+The author had used the [`pisa.mean.pv`](https://www.rdocumentation.org/packages/intsvy/versions/2.8/topics/pisa.mean.pv) function from [`intsvy`](https://daniel-caro.com/r-intsvy)`package` to obtain the Mean and Standard Deviation of PV values from “PV1MATH” to “PV10MATH”, “PV1READ” to “PV10READ” and “PV1SCIE” to “PV10SCIE” for each school and by gender.
 
 The below code was used to generate the composite PV values.
 
@@ -1044,14 +1060,14 @@ pvreadgender <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"READ"),c("CNTSCHID","ST00
 pvsciegender <- pisa.mean.pv(pvlabel=paste0("PV",1:10,"SCIE"),by= c("CNTSCHID","ST004D01T"), data=stu_qqq_SG_clean,export=FALSE,name="pvscie_bygender",folder=data_folder_path)
 ```
 
-The author then created individual plots to display the distribution of Math, Reading and Science scores across schools by gender, using the code below.
+A plot to display the distribution of Math, Reading and Science scores across schools by gender, was generated using the code below.
 
 ::: panel-tabset
 ## The Original Plot
 
 ![](images/clipboard-2922052911.png)
 
-The author had created a series of box plots across the 3 subjects to represent the subject scores for each gender for all schools (164 schools).
+The author had created a series of 2 box plots for each school ID across the 3 subjects to represent the subject scores for each gender for all schools (164 schools).
 
 ## The code
 
@@ -1086,19 +1102,23 @@ p8<- ggplot(pvmathgender, aes(x = as.factor(CNTSCHID), y = Mean,fill=ST004D01T))
 
 ### 3.5.1 Evaluation
 
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Assessment Criteria | Critique/Feedback                                                                                                                                                                             | Possible Improvements                                                                                                                                                                                                                                        |
-+=====================+===============================================================================================================================================================================================+==============================================================================================================================================================================================================================================================+
-| **Clarity**         | 1.  Graph is titled as “Subject Scores by Gender across school", however the code indicates that mean scores +/- one standard deviation were generated instead.                               | 1.  Previous visualization had already analysed the differences per school. However, to further make it more granular by introducing gender, does not seem to further value-add any insight.                                                                 |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                              |
-|                     | 2.  The data subset used for this visualization has 301 observations and 7 variables. This subset is basically the overall mean subject scores for male and female students per school        | 2.  If granularity is desired, we can retain the original intent to show the difference in performance for the schools, but instead of gender, concentrate on the examining the actual disparity between the best and the worst schools instead.             |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Aesthetics**      | 1.  The use of a vertically long plot to compare the scores across schools makes it visually difficult compare differences between schools, and identify any clusters.                        | 1.  I will re-make a horizontally compact visualization, by using ridgeline plots to show the differences in performance only between the best and worst schools. The idea of plotting the performance of genders for each and every school will be shelved. |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                              |
-|                     | 2.  Since there are 164 schools, the use of a vertically long format makes it difficult to read the Y-axis labels. This is further compounded with the splitting of genders for every school. |                                                                                                                                                                                                                                                              |
-|                     |                                                                                                                                                                                               |                                                                                                                                                                                                                                                              |
-|                     | 3.  The plot is patched side by side, resulting in the Y-axis being repeated 3 times. The order of the School IDs are all the same.                                                           |                                                                                                                                                                                                                                                              |
-+---------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Assessment Criteria | Critique/Feedback                                                                                                                                                                                                                                                               | Possible Improvements                                                                                                                                                                                                   |
++=====================+=================================================================================================================================================================================================================================================================================+=========================================================================================================================================================================================================================+
+| **Clarity**         | 1.  Although the original plot enables me to visualize the differences in scores across schools, I am unclear as to which score this is showing. Is it showing me the range of gender scores by school ID?                                                                      | 1.  Previous visualization had already analysed the differences per school. To further make it more granular by introducing gender, does not seem to add further value in terms of insights.                            |
+|                     |                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                                                         |
+|                     | 2.  Graph is titled as “Subject Scores by Gender across school", however the code indicates that mean scores +/- one standard deviation were generated instead.                                                                                                                 | 2.  We can retain the original intent to show the granular difference in performance for the schools, by examining the actual disparity between the best and the worst schools instead.                                 |
+|                     |                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                                                         |
+|                     | 3.  The data subset used for this visualization has 301 observations and 7 variables. Upon inspecting the data set, it is basically the overall mean subject scores for male and female students per school                                                                     |                                                                                                                                                                                                                         |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Aesthetics**      | 1.  The use of a vertically long plot to compare the scores across schools makes it visually challenging and difficult to spot differences between schools, and identify any clusters.                                                                                          | 1.  To revise the design of a vertically long format and re-make it to a horizontally compact visualization, by using ridge line plots to show the differences in performance only between the best and worst schools.  |
+|                     |                                                                                                                                                                                                                                                                                 | 2.  To minimize axis labels, we will only identify and plot the top & bottom 5 schools instead.                                                                                                                         |
+|                     | 2.  Since there are 164 schools, the use of a vertically long format makes it difficult to read the Y-axis labels. There are too many schools to make identification off the Y-axis easy. This is further compounded with the additional splitting of genders for every school. |                                                                                                                                                                                                                         |
+|                     |                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                                                         |
+|                     | 3.  The distance between the X-axis, which shows the scores is too far apart from the box plots. I am unable to decipher what are the actual scores or score range for each box plot.                                                                                           |                                                                                                                                                                                                                         |
+|                     |                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                                                         |
+|                     | 4.  The graph is patched side by side, resulting in the Y-axis being repeated 3 times. The order of the School IDs are all the same, hence this creates additional non-data ink, that makes the graph too “busy”.                                                               |                                                                                                                                                                                                                         |
++---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Examining the subset used for the original plot in more detail.
 
@@ -1113,14 +1133,16 @@ The *pvmathgender* subset table has 307 observations and 7 variables.
 
 The data subset can only be used to visualize the mean scores of the two genders for every school.
 
-However, because of its long format, the original plot is not suitable to effectively help readers understand the disparity in performances between schools. By adding a further split into genders per school further complicates this visually.
+The original graph is not of a suitable design to help readers easily and quickly understand the disparity in performances between schools. By adding a further split into genders per school further complicates this visually.
 
-As there is no value add to this direction, I will instead use a new compact visualization to enable the reader to quickly identify the disparity in school performance. Instead of analyzing all schools, we can narrow our focus just to the "best" and "worst" schools.
+I will use a new compact visualization to enable the reader to quickly identify the disparity in school performance. Instead of analyzing all schools, we can narrow our focus just to the "best" and "worst" schools.
 :::
 
 ### 3.5.2 Sketch of Proposed Design
 
 Rough sketch of proposed design is shown below.
+
+![](images/clipboard-2581295591.png)
 
 ### 3.5.3 Remake
 
@@ -1170,7 +1192,7 @@ top_bottom_mathsch <- top_bottom_mathsch %>%
   mutate(CNTSCHID = factor(CNTSCHID, levels = top_bottom_math))
 ```
 
-Lastly, I will use the code below to plot Ridgeline plots for the top and bottom 5 schools.
+Lastly, I will use the code below to create Ridgeline plots for the top and bottom 5 schools.
 
 ```{r}
 #| code-fold: true
@@ -1191,7 +1213,7 @@ math_5 <- ggplot(top_bottom_mathsch, aes(x = PV1MATH, y = factor(CNTSCHID), fill
   coord_cartesian(xlim=c(0,1000)) +
   theme_ridges() +
   theme(legend.position = "none",
-        plot.title = element_text(size = 10)  
+        plot.title = element_text(size = 15)  
   )  +
   labs(y = "School ID", x = NULL, title = "Math Scores for the Top and Bottom 5 Schools") +
   theme(
@@ -1207,7 +1229,55 @@ math_5
 ::: callout-tip
 ## Revised plot
 
-By narrowing our focus on only the top and bottom 5 schools, we are able to clearly infer the actual difference between the "best" and "worst" schools.
+By narrowing our focus to compare only the top and bottom 5 schools, we are able to clearly infer the actual difference between the "best" and "worst" schools.
 
-The new revised plot is now more visually compact, and allows readers to quickly identify the top and bottom 5 schools and their relative performances.
+The new revised plot is now more visually compact, and allows readers to quickly examine the difference in performance between the top and bottom 5 schools.
+:::
+
+Besides this, we can also examine the differences in performance between Male and Female students in these top and bottom 5 schools, using the code below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 10
+#| fig-height: 10
+
+
+# Convert ST004D01T to a factor with more meaningful level names
+top_bottom_mathsch$ST004D01T <- factor(top_bottom_mathsch$ST004D01T, levels = c(1, 2), labels = c("Girls", "Boys"))
+
+# Plot
+math_gender_ridges <- ggplot(top_bottom_mathsch, 
+                             aes(x = PV1MATH, 
+                                 y = interaction(CNTSCHID, ST004D01T),  # Create interaction between school ID and gender
+                                 fill = after_stat(x))) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = 4,
+    quantile_lines = TRUE
+  ) +
+  scale_fill_gradientn(
+    name = "Math Scores",
+    colors = c("red", "green"),
+    limits = c(min(top_bottom_mathsch$PV1MATH, na.rm = TRUE), max(top_bottom_mathsch$PV1MATH, na.rm = TRUE)),
+    breaks = seq(min(top_bottom_mathsch$PV1MATH, na.rm = TRUE), max(top_bottom_mathsch$PV1MATH, na.rm = TRUE), length.out = 5)
+  ) +
+  coord_cartesian(xlim = c(0, 1000)) +
+  theme_ridges() +
+  labs(y = "School ID and Gender", x = "Math Scores", title = "Math Scores for the Top and Bottom 5 Schools by Gender") +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 15),
+    axis.text.y = element_text(angle = 0, hjust = 0.5)  
+  )
+
+math_gender_ridges
+
+```
+
+::: callout-note
+## Note
+
+School IDs 70200001, 70200139 and 70200110 does not have any data on Female students and are likely a single-gender school.
 :::
