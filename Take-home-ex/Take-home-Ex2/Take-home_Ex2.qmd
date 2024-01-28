@@ -1304,11 +1304,11 @@ For example, combining multiple complex plots at the same time may confuse reade
 
 Static visualizations come with their own limitations. Understanding these limits are important to design good visuals which are easily understood by readers.
 
-Labels, annotations and legends serve to inform, but also increases duplicity. Instead of worrying whether there is enough labels to explain and guide readers, it is better to focus on how easy the reader can obtain that information.
+Labels, annotations and legends serve to inform, but also increases duplicity. Instead of worrying whether there are enough labels to explain and guide readers, it is better to focus on how easy the reader can obtain that information.
 
 3.  **What is the information you want to communicate?**
 
-It is important understand the purpose, intent and effect of the visualization. If we are confused about what we want to communicate, readers will feel the same way as well.
+It is important to understand the purpose, intent and effect of the visualization. If we are confused about what we want to communicate, readers will feel the same way as well.
 
 4.  **Learning from Peers**
 
