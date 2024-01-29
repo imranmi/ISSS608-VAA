@@ -1,0 +1,21 @@
+---
+title: "Hands-on Exercise 4c - Visualising Uncertainty "
+date: January 29, 2024
+date-modified: "last-modified"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  warning: false
+---
+
+# Getting Started
+
+## Loading R package
+
+```{r} pacman::p_load(tidyverse)}
+```
+
+# Importing Data
+
+## Wrangling Data
