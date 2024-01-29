@@ -908,5 +908,131 @@
     "title": "Take-Home Exercise 3",
     "section": "Wrangling Data",
     "text": "Wrangling Data"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "",
+    "text": "In this hands-on exercise, we will gain hands-on experience on using:\n\nggstatsplot package to create visual graphics with rich statistical information,\nperformance package to visualise model diagnostics, and\nparameters package to visualise model parameters"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#installing-and-launching-r-packages",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#installing-and-launching-r-packages",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.1 Installing and launching R packages",
+    "text": "4.3.1 Installing and launching R packages\n\npacman::p_load(ggstatsplot, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#importing-data",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#importing-data",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.2 Importing Data",
+    "text": "4.3.2 Importing Data\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nstat(exam)\n\n# A tibble: 322 × 7\n   ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE\n   &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;\n 1 Student321 3I    Male   Malay        21     9      15\n 2 Student305 3I    Female Malay        24    22      16\n 3 Student289 3H    Male   Chinese      26    16      16\n 4 Student227 3F    Male   Chinese      27    77      31\n 5 Student318 3I    Male   Malay        27    11      25\n 6 Student306 3I    Female Malay        31    16      16\n 7 Student313 3I    Male   Chinese      31    21      25\n 8 Student316 3I    Male   Malay        31    18      27\n 9 Student312 3I    Male   Malay        33    19      15\n10 Student297 3H    Male   Indian       34    49      37\n# ℹ 312 more rows"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#one-sample-test-gghistostats-method",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#one-sample-test-gghistostats-method",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.3 One-sample test: gghistostats() method",
+    "text": "4.3.3 One-sample test: gghistostats() method\nIn the code below, gghistostats() is used to to build an visual of one-sample test on English scores.\n\nset.seed(1234)\n\ngghistostats(\n  data = exam,\n  x = ENGLISH,\n  type = \"bayes\",\n  test.value = 60,\n  xlab = \"English scores\"\n)\n\n\n\n\nDefault information: - statistical details - Bayes Factor - sample sizes - distribution summary"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#unpacking-the-bayes-factor",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#unpacking-the-bayes-factor",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.4 Unpacking the Bayes Factor",
+    "text": "4.3.4 Unpacking the Bayes Factor\n\nA Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favor of one theory among two competing theories.\nThat’s because the Bayes factor gives us a way to evaluate the data in favor of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favor of a given hypothesis.\nWhen we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10.\n\n\n\nThe Schwarz criterion is one of the easiest ways to calculate rough approximation of the Bayes Factor."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#how-to-interpret-bayes-factor",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#how-to-interpret-bayes-factor",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.5 How to interpret Bayes Factor",
+    "text": "4.3.5 How to interpret Bayes Factor\nA Bayes Factor can be any positive number. One of the most common interpretations is this one—first proposed by Harold Jeffereys (1961) and slightly modified by Lee and Wagenmakers in 2013."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#two-sample-mean-test-ggbetweenstats",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#two-sample-mean-test-ggbetweenstats",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.6 Two-sample mean test: ggbetweenstats()",
+    "text": "4.3.6 Two-sample mean test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\n\n\n\n\nDefault information: - statistical details - Bayes Factor - sample sizes - distribution summary"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#one-way-anova-test-ggbetweenstats-method",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#one-way-anova-test-ggbetweenstats-method",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.7 One way ANOVA Test: ggbetweenstats() method",
+    "text": "4.3.7 One way ANOVA Test: ggbetweenstats() method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English score by race.\n\nggbetweenstats(\n  data = exam,\n  x = RACE, \n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE, \n  pairwise.comparisons = TRUE, \n  pairwise.display = \"s\",\n  p.adjust.method = \"fdr\",\n  messages = FALSE\n)\n\n\n\n\n\n“ns” → only non-significant\n“s” → only significant\n“all” → everything"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#significant-test-of-correlation-ggscatterstats",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#significant-test-of-correlation-ggscatterstats",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.8 Significant test of correlation: ggscatterstats()",
+    "text": "4.3.8 Significant test of correlation: ggscatterstats()\nIn the code below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE,\n  )"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#significant-test-of-association-dependence-ggbarstats-methods",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#significant-test-of-association-dependence-ggbarstats-methods",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.3.9 Significant test of Association (Dependence): ggbarstats() methods",
+    "text": "4.3.9 Significant test of Association (Dependence): ggbarstats() methods\nFirst, the Maths scores is binned into a 4-class variable by using cut().\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nNext, ggbarstats() is used to build a visual for Significant Test of Association.\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#importing-excel-file-readxl-method",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#importing-excel-file-readxl-method",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.1 Importing Excel file: readxl method",
+    "text": "4.5.1 Importing Excel file: readxl method\nIn the code chunk below, read_xls() of readxl package is used to import the data worksheet of ToyotaCorolla.xls workbook into R.\n\ncar_resale &lt;- read_xls(\"data/ToyotaCorolla.xls\", \n                       \"data\")\ncar_resale\n\n# A tibble: 1,436 × 38\n      Id Model    Price Age_08_04 Mfg_Month Mfg_Year     KM Quarterly_Tax Weight\n   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;\n 1    81 TOYOTA … 18950        25         8     2002  20019           100   1180\n 2     1 TOYOTA … 13500        23        10     2002  46986           210   1165\n 3     2 TOYOTA … 13750        23        10     2002  72937           210   1165\n 4     3  TOYOTA… 13950        24         9     2002  41711           210   1165\n 5     4 TOYOTA … 14950        26         7     2002  48000           210   1165\n 6     5 TOYOTA … 13750        30         3     2002  38500           210   1170\n 7     6 TOYOTA … 12950        32         1     2002  61000           210   1170\n 8     7  TOYOTA… 16900        27         6     2002  94612           210   1245\n 9     8 TOYOTA … 18600        30         3     2002  75889           210   1245\n10    44 TOYOTA … 16950        27         6     2002 110404           234   1255\n# ℹ 1,426 more rows\n# ℹ 29 more variables: Guarantee_Period &lt;dbl&gt;, HP_Bin &lt;chr&gt;, CC_bin &lt;chr&gt;,\n#   Doors &lt;dbl&gt;, Gears &lt;dbl&gt;, Cylinders &lt;dbl&gt;, Fuel_Type &lt;chr&gt;, Color &lt;chr&gt;,\n#   Met_Color &lt;dbl&gt;, Automatic &lt;dbl&gt;, Mfr_Guarantee &lt;dbl&gt;,\n#   BOVAG_Guarantee &lt;dbl&gt;, ABS &lt;dbl&gt;, Airbag_1 &lt;dbl&gt;, Airbag_2 &lt;dbl&gt;,\n#   Airco &lt;dbl&gt;, Automatic_airco &lt;dbl&gt;, Boardcomputer &lt;dbl&gt;, CD_Player &lt;dbl&gt;,\n#   Central_Lock &lt;dbl&gt;, Powered_Windows &lt;dbl&gt;, Power_Steering &lt;dbl&gt;, …\n\n\nThe output object car_resale is a tibble data frame."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#multiple-regression-model-using-lm",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#multiple-regression-model-using-lm",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.2 Multiple Regression Model using lm()",
+    "text": "4.5.2 Multiple Regression Model using lm()\nThe code below is used to calibrate a multiple linear regression model by using lm() of Base Stats of R.\n\nmodel &lt;- lm(Price ~ Age_08_04 + Mfg_Year + KM + \n              Weight + Guarantee_Period, data = car_resale)\nmodel\n\n\nCall:\nlm(formula = Price ~ Age_08_04 + Mfg_Year + KM + Weight + Guarantee_Period, \n    data = car_resale)\n\nCoefficients:\n     (Intercept)         Age_08_04          Mfg_Year                KM  \n      -2.637e+06        -1.409e+01         1.315e+03        -2.323e-02  \n          Weight  Guarantee_Period  \n       1.903e+01         2.770e+01"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-checking-for-multicolinearity",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-checking-for-multicolinearity",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.3 Model Diagnostic: Checking for multicolinearity:",
+    "text": "4.5.3 Model Diagnostic: Checking for multicolinearity:\nIn the code below, we use check_collinearity() of performance package.\n\ncheck_collinearity(model)\n\n# Check for Multicollinearity\n\nLow Correlation\n\n             Term  VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI\n               KM 1.46 [ 1.37,  1.57]         1.21      0.68     [0.64, 0.73]\n           Weight 1.41 [ 1.32,  1.51]         1.19      0.71     [0.66, 0.76]\n Guarantee_Period 1.04 [ 1.01,  1.17]         1.02      0.97     [0.86, 0.99]\n\nHigh Correlation\n\n      Term   VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI\n Age_08_04 31.07 [28.08, 34.38]         5.57      0.03     [0.03, 0.04]\n  Mfg_Year 31.16 [28.16, 34.48]         5.58      0.03     [0.03, 0.04]\n\n\n\ncheck_c &lt;- check_collinearity(model)\nplot(check_c)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-checking-normality-assumption",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-checking-normality-assumption",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.4 Model Diagnostic: checking normality assumption",
+    "text": "4.5.4 Model Diagnostic: checking normality assumption\nIn the code below, we use check_normality() of performance package.\n\nmodel1 &lt;- lm(Price ~ Age_08_04 + KM + \n              Weight + Guarantee_Period, data = car_resale)\n\n\ncheck_n &lt;- check_normality(model1)\n\n\nplot(check_n)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-check-model-for-homogeneity-of-variances",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-check-model-for-homogeneity-of-variances",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.5 Model Diagnostic: Check model for homogeneity of variances",
+    "text": "4.5.5 Model Diagnostic: Check model for homogeneity of variances\nIn the code below, we use check_heteroscedasticity() of performance package.\n\ncheck_h &lt;- check_heteroscedasticity(model1)\n\n\nplot(check_h)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-complete-check",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#model-diagnostic-complete-check",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.6 Model Diagnostic: Complete check",
+    "text": "4.5.6 Model Diagnostic: Complete check\nWe can also perform a complete check by using check_model().\n\ncheck_model(model1)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#visualising-regression-parameters-see-methods",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#visualising-regression-parameters-see-methods",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.7 Visualising Regression Parameters: see methods",
+    "text": "4.5.7 Visualising Regression Parameters: see methods\nIn the code below, plot() of see package and parameters() of parameters package is used to visualise the parameters of a regression model.\n\nplot(parameters(model1))"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#visualising-regression-parameters-ggcoefstats-method",
+    "href": "Hands-on-ex/Hands-on-Ex4b/Hands-on_Ex4b.html#visualising-regression-parameters-ggcoefstats-method",
+    "title": "Hands-on Exercise 4b - Visual Stastistical Analysis",
+    "section": "4.5.8 Visualising Regression Parameters: ggcoefstats() method",
+    "text": "4.5.8 Visualising Regression Parameters: ggcoefstats() method\nIn the code below, ggcoefstats() of ggstatsplot package is used to visualise the parameters of a regression model.\n\nggcoefstats(model1, \n            output = \"plot\")"
   }
 ]
