@@ -514,4 +514,4 @@ Below are a few sample plots for practise.
 
 # 4.6 References
 
-Main reference: Kam, T.S. (2023). [Visualising Distribution.](https://r4va.netlify.app/chap09)
+Main reference: Kam, T.S. (2024). [Visualising Distribution.](https://r4va.netlify.app/chap09)

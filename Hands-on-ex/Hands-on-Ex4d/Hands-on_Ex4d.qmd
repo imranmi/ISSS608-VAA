@@ -13,8 +13,7 @@ execute:
 
 ## Loading R package
 
-```{r} pacman::p_load(tidyverse)}
-```
+`{r} pacman::p_load(tidyverse)}`
 
 # Importing Data
 
