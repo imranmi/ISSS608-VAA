@@ -82,8 +82,6 @@ A **Bayes Factor** can be any positive number. One of the most common interpre
 In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of Maths scores by gender.
 
 ```{r}
-#| echo: false
-
 ggbetweenstats(
   data = exam,
   x = GENDER, 
