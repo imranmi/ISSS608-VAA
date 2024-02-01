@@ -455,12 +455,8 @@ ggplot(data = exam,
   transition_states(.draw, 1, 3)
 ```
 
-# 4.6 Plotting Practice
-
-Below are a few sample plots for practise.
-
-# 4.7 References
+# 4.6 References
 
 Main reference: Kam, T.S. (2024). [Visualizing Uncertainty.](https://r4va.netlify.app/chap11#learning-outcome)
 
-#  
+# 

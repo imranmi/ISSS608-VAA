@@ -258,7 +258,24 @@ ggcoefstats(model1,
 
 # 4.6 Plotting Practise
 
-Below are a few sample plots for practise.
+1\) Scatterplot with Marginal histograms
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggscatterstats(
+  data = exam,                                          
+  x = MATHS,                                                  
+  y = ENGLISH,
+  marginal = TRUE,
+  marginal.type = "histogram",
+  centrality.para = "mean",
+  margins = "both",
+  title = "Relationship Math and English scores",
+  messages = FALSE
+)
+```
 
 # 4.7 References
 

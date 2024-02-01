@@ -510,7 +510,79 @@ ggplot(exam,
 
 # 4.5 Plotting Practise
 
-Below are a few sample plots for practise.
+1\) Differences in distribution of genders in classes
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+ggplot(exam, 
+       aes(x = ENGLISH, 
+           y = interaction(CLASS, GENDER),
+         fill = GENDER)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    color = "black"
+  ) +
+  scale_x_continuous(
+    name = "ENGLISH",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = "Genders per class", expand = expansion(add = c(0.2, 2.6))) +
+  scale_fill_manual(values = c("Male" = "lightblue", "Female" = "lightpink")) +
+  theme_ridges() +
+  theme(legend.position = "none")
+```
+
+2\) Specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(exam,
+       aes(x = ENGLISH, 
+           y = interaction(CLASS, GENDER), 
+           fill = factor(stat(quantile))
+           )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE, 
+    quantiles = c(0.025, 0.975)
+    ) +
+  scale_fill_manual(
+    name = "Probability",
+    values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
+    labels = c("(0, 0.025]", "(0.025, 0.975]", "(0.975, 1]")
+  ) +
+  labs(y=NULL) +
+  theme_ridges() +
+  theme(legend.position = "bottom")
+```
+
+3\) Half-eye with box plot
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+ggplot(exam, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  coord_flip() +
+  theme_fivethirtyeight()
+  
+```
 
 # 4.6 References
 
