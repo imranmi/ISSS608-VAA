@@ -11,14 +11,70 @@ execute:
 
 # Interactivity in Graphs
 
-# Getting Started
-
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(ggiraph, plotly, listviewer,
+               patchwork, DT, tidyverse) 
 ```
 
-# Importing Data
+## Importing Data
 
-## Working with Tableau
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+Adding a Tool tip
+
+```{r}
+
+p4 <- ggplot(data=exam_data, 
+       aes(x = SCIENCE)) +
+  geom_dotplot_interactive(           
+    aes(data_id = CLASS, tooltip=ID), 
+    stackgroups = TRUE,               
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p4,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618                      
+)                                        
+```
+
+Adding tool tip to patchwork
+
+```{r}
+p_1 <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID, tooltip=ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +  
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+
+p_2 <- ggplot(data=exam_data, 
+       aes(x = SCIENCE)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID, tooltip=ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") + 
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+
+girafe(code = print(p_1 + p_2), 
+       width_svg = 6,
+       height_svg = 3,
+       options = list(
+         opts_hover(css = "fill: #800080;"),
+         opts_hover_inv(css = "opacity:0.2;")
+         )
+       ) 
+```

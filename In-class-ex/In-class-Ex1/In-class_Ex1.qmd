@@ -20,7 +20,7 @@ In this hands-on exercise, two R packages will be used. They are:
 The code chunk used is as follows:
 
 ```{r}
-pacman::p_load(tidyverse, haven)
+pacman::p_load(tidyverse, haven, DT)
 ```
 
 ## Importing PISA data
@@ -53,4 +53,40 @@ For our analysis we shall read in data from stu_qqq_SG.rds using `read_rds()`
 
 ```{r}
 stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
+```
+
+```{r}
+head(stu_qqq_SG)
+```
+
+```{r}
+#| eval: false
+
+sch_qqq <- read_sas("data/cy08msp_sch_qqq.sas7bdat")
+```
+
+```{r}
+#| eval: false
+
+sch_qqq_SG <- sch_qqq %>%
+  filter(CNT == "SGP")
+```
+
+```{r}
+#| eval: false
+
+write_rds(sch_qqq_SG,
+          "data/sch_qqq_SG.rds")
+```
+
+```{r}
+sch_qqq_SG <- read_rds("data/sch_qqq_SG.rds")
+```
+
+```{r}
+DT::datatable(sch_qqq_SG, class= "compact")
+```
+
+```{r}
+write.csv(sch_qqq_SG, "data/sch_qqq_SG.csv", row.names = FALSE)
 ```

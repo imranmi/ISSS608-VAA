@@ -137,21 +137,21 @@
     "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html",
     "title": "In-Class Exercise 1 - Now you see it!",
     "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven, DT)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex1/In-class_Ex1.html#loading-r-packages",
     "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html#loading-r-packages",
     "title": "In-Class Exercise 1 - Now you see it!",
     "section": "",
-    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven)"
+    "text": "In this hands-on exercise, two R packages will be used. They are:\n\ntidyverse, and\nhaven\n\nThe code chunk used is as follows:\n\npacman::p_load(tidyverse, haven, DT)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex1/In-class_Ex1.html#importing-pisa-data",
     "href": "In-class-ex/In-class-Ex1/In-class_Ex1.html#importing-pisa-data",
     "title": "In-Class Exercise 1 - Now you see it!",
     "section": "Importing PISA data",
-    "text": "Importing PISA data\nThe code chunk below uses ‘read_sas()’ of haven to import PISA data into R environment.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\nUpon first import, as the student questionaire data file contains data from other countries, we use filter() to filter the data file to only Singapore data.\n\nstu_qqq_SG &lt;- stu_qqq %&gt;%\n  filter(CNT == \"SGP\")\n\nWe use write_rds() to save the filtered datafile to a seperate file called stu_qqq_SG\n\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\nFor our analysis we shall read in data from stu_qqq_SG.rds using read_rds()\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")"
+    "text": "Importing PISA data\nThe code chunk below uses ‘read_sas()’ of haven to import PISA data into R environment.\n\nstu_qqq &lt;- read_sas(\"data/cy08msp_stu_qqq.sas7bdat\")\n\nUpon first import, as the student questionaire data file contains data from other countries, we use filter() to filter the data file to only Singapore data.\n\nstu_qqq_SG &lt;- stu_qqq %&gt;%\n  filter(CNT == \"SGP\")\n\nWe use write_rds() to save the filtered datafile to a seperate file called stu_qqq_SG\n\nwrite_rds(stu_qqq_SG,\n          \"data/stu_qqq_SG.rds\")\n\nFor our analysis we shall read in data from stu_qqq_SG.rds using read_rds()\n\nstu_qqq_SG &lt;- read_rds(\"data/stu_qqq_SG.rds\")\n\n\nhead(stu_qqq_SG)\n\n# A tibble: 6 × 1,279\n  CNT   CNTRYID CNTSCHID CNTSTUID CYC   NatCen STRATUM SUBNATIO REGION  OECD\n  &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;\n1 SGP       702 70200052 70200001 08MS  070200 SGP01   7020000   70200     0\n2 SGP       702 70200134 70200002 08MS  070200 SGP01   7020000   70200     0\n3 SGP       702 70200112 70200003 08MS  070200 SGP01   7020000   70200     0\n4 SGP       702 70200004 70200004 08MS  070200 SGP01   7020000   70200     0\n5 SGP       702 70200152 70200005 08MS  070200 SGP01   7020000   70200     0\n6 SGP       702 70200043 70200006 08MS  070200 SGP01   7020000   70200     0\n# ℹ 1,269 more variables: ADMINMODE &lt;dbl&gt;, LANGTEST_QQQ &lt;dbl&gt;,\n#   LANGTEST_COG &lt;dbl&gt;, LANGTEST_PAQ &lt;dbl&gt;, Option_CT &lt;dbl&gt;, Option_FL &lt;dbl&gt;,\n#   Option_ICTQ &lt;dbl&gt;, Option_WBQ &lt;dbl&gt;, Option_PQ &lt;dbl&gt;, Option_TQ &lt;dbl&gt;,\n#   Option_UH &lt;dbl&gt;, BOOKID &lt;dbl&gt;, ST001D01T &lt;dbl&gt;, ST003D02T &lt;dbl&gt;,\n#   ST003D03T &lt;dbl&gt;, ST004D01T &lt;dbl&gt;, ST250Q01JA &lt;dbl&gt;, ST250Q02JA &lt;dbl&gt;,\n#   ST250Q03JA &lt;dbl&gt;, ST250Q04JA &lt;dbl&gt;, ST250Q05JA &lt;dbl&gt;, ST250D06JA &lt;chr&gt;,\n#   ST250D07JA &lt;chr&gt;, ST251Q01JA &lt;dbl&gt;, ST251Q02JA &lt;dbl&gt;, ST251Q03JA &lt;dbl&gt;, …\n\n\n\nsch_qqq &lt;- read_sas(\"data/cy08msp_sch_qqq.sas7bdat\")\n\n\nsch_qqq_SG &lt;- sch_qqq %&gt;%\n  filter(CNT == \"SGP\")\n\n\nwrite_rds(sch_qqq_SG,\n          \"data/sch_qqq_SG.rds\")\n\n\nsch_qqq_SG &lt;- read_rds(\"data/sch_qqq_SG.rds\")\n\n\nDT::datatable(sch_qqq_SG, class= \"compact\")\n\n\n\n\n\n\n\nwrite.csv(sch_qqq_SG, \"data/sch_qqq_SG.csv\", row.names = FALSE)"
   },
   {
     "objectID": "Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html",
@@ -235,7 +235,7 @@
     "href": "Hands-on-ex/Hands-on-Ex4a/Hands-on_Ex4a.html#varying-fill-colours-along-the-x-axis",
     "title": "Hands-on Exercise 4a - Visualising Distribution",
     "section": "4.3.2 Varying fill colours along the x axis",
-    "text": "4.3.2 Varying fill colours along the x axis\nWe can have the area under a ridgeline filled with colors that vary along the x axis. This effect can be achieved by using either geom_ridgeline_gradient() or geom_density_ridges_gradient(). Both geoms work just like geom_ridgeline() and geom_density_ridges(), except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill.\nWe can have changing fill colors OR transparency but not both.\n\nThe PlotThe Code\n\n\n\n\n\n\n\n\n\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Temp. [F]\",\n                       option = \"D\") +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
+    "text": "4.3.2 Varying fill colours along the x axis\nWe can have the area under a ridgeline filled with colors that vary along the x axis. This effect can be achieved by using either geom_ridgeline_gradient() or geom_density_ridges_gradient(). Both geoms work just like geom_ridgeline() and geom_density_ridges(), except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill.\nWe can have changing fill colors OR transparency but not both.\n\nThe PlotThe Code\n\n\n\n\n\n\n\n\n\n\nggplot(exam, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Grades\",\n                       option = \"D\") +\n  scale_x_continuous(\n    name = \"English grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
   },
   {
     "objectID": "Hands-on-ex/Hands-on-Ex4a/Hands-on_Ex4a.html#mapping-the-probabilities-directly-onto-colour",
@@ -766,8 +766,8 @@
     "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#loading-r-package",
     "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html#loading-r-package",
     "title": "In-Class Exercise 2",
-    "section": "Loading R package",
-    "text": "Loading R package\n\npacman::p_load(tidyverse)"
+    "section": "",
+    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#working-with-tableau",
@@ -1160,5 +1160,19 @@
     "title": "Hands-on Exercise 4d - Funnel Plots for Fair Comparisons",
     "section": "4.5.4 Interactive Funnel Plot: plotly + ggplot2",
     "text": "4.5.4 Interactive Funnel Plot: plotly + ggplot2\nWe will make the previous plot interactive, using ggplotly() of plotly package.\n\nfp_ggplotly &lt;- ggplotly(p,\n  tooltip = c(\"label\", \n              \"x\", \n              \"y\"))\nfp_ggplotly"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
+    "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
+    "title": "In-Class Exercise 2",
+    "section": "",
+    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse) \n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nAdding a Tool tip\n\np4 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS, tooltip=ID), \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p4,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\nAdding tool tip to patchwork\n\np_1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np_2 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p_1 + p_2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #800080;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
+  },
+  {
+    "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#importing-data",
+    "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html#importing-data",
+    "title": "In-Class Exercise 2",
+    "section": "",
+    "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nAdding a Tool tip\n\np4 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS, tooltip=ID), \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p4,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\nAdding tool tip to patchwork\n\np_1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np_2 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p_1 + p_2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #800080;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
   }
 ]
