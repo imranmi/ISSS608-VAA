@@ -116,14 +116,14 @@
     "href": "In-class-ex/In-class-Ex3/In-class_Ex3.html",
     "title": "In-Class Exercise 3",
     "section": "",
-    "text": "pacman::p_load(tidyverse)"
+    "text": "pacman::p_load(tidyverse, ggplot2, plotly, dplyr)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex3/In-class_Ex3.html#loading-r-package",
     "href": "In-class-ex/In-class-Ex3/In-class_Ex3.html#loading-r-package",
     "title": "In-Class Exercise 3",
     "section": "",
-    "text": "pacman::p_load(tidyverse)"
+    "text": "pacman::p_load(tidyverse, ggplot2, plotly, dplyr)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex3/In-class_Ex3.html#wrangling-data",
@@ -767,7 +767,7 @@
     "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html#loading-r-package",
     "title": "In-Class Exercise 2",
     "section": "",
-    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse)"
+    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse,ggdist, ggridges, ggthemes,\n               colorspace)"
   },
   {
     "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#working-with-tableau",
@@ -1166,7 +1166,7 @@
     "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
     "title": "In-Class Exercise 2",
     "section": "",
-    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse) \n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nAdding a Tool tip\n\np4 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS, tooltip=ID), \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p4,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\nAdding tool tip to patchwork\n\np_1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np_2 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p_1 + p_2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #800080;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
+    "text": "pacman::p_load(ggiraph, plotly, listviewer,\n               patchwork, DT, tidyverse,ggdist, ggridges, ggthemes,\n               colorspace) \n\n\n\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nAdding a Tool tip\n\np4 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS, tooltip=ID), \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p4,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\nAdding tool tip to patchwork\n\np_1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np_2 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p_1 + p_2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #800080;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
   },
   {
     "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html#importing-data",
@@ -1174,5 +1174,124 @@
     "title": "In-Class Exercise 2",
     "section": "",
     "text": "exam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nAdding a Tool tip\n\np4 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS, tooltip=ID), \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p4,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\nAdding tool tip to patchwork\n\np_1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np_2 &lt;- ggplot(data=exam_data, \n       aes(x = SCIENCE)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID, tooltip=ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p_1 + p_2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #800080;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html",
+    "href": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html",
+    "title": "Hands-on Exercise 5a- Creating Ternary Plots with R",
+    "section": "",
+    "text": "Ternary plots are a way to display the distribution and variability of three-part compositional data. (For example, the proportion of aged, economy active and young population or sand, silt, and clay in soil.)\nIt’s display is a triangle with sides scaled from 0 to 1. Each side represents one of the three components. A point is plotted so that a line drawn perpendicular from the point to each leg of the triangle intersect at the component values of the point.\nIn this hands-on, we will learn how to build ternary plot programmatically using R for visualising and analysing population structure of Singapore.\nThis hands-on exercise consists of four steps:\n\nInstall and launch tidyverse and ggtern packages.\nDerive three new measures using mutate() function of dplyr package.\nBuild a static ternary plot using ggtern() function of ggtern package.\nBuild an interactive ternary plot using plot-ly() function of Plotly R package."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-a-static-ternary-diagram",
+    "href": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-a-static-ternary-diagram",
+    "title": "Hands-on Exercise 5a- Creating Ternary Plots with R",
+    "section": "5.4.1 Plotting a static ternary diagram",
+    "text": "5.4.1 Plotting a static ternary diagram\nUsing ggtern() function of ggtern package to create a simple ternary plot.\n\n#Building the static ternary plot\nggtern(data=agpop_mutated,aes(x=ACTIVE,y=OLD, z=YOUNG)) +\n  geom_point()\n\n\n\n\n\n#Building the static ternary plot\nggtern(data=agpop_mutated, aes(x=ACTIVE,y=OLD, z=YOUNG)) +\n  geom_point() +\n  labs(title=\"Population structure, 2015\") +\n  theme_rgbw()"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-an-interactive-ternary-diagram",
+    "href": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-an-interactive-ternary-diagram",
+    "title": "Hands-on Exercise 5a- Creating Ternary Plots with R",
+    "section": "5.4.2 Plotting an interactive ternary diagram",
+    "text": "5.4.2 Plotting an interactive ternary diagram\nUsing plot_ly() function of Plotly R.\n\n# reusable function for creating annotation object\nlabel &lt;- function(txt) {\n  list(\n    text = txt, \n    x = 0.1, y = 1,\n    ax = 0, ay = 0,\n    xref = \"paper\", yref = \"paper\", \n    align = \"center\",\n    font = list(family = \"serif\", size = 15, color = \"white\"),\n    bgcolor = \"#b3b3b3\", bordercolor = \"black\", borderwidth = 2\n  )\n}\n\n# reusable function for axis formatting\naxis &lt;- function(txt) {\n  list(\n    title = txt, tickformat = \".0%\", tickfont = list(size = 10)\n  )\n}\n\nternaryAxes &lt;- list(\n  aaxis = axis(\"Active\"), \n  baxis = axis(\"Old\"), \n  caxis = axis(\"Young\")\n)\n\n# Initiating a plotly visualization \nplot_ly(\n  agpop_mutated, \n  a = ~ACTIVE, \n  b = ~OLD, \n  c = ~YOUNG, \n  color = I(\"black\"), \n  type = \"scatterternary\"\n) %&gt;%\n  layout(\n    annotations = label(\"Ternary Markers\"), \n    ternary = ternaryAxes\n  )"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-practise",
+    "href": "Hands-on-ex/Hands-on-Ex5a/Hands-on_Ex5a.html#plotting-practise",
+    "title": "Hands-on Exercise 5a- Creating Ternary Plots with R",
+    "section": "5.4.3 Plotting Practise",
+    "text": "5.4.3 Plotting Practise\nBelow are some additional plots created for practise."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "",
+    "text": "There are three broad reasons for computing a correlation matrix.\n\nTo reveal the relationship between high-dimensional variables pair-wisely.\nTo input into other analyses. For example, people commonly use correlation matrices as inputs for exploratory factor analysis, confirmatory factor analysis, structural equation models, and linear regression when excluding missing values pairwise.\nAs a diagnostic when checking other analyses. For example, with linear regression a high amount of correlations suggests that the linear regression’s estimates will be unreliable.\n\nWhen the data is large, both in terms of the number of observations and the number of variables, Corrgram tend to be used to visually explore and analyse the structure and the patterns of relations among variables. It is designed based on two main schemes:\n\nRendering the value of a correlation to depict its sign and magnitude, and\nReordering the variables in a correlation matrix so that “similar” variables are positioned adjacently, facilitating perception.\n\nIn this hands-on exercise, we will learn how to plot data visualisation for visualising correlation matrix with R. It consists of three main sections. First, we create correlation matrix using pairs() of R Graphics. Next, we plot corrgram using corrplot package of R. Lastly, we create an interactive correlation matrix using plotly R."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#basic-correlation-matrix",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#basic-correlation-matrix",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.4.1 Basic correlation matrix",
+    "text": "5.4.1 Basic correlation matrix\n\npairs(wine[,1:11])\n\n\n\n\nThe required input of pairs() can be a matrix or data frame. The code chunk used to create the scatterplot matrix is relatively simple. It uses the default pairs function.\n\npairs(wine[,2:12])"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#drawing-the-lower-or-upper-corners",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#drawing-the-lower-or-upper-corners",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.4.2 Drawing the lower or upper corners",
+    "text": "5.4.2 Drawing the lower or upper corners\npairs function of R Graphics provides many customisation arguments. For example, it is a common practice to show either the upper half or lower half of the correlation matrix instead of both. This is because a correlation matrix is symmetric.\nTo show the lower half of the correlation matrix, the upper.panel argument will be used as shown in the code chunk below.\n\npairs(wine[,2:12], upper.panel = NULL)\n\n\n\n\nWe can also display the upper half of the correlation matrix by using the code below.\n\npairs(wine[,2:12], lower.panel = NULL)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#including-with-correlation-coefficients",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#including-with-correlation-coefficients",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.4.3 Including with correlation coefficients",
+    "text": "5.4.3 Including with correlation coefficients\nTo show the correlation coefficient of each pair of variables instead of a scatter plot, panel.cor function will be used. This will also show higher correlations in a larger font.\n\npanel.cor &lt;- function(x, y, digits=2, prefix=\"\", cex.cor, ...) {\nusr &lt;- par(\"usr\")\non.exit(par(usr))\npar(usr = c(0, 1, 0, 1))\nr &lt;- abs(cor(x, y, use=\"complete.obs\"))\ntxt &lt;- format(c(r, 0.123456789), digits=digits)[1]\ntxt &lt;- paste(prefix, txt, sep=\"\")\nif(missing(cex.cor)) cex.cor &lt;- 0.8/strwidth(txt)\ntext(0.5, 0.5, txt, cex = cex.cor * (1 + r) / 2)\n}\n\npairs(wine[,2:12], \n      upper.panel = panel.cor)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#the-basic-plot",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#the-basic-plot",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.5.1 The Basic Plot",
+    "text": "5.5.1 The Basic Plot\nOne of the advantage of using ggcorrmat() over many other methods to visualise a correlation matrix is it’s ability to provide a comprehensive and yet professional statistical report as shown in the figure below.\n\nlibrary(ggstatsplot)\n\nggcorrmat(\n  data = wine, \n  cor.vars = 1:11)\n\n\n\n\n\nggstatsplot::ggcorrmat(\n  data = wine, \n  cor.vars = 1:11,\n  ggcorrplot.args = list(outline.color = \"black\", \n                         hc.order = TRUE,\n                         tl.cex = 10),\n  title    = \"Correlogram for wine dataset\",\n  subtitle = \"Four pairs are no significant at p &lt; 0.05\"\n)\n\n\n\n\nThings to learn from the code above:\n\ncor.vars argument is used to compute the correlation matrix needed to build the corrgram.\nggcorrplot.args argument provide additional (mostly aesthetic) arguments that will be passed to ggcorrplot::ggcorrplot function. The list should avoid any of the following arguments since they are already internally being used: corr, method, p.mat, sig.level, ggtheme, colors, lab, pch, legend.title, digits.\n\nThe sample sub-code chunk can be used to control specific component of the plot such as the font size of the x-axis, y-axis, and the statistical report.\n\n#ggplot.component = list(\n    #theme(text=element_text(size=5),\n      #axis.text.x = element_text(size = 8),\n      #axis.text.y = element_text(size = 8)))"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#getting-started-with-corrplot",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#getting-started-with-corrplot",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.1 Getting started with corrplot",
+    "text": "5.7.1 Getting started with corrplot\nFirst, we need to compute the correlation matrix of wine data frame.\nIn the code below, cor() of R Stats is used to compute the correlation matrix of wine data frame.\n\nwine.cor &lt;- cor(wine[, 1:11])\n\nNext, corrplot() is used to plot the corrgram by using all the default setting as shown in the code below.\n\ncorrplot(wine.cor)\n\n\n\n\nThe default visual object used to plot the corrgram is circle. The default layout of the corrgram is a symmetric matrix. The default colour scheme is diverging blue-red. Blue colours are used to represent pair variables with positive correlation coefficients and red colours are used to represent pair variables with negative correlation coefficients. The intensity of the colour or also know as saturation is used to represent the strength of the correlation coefficient. Darker colours indicate relatively stronger linear relationship between the paired variables. On the other hand, lighter colours indicates relatively weaker linear relationship."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-visual-geometrics",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-visual-geometrics",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.2 Working with visual geometrics",
+    "text": "5.7.2 Working with visual geometrics\nIn corrplot package, there are seven visual geometrics (parameter method) can be used to encode the attribute values. They are: circle, square, ellipse, number, shade, color and pie. The default is circle. As shown in the previous section, the default visual geometric of corrplot matrix is circle. However, this default setting can be changed by using the method argument as shown in the code chunk below.\n\ncorrplot(wine.cor, \n         method = \"ellipse\") \n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"square\") \n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"number\") \n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"shade\") \n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"color\") \n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"pie\")"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-layout",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-layout",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.3 Working with layout",
+    "text": "5.7.3 Working with layout\ncorrplor() supports three layout types, namely: “full”, “upper” or “lower”. The default is “full” which display full matrix. The default setting can be changed by using the type argument of corrplot().\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         type=\"upper\")\n\n\n\n\nThe default layout of the corrgram can be further customised. For example, arguments diag and tl.col are used to turn off the diagonal cells and to change the axis text label colour to black colour respectively as shown in the code and figure below.\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.col = \"black\")\n\n\n\n\nWe can also experiment with other layout design argument such as tl.pos, tl.cex, tl.offset, cl.pos, cl.cex and cl.offset, just to mention a few.\nParameters group tl.* is for text-legend. The common-using are:\n\ntl.pos is for the position of text labels. It is character or logical. If character, it must be one of 'lt', 'ld', 'td', 'd', 'l' or 'n'. 'lt'(default if type='full') means left and top, 'ld'(default if type='lower') means left and diagonal, 'td'(default if type='upper') means top and diagonal(near), 'd' means diagonal, 'l' means left, 'n' means don’t add text-label.\ntl.cex is for the size of text label (variable names).\ntl.srt is for text label string rotation in degrees.\n\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.pos = 'lt' )\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"color\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.pos = 'td' )\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.pos = 'n' )\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"pie\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.cex = 0.5 )\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"square\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.cex = 1 )\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         type=\"upper\",\n         diag = FALSE,\n         tl.srt = 45 )"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-mixed-layout",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#working-with-mixed-layout",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.4 Working with mixed layout",
+    "text": "5.7.4 Working with mixed layout\nWith corrplot package, it is possible to design corrgram with mixed visual matrix of one half and numerical matrix on the other half. In order to create a coorgram with mixed layout, the corrplot.mixed(), a wrapped function for mixed visualisation style will be used.\nFigure below shows a mixed layout corrgram plotted using wine quality data.\n\ncorrplot.mixed(wine.cor, \n               lower = \"shade\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               tl.col = \"blue\",\n               tl.srt = 45)\n\n\n\n\n\ncorrplot.mixed(wine.cor, \n               lower = \"circle\", \n               upper = \"square\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               tl.col = \"red\")\n\n\n\n\nThe argument lower and upper are used to define the visualisation method used. In this case circle is used to map the lower half of the corrgram and square is used to map the upper half of the corrgram. The argument tl.pos, on the other, is used to specify the placement of the axis label. Lastly, the diag argument is used to specify the glyph on the principal diagonal of the corrgram."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#combining-corrgram-with-significant-test",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#combining-corrgram-with-significant-test",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.5 Combining corrgram with significant test",
+    "text": "5.7.5 Combining corrgram with significant test\nWe are also interested to know which pair of variables has correlation coefficients that are statistically significant.\nFigure below shows a corrgram combined with the significant test. The corrgram reveals that not all correlation pairs are statistically significant. For example the correlation between total sulfur dioxide and free surfur dioxide is statistically significant at significant level of 0.1 but not the pair between total sulfur dioxide and citric acid.\n\n\n\n\n\nWe can use the cor.mtest() to compute the p-values and confidence interval for each pair of variables.\n\nwine.sig = cor.mtest(wine.cor, conf.level= .95)\n\nWe can then use the p.mat argument of corrplot function as shown in the code below.\n\ncorrplot(wine.cor,\n         method = \"number\",\n         type = \"lower\",\n         diag = FALSE,\n         tl.col = \"black\",\n         tl.srt = 45,\n         p.mat = wine.sig$p,\n         sig.level = .05)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#reorder-a-corrgram",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#reorder-a-corrgram",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.6 Reorder a corrgram",
+    "text": "5.7.6 Reorder a corrgram\nMatrix reorder is very important for mining the hidden structure and pattern in a corrgram. By default, the order of attributes of a corrgram is sorted according to the correlation matrix (i.e. “original”). The default setting can be over-written by using the order argument of corrplot(). Currently, corrplot package support four sorting methods, they are:\n\n“AOE” is for the angular order of the eigenvectors. See Michael Friendly (2002) for details.\n“FPC” for the first principal component order.\n“hclust” for hierarchical clustering order, and “hclust.method” for the agglomeration method to be used.\n\n“hclust.method” should be one of “ward”, “single”, “complete”, “average”, “mcquitty”, “median” or “centroid”.\n\n“alphabet” for alphabetical order.\n\n“AOE”, “FPC”, “hclust”, “alphabet”. More algorithms can be found in seriation package.\n\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"AOE\",\n               tl.col = \"black\")\n\n\n\n\n\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"FPC\",\n               tl.col = \"black\")\n\n\n\n\n\ncorrplot.mixed(wine.cor, \n               lower = \"ellipse\", \n               upper = \"number\",\n               tl.pos = \"lt\",\n               diag = \"l\",\n               order=\"alphabet\",\n               tl.col = \"black\")\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         tl.pos = \"lt\",\n         tl.col = \"red\",\n         order=\"hclust\",\n         hclust.method = \"centroid\",\n         addrect = 5)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#reordering-a-correlation-matrix-using-hclust",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#reordering-a-correlation-matrix-using-hclust",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.7.7 Reordering a correlation matrix using hclust",
+    "text": "5.7.7 Reordering a correlation matrix using hclust\nIf using hclust, corrplot() can draw rectangles around the corrgram based on the results of hierarchical clustering.\n\ncorrplot(wine.cor, \n         method = \"ellipse\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"ward.D\",\n         addrect = 6)\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"mcquitty\",\n         addrect = 6)\n\n\n\n\n\ncorrplot(wine.cor, \n         method = \"shade\", \n         tl.pos = \"lt\",\n         tl.col = \"black\",\n         order=\"hclust\",\n         hclust.method = \"average\",\n         addrect = 8)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#r-packages",
+    "href": "Hands-on-ex/Hands-on-Ex5b/Hands-on_Ex5b.html#r-packages",
+    "title": "Hands-on Exercise 5b- Visual Correlation Analysis",
+    "section": "5.9.1 R packages",
+    "text": "5.9.1 R packages\n\nggcormat() of ggstatsplot package\nggscatmat and ggpairs of GGally.\ncorrplot. A graphical display of a correlation matrix or general matrix. It also contains some algorithms to do matrix reordering. In addition, corrplot is good at details, including choosing color, text labels, color labels, layout, etc.\ncorrgram calculates correlation of variables and displays the results graphically. Included panel functions can display points, shading, ellipses, and correlation values with confidence intervals."
   }
 ]

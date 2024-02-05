@@ -14,9 +14,7 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, ggplot2, plotly, dplyr)
+
+
 ```
-
-# Importing Data
-
-## Wrangling Data

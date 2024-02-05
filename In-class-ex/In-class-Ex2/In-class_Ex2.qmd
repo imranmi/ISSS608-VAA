@@ -15,7 +15,10 @@ execute:
 
 ```{r}
 pacman::p_load(ggiraph, plotly, listviewer,
-               patchwork, DT, tidyverse) 
+               patchwork, DT, tidyverse,ggdist, ggridges, ggthemes,
+               colorspace) 
+
+
 ```
 
 ## Importing Data
