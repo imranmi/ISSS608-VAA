@@ -1307,5 +1307,75 @@
     "title": "Hands-on Exercise 5c- Visual Multivariate Analysis with Heatmap",
     "section": "5.5.9 The finish touch",
     "text": "5.5.9 The finish touch\nBeside providing a wide collection of arguments for meeting the statistical analysis needs, heatmaply also provides many plotting features to ensure cartographic quality heatmap can be produced.\nIn the code chunk below the following arguments are used:\n\nk_row is used to produce 5 groups.\nmargins is used to change the top margin to 60 and row margin to 200.\nfontsizw_row and fontsize_col are used to change the font size for row and column labels to 4.\nmain is used to write the main title of the plot.\nxlab and ylab are used to write the x-axis and y-axis labels respectively.\n\n\nheatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),\n          Colv=NA,\n          seriate = \"none\",\n          colors = Blues,\n          k_row = 5,\n          margins = c(NA,200,60,NA),\n          fontsize_row = 4,\n          fontsize_col = 5,\n          main=\"World Happiness Score and Variables by Country, 2018 \\nDataTransformation using Normalise Method\",\n          xlab = \"World Happiness Indicators\",\n          ylab = \"World Countries\"\n          )"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "",
+    "text": "Parallel coordinates plot is a data visualisation specially designed for visualising and analysing multivariate, numerical data. It is ideal for comparing multiple variables together and seeing the relationships between them. For example, the variables contribute to Happiness Index. Parallel coordinates was invented by Alfred Inselberg in the 1970s as a way to visualize high-dimensional data. This data visualisation technique is more often found in academic and scientific communities than in business and consumer data visualizations. As pointed out by Stephen Few(2006), “This certainly isn’t a chart that you would present to the board of directors or place on your Web site for the general public. In fact, the strength of parallel coordinates isn’t in their ability to communicate some truth in the data to others, but rather in their ability to bring meaningful multivariate patterns and comparisons to light when used interactively for analysis.” For example, parallel coordinates plot can be used to characterise clusters detected during customer segmentation.\nBy the end of this hands-on exercise, we will gain hands-on experience on:\n\nplotting statistic parallel coordinates plots by using ggparcoord() of GGally package,\nplotting interactive parallel coordinates plots by using parcoords package, and\nplotting interactive parallel coordinates plots by using parallelPlot package."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#plotting-a-simple-parallel-coordinates",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#plotting-a-simple-parallel-coordinates",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.4.1 Plotting a simple parallel coordinates",
+    "text": "5.4.1 Plotting a simple parallel coordinates\nCode below shows a typical syntax used to plot a basic static parallel coordinates plot by using ggparcoord().\n\nggparcoord(data = wh, \n           columns = c(7:12))\n\n\n\n\nNotice that only two argument namely data and columns is used. Data argument is used to map the data object (i.e. wh) and columns is used to select the columns for preparing the parallel coordinates plot."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#plotting-a-parallel-coordinates-with-boxplot",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#plotting-a-parallel-coordinates-with-boxplot",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.4.2 Plotting a parallel coordinates with boxplot",
+    "text": "5.4.2 Plotting a parallel coordinates with boxplot\nThe basic parallel coordinates failed to reveal any meaning understanding of the World Happiness measures. In this section, we will learn how to makeover the plot by using a collection of arguments provided by ggparcoord().\n\nggparcoord(data = wh, \n           columns = c(7:12), \n           groupColumn =2,\n           scale = \"uniminmax\",\n           alphaLines = 0.3,\n           boxplot = TRUE, \n           title = \"Parallel Coordinates Plot of World Happines Variables\")\n\n\n\n\nThings to learn from the code above.\n\ngroupColumn argument is used to group the observations (i.e. parallel lines) by using a single variable (i.e. Region) and colour the parallel coordinates lines by region name.\nscale argument is used to scale the variables in the parallel coordinate plot by using uniminmax method. The method univariately scale each variable so the minimum of the variable is zero and the maximum is one.\nalphaLines argument is used to reduce the intensity of the line colour to 0.2. The permissible value range is between 0 to 1.\nboxplot argument is used to turn on the boxplot by using logical TRUE. The default is FALSE.\ntitle argument is used to provide the parallel coordinates plot a title."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#parallel-coordinates-with-facet",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#parallel-coordinates-with-facet",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.4.3 Parallel coordinates with facet",
+    "text": "5.4.3 Parallel coordinates with facet\nSince ggparcoord() is developed by extending ggplot2 package, we can combine with some of the ggplot2 functions when plotting a parallel coordinates plot.\nIn the code below, facet_wrap() of ggplot2 is used to plot 10 small multiple parallel coordinates plots. Each plot represent one geographical region such as East Asia.\n\nggparcoord(data = wh, \n           columns = c(7:12), \n           groupColumn = 2,\n           scale = \"uniminmax\",\n           alphaLines = 0.2,\n           boxplot = TRUE, \n           title = \"Multiple Parallel Coordinates Plots of World Happines Variables by Region\") +\n  facet_wrap(~ Region)\n\n\n\n\nOne of the aesthetic defect of the current design is that some of the variable names overlap on x-axis."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#rotating-x-axis-text-label",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#rotating-x-axis-text-label",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.4.4 Rotating x-axis text label",
+    "text": "5.4.4 Rotating x-axis text label\nTo make the x-axis text label easy to read, let us rotate the labels by 30 degrees. We can rotate axis text labels using theme() function in ggplot2 as shown in the code chunk below\n\nggparcoord(data = wh, \n           columns = c(7:12), \n           groupColumn = 2,\n           scale = \"uniminmax\",\n           alphaLines = 0.2,\n           boxplot = TRUE, \n           title = \"Multiple Parallel Coordinates Plots of World Happines Variables by Region\") +\n  facet_wrap(~ Region) + \n  theme(axis.text.x = element_text(angle = 30))\n\n\n\n\nThing to learn from the code chunk above:\n\nTo rotate x-axis text labels, we use axis.text.x as argument to theme() function. And we specify element_text(angle = 30) to rotate the x-axis text by an angle 30 degree."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#adjusting-the-rotated-x-axis-text-label",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#adjusting-the-rotated-x-axis-text-label",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.4.5 Adjusting the rotated x-axis text label",
+    "text": "5.4.5 Adjusting the rotated x-axis text label\nRotating x-axis text labels to 30 degrees makes the label overlap with the plot and we can avoid this by adjusting the text location using hjust argument to theme’s text element with element_text(). We use axis.text.x as we want to change the look of x-axis text.\n\nggparcoord(data = wh, \n           columns = c(7:12), \n           groupColumn = 2,\n           scale = \"uniminmax\",\n           alphaLines = 0.2,\n           boxplot = TRUE, \n           title = \"Multiple Parallel Coordinates Plots of World Happines Variables by Region\") +\n  facet_wrap(~ Region) + \n  theme(axis.text.x = element_text(angle = 30, hjust=1))"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#the-basic-plot",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#the-basic-plot",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.5.1 The basic plot",
+    "text": "5.5.1 The basic plot\nThe code below plots an interactive parallel coordinates plot by using parallelPlot().\n\nwh &lt;- wh %&gt;%\n  select(\"Happiness score\", c(7:12))\nparallelPlot(wh,\n             width = 320,\n             height = 250)\n\n\n\n\n\nNotice that some of the axis labels are too long. We will learn how to overcome this problem in the next step."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#rotate-axis-label",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#rotate-axis-label",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.5.2 Rotate axis label",
+    "text": "5.5.2 Rotate axis label\nIn the code chunk below, rotateTitle argument is used to avoid overlapping axis labels.\n\nparallelPlot(wh,\n             rotateTitle = TRUE)\n\n\n\n\n\nOne of the useful interactive feature of parallelPlot is we can click on a variable of interest, for example Happiness score, the monotonous blue colour (default) will change a blues with different intensity colour scheme will be used."
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#changing-the-colour-scheme",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#changing-the-colour-scheme",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.5.3 Changing the colour scheme",
+    "text": "5.5.3 Changing the colour scheme\nWe can change the default blue colour scheme by using continousCS argument as shown in the code below.\n\nparallelPlot(wh,\n             continuousCS = \"YlOrRd\",\n             rotateTitle = TRUE)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#parallel-coordinates-plot-with-histogram",
+    "href": "Hands-on-ex/Hands-on-Ex5d/Hands-on_Ex5d.html#parallel-coordinates-plot-with-histogram",
+    "title": "Hands-on Exercise 5d- Visual Multivariate Analysis with Parallel Coordinates Plot",
+    "section": "5.5.4 Parallel coordinates plot with histogram",
+    "text": "5.5.4 Parallel coordinates plot with histogram\nIn the code below, histoVisibility argument is used to plot histogram along the axis of each variables.\n\nhistoVisibility &lt;- rep(TRUE, ncol(wh))\nparallelPlot(wh,\n             rotateTitle = TRUE,\n             histoVisibility = histoVisibility)"
   }
 ]
