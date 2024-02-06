@@ -166,6 +166,10 @@ ggparcoord(data = wh,
 The code below plots an interactive parallel coordinates plot by using `parallelPlot()`.
 
 ```{r}
+#| fig-width: 14
+#| fig-height: 6
+#| column: body-outset-right
+
 wh <- wh %>%
   select("Happiness score", c(7:12))
 parallelPlot(wh,
