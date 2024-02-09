@@ -1,6 +1,6 @@
 ---
-title: "Hands-on Exercise 8"
-date: January 1, 2024
+title: "Library Workshop on R, ep 5: Building Better Predictive Models - "
+date: January 8, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -14,9 +14,142 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidymodels, tidyverse, SmartEDA, gt, knitr, parsnip, ranger, randomForest)
 ```
 
 # Importing Data
 
-## Wrangling Data
+```{r}
+data(diamonds)
+```
+
+```{r}
+ggplot(data = diamonds,
+       aes(x=cut)) +
+  geom_bar()
+```
+
+```{r}
+diamonds |> 
+  ExpCatViz(target = NULL,
+            col = "sky blue",
+            clim = 10,
+            margin = 2,
+            Page = c(3,1))
+
+```
+
+## Data Sampling: rsample method
+
+```{r}
+set.seed(1243)
+  diamonds_split <- diamonds %>%
+select(c(1:7)) %>%
+initial_split(prop = .6,
+strata = price) # using price to stratify the data, to handle the skewness
+
+
+```
+
+```{r}
+training_data <- training(diamonds_split)
+testing_data <- testing(diamonds_split)
+```
+
+## Creating cross-validation data
+
+Creating cross-validation data sets: rsample method
+
+```{r}
+vfold_data <- vfold_cv(training_data,
+                         v = 3, # should be at least 30, 3 used only for demo
+                         repeats = 1,
+                         strata = price)
+```
+
+```{r}
+vfold_data |> 
+  mutate(df_ana = map(splits, analysis),
+  df_ass = map(splits, assessment))
+```
+
+```{r}
+processed_data <- recipe(
+  price ~ .,
+  data = training_data) %>%
+  step_log(all_outcomes()) %>%
+  step_normalize(all_predictors(),  # instead of old way of listing all predictor variables, instead can just use all_predictors()
+                 -all_nominal()) |>  # exclude nominal scales
+                   step_dummy(all_nominal()) %>% #created only for the nominal scale data
+                   step_poly(carat, degree = 2)
+```
+
+Lastly, `prep()` alls on a recipe applies all the steps and `juice()` is used to extract the transformed data set on a new data set.
+
+```{r}
+prep(processed_data)
+
+```
+
+```{r}
+juiced_data <- juice(prep(processed_data))
+names(juiced_data)
+
+# for categorical data, when we create dummy data, its always n-1 ie one less
+```
+
+## Calibrating a multivariate linear regression model: parsnip method
+
+In the code chunk below, `linear_reg()` of parsnip is used to calibrate a multivariate linear regression model.
+
+lm model using basse
+
+```{r}
+lm_model <-
+  linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+
+#least square model
+```
+
+Fitting the lm model
+
+```{r}
+lm_fit <- fit(lm_model,
+price ~ .,
+juiced_data)
+
+lm_fit
+
+```
+
+Calibrating Random forest model
+
+```{r}
+library(parsnip)
+
+rf_fit <- rand_forest(
+  mode = "regression",
+  engine = "ranger",
+  mtry = .preds(),
+  trees = 100) %>%
+
+  fit(price ~ .,
+    data = juiced_data)
+
+rf_fit
+```
+
+```{r}
+#rf2_fit <- rand_forest(
+  #mode = "regression",
+  #engine = "randomForest",
+  #mtry = .preds(),
+  #trees = 100) %>%
+
+  #fit(price ~ .,
+    #data = juiced_data)
+
+#rf2_fit
+```

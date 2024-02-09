@@ -14,9 +14,321 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(ungeviz, plotly, crosstalk,
+               DT, ggdist, ggridges,
+               colorspace, gganimate, tidyverse, dplyr, 
+               readr, SmartEDA, transformr)
 ```
 
-# Importing Data
+# Importing Data and Data Preparation
 
-## Wrangling Data
+I will download and import data for July (Dry) and December (Wet) for 1983, 1993, 2003, 2013, 2023.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# List of file names
+December_files <- c("data/DAILYDATA_S24_198312.csv", "data/DAILYDATA_S24_199312.csv", 
+                "data/DAILYDATA_S24_200312.csv", "data/DAILYDATA_S24_201312.csv", 
+                "data/DAILYDATA_S24_202312.csv")
+
+July_files <- c("data/DAILYDATA_S24_198307.csv", "data/DAILYDATA_S24_199307.csv", 
+                "data/DAILYDATA_S24_200307.csv", "data/DAILYDATA_S24_201307.csv", 
+                "data/DAILYDATA_S24_202307.csv")
+
+
+```
+
+Upon inspecting the csv files for the 5 years, there is missing data for columns in 4 out of the 5 years:
+
+-   Highest  30-min Rainfall (mm)
+
+-   Highest  60-min Rainfall (mm)
+
+-   Highest 120-min Rainfall (mm)
+
+These columns will be excluded as we import the csv files into our R environment
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Reading and combining the CSV files, by "stacking vertically"
+December_data <- lapply(December_files, read_csv, col_names = FALSE,
+                        col_select = c(1, 2, 3, 4, 5, 9, 10, 11, 12, 13),
+                        skip = 1) %>%
+  bind_rows(.id = "file")
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Reading and combining the CSV files, by "stacking vertically"
+July_data <- lapply(July_files, read_csv, col_names = FALSE,
+                        col_select = c(1, 2, 3, 4, 5, 9, 10, 11, 12, 13),
+                        skip = 1) %>%
+  bind_rows(.id = "file")
+```
+
+Renaming the column names
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Renaming the columns
+colnames(December_data) <- c("ID", "Station", "Year", "Month", "Day", 
+                              "Daily_Rainfall_Total_mm", "Mean_Temperature_C", 
+                              "Maximum_Temperature_C", "Minimum_Temperature_C", 
+                              "Mean_Wind_Speed_km_h", "Max_Wind_Speed_km_h")
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Renaming the columns
+colnames(July_data) <- c("ID", "Station", "Year", "Month", "Day", 
+                              "Daily_Rainfall_Total_mm", "Mean_Temperature_C", 
+                              "Maximum_Temperature_C", "Minimum_Temperature_C", 
+                              "Mean_Wind_Speed_km_h", "Max_Wind_Speed_km_h")
+```
+
+Inspecting the data for December month
+
+```{r}
+head(December_data)
+
+```
+
+```{r}
+DT::datatable(December_data, class= "compact")
+```
+
+Inspecting the data for July
+
+```{r}
+head(July_data)
+```
+
+```{r}
+DT::datatable(July_data, class= "compact")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+write.csv(December_data, file = "December_data.csv", row.names = FALSE)
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+write.csv(July_data, file = "July_data.csv", row.names = FALSE)
+```
+
+# Visualising the time series data
+
+Visualising the changes over the 5 years for the month of December (Wet months)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p_dec <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = as.factor(Year))) +
+  geom_line() +
+  facet_wrap(~Year, ncol = 1) +  
+  labs(title = "Daily Rainfall in December by Year",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year") +
+  theme_minimal()  # Optional: Adds a minimalistic theme
+
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplotly(p_dec)
+
+```
+
+Visualising the same data through animation
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p_dec1 <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = as.factor(Year))) +
+  geom_line() +
+  facet_wrap(~Year, ncol = 1) +  
+  labs(title = "Daily Rainfall in December by Year: Day {frame_along}", 
+       x = "Day of the Month", 
+       y = "Rainfall (mm)", 
+       color = "Year") +
+  theme_minimal() +
+  transition_reveal(Day) +  # Animate the line drawing across days
+  ease_aes('linear')
+
+# Animate and display the plot
+animate(p_dec1, nframes = 31, fps = 5, width = 800, height = 600)
+```
+
+Combining the Daily rainfall for December 1983, 1993, 2003, 2013 and 2023
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, 
+                               color = as.factor(Year))) +
+  geom_line() +
+  labs(title = "Daily Rainfall in December Across Years",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year",
+       fill = "Year")
+```
+
+```{r}
+p_interactive <- ggplotly(p)
+
+p_interactive
+```
+
+Visualising the changes over the 5 years for the month of July (Dry months)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p_july <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = as.factor(Year))) +
+  geom_line() +
+  facet_wrap(~Year, ncol = 1) +  
+  labs(title = "Daily Rainfall in July by Year",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year") +
+  theme_minimal()  # Optional: Adds a minimalistic theme
+
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplotly(p_july)
+```
+
+Visualising the same data through animation
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p_july1 <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = as.factor(Year))) +
+  geom_line() +
+  facet_wrap(~Year, ncol = 1) +  
+  labs(title = "Daily Rainfall in July by Year: Day {frame_along}", 
+       x = "Day of the Month", 
+       y = "Rainfall (mm)", 
+       color = "Year") +
+  theme_minimal() +
+  transition_reveal(Day) +  # Animate the line drawing across days
+  ease_aes('linear')
+
+# Animate and display the plot
+animate(p_july1, nframes = 31, fps = 5, width = 800, height = 600)
+```
+
+Combining the Daily rainfall for July 1983, 1993, 2003, 2013 and 2023
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p2 <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, 
+                               color = as.factor(Year))) +
+  geom_line() +
+  labs(title = "Daily Rainfall in July Across Years",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year",
+       fill = "Year")
+```
+
+```{r}
+p2_interactive <- ggplotly(p2)
+
+p2_interactive
+```
+
+Combining both July and December data sets to plot an overlay
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+July_data$Month <- 'July'
+December_data$Month <- 'December'
+
+```
+
+```{r}
+
+combined_data <- rbind(July_data, December_data)
+
+```
+
+Plotting both months for each year
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p_combined <- ggplot(combined_data, aes(x = Day, 
+                                        y = Daily_Rainfall_Total_mm, group = Month)) +
+  
+  # Use geom_area for one of the months, December in this case
+  geom_area(data = subset(combined_data, Month == "July"), 
+            aes(fill = as.factor(Year)), alpha = 0.3) +
+  
+  # Use geom_line for both months to ensure the line is on top of the fill
+  geom_line(aes(color = as.factor(Year), 
+                linetype = Month)) +
+  facet_wrap(~Year, ncol = 1) +
+  labs(title = "Daily Rainfall in July and December by Year",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year",
+       fill = "Year",
+       linetype = "Month") +
+  theme_minimal() +
+  
+  guides(fill = guide_legend("Year"), color = guide_legend("Year"), 
+         linetype = guide_legend("Month"))
+
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplotly(p_combined)
+
+```
+
+```{r}
+p_combined
+```

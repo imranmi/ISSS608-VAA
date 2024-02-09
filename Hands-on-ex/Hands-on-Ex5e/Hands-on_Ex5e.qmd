@@ -495,6 +495,23 @@ tm6 <- treemap(aggregated_data_attack,
 ```
 
 ```{r}
+# Create the treemap
+tm6 <- treemap(aggregated_data_attack,
+        index=c("region_txt", "targtype1_txt"),
+        vSize="TotalEvents",
+        vColor="TotalKills",
+        type = "manual",
+        algorithm = "pivotSize",
+        sortID = "TotalKills",
+        title="Who are the Main Targets in each Region?",
+        palette="Reds",
+        border.col="white",
+        border.lwds=0.5)
+
+
+```
+
+```{r}
 d3tree(tm6,rootname = "Main Targets" )
 ```
 
