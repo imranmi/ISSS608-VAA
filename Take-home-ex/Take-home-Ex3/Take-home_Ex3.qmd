@@ -9,20 +9,44 @@ execute:
   warning: false
 ---
 
-# Getting Started
+# 1. Overview
 
-## Loading R package
+According to an office report as shown in the infographic below,
+
+-   Daily mean temperature are projected to increase by 1.4 to 4.6, and
+
+-   The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.
+
+![](images/clipboard-3321996442.png)
+
+# 2. The Task
+
+As a visual analytics greenhorn, we are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.
+
+In this take-home exercise, we are required to:
+
+-   Select a weather station and download [historical daily temperature or rainfall data](http://www.weather.gov.sg/climate-historical-daily/) from [Meteorological Service Singapore](http://www.weather.gov.sg/home/) website,
+
+-   Select either daily temperature or rainfall records of a month of the year 1983, 1993, 2003, 2013 and 2023 and create an analytics-driven data visualisation,
+
+-   Apply appropriate interactive techniques to enhance the user experience in data discovery and/or visual story-telling.
+
+## 2.1 Installing and Loading R packages
 
 ```{r}
 pacman::p_load(ungeviz, plotly, crosstalk,
                DT, ggdist, ggridges,
                colorspace, gganimate, tidyverse, dplyr, 
-               readr, SmartEDA, transformr)
+               readr, ggiraph)
 ```
 
-# Importing Data and Data Preparation
+## 2.2 Importing Data and Data Preparation
 
-I will download and import data for July (Dry) and December (Wet) for 1983, 1993, 2003, 2013, 2023.
+I will download and import data for July (Dry) and December (Wet) for 1983, 1993, 2003, 2013, 2023.\
+\
+I have chosen Changi weather station, as it is one of the older weather stations with complete historical data for both daily rainfall and mean,max and min temperatures. For more information on the weather stations and the data period available, please refer to this [link.](http://www.weather.gov.sg/wp-content/uploads/2022/06/Station_Records.pdf)
+
+Additionally, I have chosen the months of July and December as they both have 31 days of data.
 
 ```{r}
 #| code-fold: true
@@ -40,7 +64,7 @@ July_files <- c("data/DAILYDATA_S24_198307.csv", "data/DAILYDATA_S24_199307.csv"
 
 ```
 
-Upon inspecting the csv files for the 5 years, there is missing data for columns in 4 out of the 5 years:
+Upon inspecting the csv files for the 5 years, the below columns contain missing data for 4 out of the 5 years:
 
 -   Highest  30-min Rainfall (mm)
 
@@ -48,7 +72,7 @@ Upon inspecting the csv files for the 5 years, there is missing data for columns
 
 -   Highest 120-min Rainfall (mm)
 
-These columns will be excluded as we import the csv files into our R environment
+Therefore, these columns will be excluded as we import the csv files into our R environment
 
 ```{r}
 #| code-fold: true
@@ -98,7 +122,7 @@ colnames(July_data) <- c("ID", "Station", "Year", "Month", "Day",
                               "Mean_Wind_Speed_km_h", "Max_Wind_Speed_km_h")
 ```
 
-Inspecting the data for December month
+### 2.2.1 Inspecting the data for December
 
 ```{r}
 head(December_data)
@@ -109,7 +133,7 @@ head(December_data)
 DT::datatable(December_data, class= "compact")
 ```
 
-Inspecting the data for July
+### 2.2.2 Inspecting the data for July
 
 ```{r}
 head(July_data)
@@ -134,9 +158,9 @@ write.csv(December_data, file = "December_data.csv", row.names = FALSE)
 write.csv(July_data, file = "July_data.csv", row.names = FALSE)
 ```
 
-# Visualising the time series data
+# 3. Visualising the time series data
 
-Visualising the changes over the 5 years for the month of December (Wet months)
+## 3.1 Visualising the Daily Rainfall over the 5 years, for the month of December (Wet month)
 
 ```{r}
 #| code-fold: true
@@ -162,7 +186,7 @@ ggplotly(p_dec)
 
 ```
 
-Visualising the same data through animation
+### 3.1.1 Visualising through animation
 
 ```{r}
 #| code-fold: true
@@ -183,7 +207,7 @@ p_dec1 <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group 
 animate(p_dec1, nframes = 31, fps = 5, width = 800, height = 600)
 ```
 
-Combining the Daily rainfall for December 1983, 1993, 2003, 2013 and 2023
+### 3.1.2 Combining the Daily rainfall for December 1983, 1993, 2003, 2013 and 2023
 
 ```{r}
 #| code-fold: true
@@ -205,7 +229,13 @@ p_interactive <- ggplotly(p)
 p_interactive
 ```
 
-Visualising the changes over the 5 years for the month of July (Dry months)
+::: callout-note
+## Note
+
+I did not convert the above plot to an animation as the end-result was too busy, and difficult to discern any differences and trends easily.
+:::
+
+## 3.2 Visualising the Daily Rainfall over the 5 years, for the month of July (Dry month)
 
 ```{r}
 #| code-fold: true
@@ -230,7 +260,7 @@ p_july <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = as
 ggplotly(p_july)
 ```
 
-Visualising the same data through animation
+### 3.2.1 Visualising through animation
 
 ```{r}
 #| code-fold: true
@@ -251,7 +281,7 @@ p_july1 <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Y
 animate(p_july1, nframes = 31, fps = 5, width = 800, height = 600)
 ```
 
-Combining the Daily rainfall for July 1983, 1993, 2003, 2013 and 2023
+### 3.2.2 Combining the Daily rainfall for July 1983, 1993, 2003, 2013 and 2023
 
 ```{r}
 #| code-fold: true
@@ -273,7 +303,11 @@ p2_interactive <- ggplotly(p2)
 p2_interactive
 ```
 
-Combining both July and December data sets to plot an overlay
+::: callout-note
+I did not convert the above plot to an animation as the end-result was too busy, and difficult to discern any differences and trends easily.
+:::
+
+## 3.3 Comparing both July and December Daily Rainfall over the years (Dry Vs Wet month)
 
 ```{r}
 #| code-fold: true
@@ -290,6 +324,14 @@ combined_data <- rbind(July_data, December_data)
 
 ```
 
+```{r}
+head(combined_data)
+```
+
+```{r}
+DT::datatable(combined_data, class= "compact")
+```
+
 Plotting both months for each year
 
 ```{r}
@@ -299,7 +341,7 @@ Plotting both months for each year
 p_combined <- ggplot(combined_data, aes(x = Day, 
                                         y = Daily_Rainfall_Total_mm, group = Month)) +
   
-  # Use geom_area for one of the months, December in this case
+  # Use geom_area for one of the months, July in this case
   geom_area(data = subset(combined_data, Month == "July"), 
             aes(fill = as.factor(Year)), alpha = 0.3) +
   
@@ -325,12 +367,82 @@ p_combined <- ggplot(combined_data, aes(x = Day,
 #| fig-height: 7
 #| column: body-outset-right
 
-ggplotly(p_combined)
+p_combined
+```
+
+Making it interactive using `ggploty()` method.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p3 <- ggplot(combined_data, aes(x = Day, y = Daily_Rainfall_Total_mm)) +
+  
+  # Use geom_line for both months, specifying linetype based on Month
+  geom_line(aes(color = as.factor(Year), linetype = Month)) +
+  facet_wrap(~Year, ncol = 1) +
+  labs(title = "Daily Rainfall in July and December by Year",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year",
+       linetype = "Month") +
+  theme_minimal() +
+  
+  guides(fill = guide_legend("Year"), color = guide_legend("Year"), 
+         linetype = guide_legend("Month"))
+
+# Adjust linetype manually for clarity
+p_combined <- p_combined + scale_linetype_manual(values = c("July" = "dotted", "December" = "solid"))
 
 ```
 
 ```{r}
-p_combined
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplotly(p3)
 ```
 
-Next we will
+### 3.3.1 Visualising through Animation
+
+Next we will animate the combined plot of July and December Daily rainfall across the years, using `gganimate.`
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Adjusted plot code without geom_area
+p_combined_simple <- ggplot(combined_data, 
+                            aes(x = Day, 
+                            y = Daily_Rainfall_Total_mm, 
+                            group = interaction(Month, Year), 
+                            color = as.factor(Year))) +
+  
+  geom_line(aes(linetype = Month)) +
+  facet_wrap(~Year, ncol = 1) +
+  labs(title = "Daily Rainfall in July and December by Year: Day {frame_along}",
+       x = "Day of the Month",
+       y = "Rainfall (mm)",
+       color = "Year",
+       linetype = "Month") +
+  theme_minimal() +
+  guides(color = guide_legend("Year"), linetype = guide_legend("Month"))
+
+# Simplify the animation using transition_reveal for Day
+animated_plot_simple <- p_combined_simple +
+  transition_reveal(Day) +
+  ease_aes('linear')
+
+# Render the animation
+animate(animated_plot_simple, nframes = 31, fps = 5, width = 800, height = 600)
+
+```
+
+::: callout-tip
+## Observation
+
+The infographics had concluded that the contrast between wet months (Nov to Jan) and dry months (Feb and June to Sep) is likely to be more pronounced.\
+\
+We can see from the visualisations above that, while there are a few more wet days in December, with relatively more rainfall; there seems to be no substantial contrast between July and December across the years.
+:::
