@@ -1330,41 +1330,6 @@
     "text": "Wrangling Data"
   },
   {
-    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html",
-    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html",
-    "title": "Library Workshop on R, ep 5: Building Better Predictive Models -",
-    "section": "",
-    "text": "pacman::p_load(tidymodels, tidyverse, SmartEDA, gt, knitr, parsnip, ranger, randomForest)"
-  },
-  {
-    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#loading-r-package",
-    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#loading-r-package",
-    "title": "Library Workshop on R, ep 5: Building Better Predictive Models -",
-    "section": "",
-    "text": "pacman::p_load(tidymodels, tidyverse, SmartEDA, gt, knitr, parsnip, ranger, randomForest)"
-  },
-  {
-    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#data-sampling-rsample-method",
-    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#data-sampling-rsample-method",
-    "title": "Library Workshop on R, ep 5: Building Better Predictive Models -",
-    "section": "Data Sampling: rsample method",
-    "text": "Data Sampling: rsample method\n\nset.seed(1243)\n  diamonds_split &lt;- diamonds %&gt;%\nselect(c(1:7)) %&gt;%\ninitial_split(prop = .6,\nstrata = price) # using price to stratify the data, to handle the skewness\n\n\ntraining_data &lt;- training(diamonds_split)\ntesting_data &lt;- testing(diamonds_split)"
-  },
-  {
-    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#creating-cross-validation-data",
-    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#creating-cross-validation-data",
-    "title": "Library Workshop on R, ep 5: Building Better Predictive Models -",
-    "section": "Creating cross-validation data",
-    "text": "Creating cross-validation data\nCreating cross-validation data sets: rsample method\n\nvfold_data &lt;- vfold_cv(training_data,\n                         v = 3, # should be at least 30, 3 used only for demo\n                         repeats = 1,\n                         strata = price)\n\n\nvfold_data |&gt; \n  mutate(df_ana = map(splits, analysis),\n  df_ass = map(splits, assessment))\n\n#  3-fold cross-validation using stratification \n# A tibble: 3 × 4\n  splits                id    df_ana                df_ass               \n  &lt;list&gt;                &lt;chr&gt; &lt;list&gt;                &lt;list&gt;               \n1 &lt;split [21576/10788]&gt; Fold1 &lt;tibble [21,576 × 7]&gt; &lt;tibble [10,788 × 7]&gt;\n2 &lt;split [21576/10788]&gt; Fold2 &lt;tibble [21,576 × 7]&gt; &lt;tibble [10,788 × 7]&gt;\n3 &lt;split [21576/10788]&gt; Fold3 &lt;tibble [21,576 × 7]&gt; &lt;tibble [10,788 × 7]&gt;\n\n\n\nprocessed_data &lt;- recipe(\n  price ~ .,\n  data = training_data) %&gt;%\n  step_log(all_outcomes()) %&gt;%\n  step_normalize(all_predictors(),  # instead of old way of listing all predictor variables, instead can just use all_predictors()\n                 -all_nominal()) |&gt;  # exclude nominal scales\n                   step_dummy(all_nominal()) %&gt;% #created only for the nominal scale data\n                   step_poly(carat, degree = 2)\n\nLastly, prep() alls on a recipe applies all the steps and juice() is used to extract the transformed data set on a new data set.\n\nprep(processed_data)\n\n\njuiced_data &lt;- juice(prep(processed_data))\nnames(juiced_data)\n\n [1] \"depth\"        \"table\"        \"price\"        \"cut_1\"        \"cut_2\"       \n [6] \"cut_3\"        \"cut_4\"        \"color_1\"      \"color_2\"      \"color_3\"     \n[11] \"color_4\"      \"color_5\"      \"color_6\"      \"clarity_1\"    \"clarity_2\"   \n[16] \"clarity_3\"    \"clarity_4\"    \"clarity_5\"    \"clarity_6\"    \"clarity_7\"   \n[21] \"carat_poly_1\" \"carat_poly_2\"\n\n# for categorical data, when we create dummy data, its always n-1 ie one less"
-  },
-  {
-    "objectID": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#calibrating-a-multivariate-linear-regression-model-parsnip-method",
-    "href": "Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html#calibrating-a-multivariate-linear-regression-model-parsnip-method",
-    "title": "Library Workshop on R, ep 5: Building Better Predictive Models -",
-    "section": "Calibrating a multivariate linear regression model: parsnip method",
-    "text": "Calibrating a multivariate linear regression model: parsnip method\nIn the code chunk below, linear_reg() of parsnip is used to calibrate a multivariate linear regression model.\nlm model using basse\n\nlm_model &lt;-\n  linear_reg() %&gt;%\n  set_mode(\"regression\") %&gt;%\n  set_engine(\"lm\")\n\n#least square model\n\nFitting the lm model\n\nlm_fit &lt;- fit(lm_model,\nprice ~ .,\njuiced_data)\n\nlm_fit\n\nparsnip model object\n\n\nCall:\nstats::lm(formula = price ~ ., data = data)\n\nCoefficients:\n (Intercept)         depth         table         cut_1         cut_2  \n   7.721e+00    -3.345e-03    -2.002e-03     8.743e-02    -7.044e-03  \n       cut_3         cut_4       color_1       color_2       color_3  \n   1.031e-02     8.402e-04    -4.575e-01    -8.609e-02    -1.453e-03  \n     color_4       color_5       color_6     clarity_1     clarity_2  \n   1.925e-02    -7.115e-03    -8.919e-04     8.281e-01    -2.209e-01  \n   clarity_3     clarity_4     clarity_5     clarity_6     clarity_7  \n   1.182e-01    -4.658e-02     1.672e-02    -2.751e-04     2.242e-02  \ncarat_poly_1  carat_poly_2  \n   1.888e+02    -5.476e+01  \n\n\nCalibrating Random forest model\n\nlibrary(parsnip)\n\nrf_fit &lt;- rand_forest(\n  mode = \"regression\",\n  engine = \"ranger\",\n  mtry = .preds(),\n  trees = 100) %&gt;%\n\n  fit(price ~ .,\n    data = juiced_data)\n\nrf_fit\n\nparsnip model object\n\nRanger result\n\nCall:\n ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~.preds(),      x), num.trees = ~100, num.threads = 1, verbose = FALSE, seed = sample.int(10^5,      1)) \n\nType:                             Regression \nNumber of trees:                  100 \nSample size:                      32364 \nNumber of independent variables:  21 \nMtry:                             21 \nTarget node size:                 5 \nVariable importance mode:         none \nSplitrule:                        variance \nOOB prediction error (MSE):       0.01140427 \nR squared (OOB):                  0.9889378 \n\n\n\n#rf2_fit &lt;- rand_forest(\n  #mode = \"regression\",\n  #engine = \"randomForest\",\n  #mtry = .preds(),\n  #trees = 100) %&gt;%\n\n  #fit(price ~ .,\n    #data = juiced_data)\n\n#rf2_fit"
-  },
-  {
     "objectID": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
     "href": "In-class-ex/In-class-Ex2/In-class_Ex2.html",
     "title": "In-Class Exercise 2",

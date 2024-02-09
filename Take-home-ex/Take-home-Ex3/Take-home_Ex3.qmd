@@ -17,7 +17,7 @@ execute:
 pacman::p_load(ungeviz, plotly, crosstalk,
                DT, ggdist, ggridges,
                colorspace, gganimate, tidyverse, dplyr, 
-               readr, SmartEDA, transformr)
+               readr, SmartEDA, transformr
 ```
 
 # Importing Data and Data Preparation
