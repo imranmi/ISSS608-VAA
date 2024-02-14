@@ -109,6 +109,8 @@ colnames(December_data) <- c("ID", "Station", "Year", "Month", "Day",
                               "Maximum_Temperature_C", "Minimum_Temperature_C", 
                               "Mean_Wind_Speed_km_h", "Max_Wind_Speed_km_h")
 
+December_data$Year <- as.factor(December_data$Year)
+
 ```
 
 ```{r}
@@ -120,6 +122,8 @@ colnames(July_data) <- c("ID", "Station", "Year", "Month", "Day",
                               "Daily_Rainfall_Total_mm", "Mean_Temperature_C", 
                               "Maximum_Temperature_C", "Minimum_Temperature_C", 
                               "Mean_Wind_Speed_km_h", "Max_Wind_Speed_km_h")
+
+July_data$Year <- as.factor(July_data$Year)
 ```
 
 ### 2.2.1 Inspecting the data for July
@@ -143,21 +147,6 @@ head(December_data)
 DT::datatable(December_data, class= "compact")
 ```
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-write.csv(December_data, file = "December_data.csv", row.names = FALSE)
-
-```
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-write.csv(July_data, file = "July_data.csv", row.names = FALSE)
-```
-
 # 3. Visualising daily rainfall from 1983 to 2023
 
 ## 3.1 Visualising Daily Rainfall for the month of July (Dry month) over the years
@@ -168,7 +157,7 @@ First, I will plot a line plot that compares daily rainfall in July over the 5 y
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p_july <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = as.factor(Year))) +
+p_july <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = Year)) +
   geom_line() +
   facet_wrap(~Year, ncol = 1) +  
   labs(title = "Daily Rainfall in July by Year",
@@ -194,7 +183,7 @@ ggplotly(p_july)
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p_july1 <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = as.factor(Year))) +
+p_july1 <- ggplot(July_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = Year)) +
   geom_line() +
   facet_wrap(~Year, ncol = 1) +  
   labs(title = "Daily Rainfall in July by Year: Day {frame_along}", 
@@ -225,7 +214,7 @@ First, I will plot a line plot that compares daily rainfall in December over the
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p_dec <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = as.factor(Year))) +
+p_dec <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color = Year)) +
   geom_line() +
   facet_wrap(~Year, ncol = 1) +  
   labs(title = "Daily Rainfall in December by Year",
@@ -250,7 +239,7 @@ ggplotly(p_dec)
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p_dec1 <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = as.factor(Year))) +
+p_dec1 <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, group = Year, color = Year)) +
   geom_line() +
   facet_wrap(~Year, ncol = 1) +  
   labs(title = "Daily Rainfall in December by Year: Day {frame_along}", 
@@ -349,7 +338,7 @@ Making it interactive using `ggploty()` method.
 p3 <- ggplot(combined_data, aes(x = Day, y = Daily_Rainfall_Total_mm)) +
   
   # Use geom_line for both months, specifying linetype based on Month
-  geom_line(aes(color = as.factor(Year), linetype = Month)) +
+  geom_line(aes(color = Year, linetype = Month)) +
   facet_wrap(~Year, ncol = 1) +
   labs(title = "Daily Rainfall in July and December by Year",
        x = "Day of the Month",
@@ -387,7 +376,7 @@ p_combined_simple <- ggplot(combined_data,
                             aes(x = Day, 
                             y = Daily_Rainfall_Total_mm, 
                             group = interaction(Month, Year), 
-                            color = as.factor(Year))) +
+                            color = Year)) +
   
   geom_line(aes(linetype = Month)) +
   facet_wrap(~Year, ncol = 1) +
@@ -418,9 +407,9 @@ The infographics had reported that:-
 
 2.  Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 
-From the visualisations above, while there are visibly more rainy days in December relative to July over the years, there seems to be no substantial increase in the intensity and frequency of heavy rain events from 1983. \
+From the visualisations above, while there are visibly more rainy days in December relative to July over the years, there seems to be no substantial increase in the intensity and frequency of heavy rain events from 1983.\
 \
-For example, the highest recorded daily rainfall was in December 1983 at 164.4 mm, which has not yet been eclipsed. \
+For example, the highest recorded daily rainfall was in December 1983 at 164.4 mm, which has not yet been eclipsed.\
 \
 Similarly, overall volume of rainfall in both July and December 2023 seems to be the least within the 5 years.
 :::
@@ -429,7 +418,7 @@ Similarly, overall volume of rainfall in both July and December 2023 seems to be
 
 ## 4.1 Differences between same months across the years
 
-Our previous visualisations seem to indicate that there are some differences in the daily rainfall for each of the months July and December, across the 5 years ie the difference between each July/December of 1983,1993,2003,2013 and 2023.
+Our previous visualisations seem to indicate that there are some differences in the daily rainfall for each of the months July and December, across the 5 years ie the difference between each July/December of 1983, 1993, 2003, 2013 and 2023.
 
 We will validate this statistically. We will use `ggstatsbetween()` from the `ggstatplot` package to examine if there are any significant statistical differences between the median daily rainfall for the same month across the five years.
 
@@ -565,32 +554,9 @@ p4 <- ggplot(rain_fall_summary, aes(x = Year, y = RainyDays, group = Month, colo
        y = "Number of Rainy Days",
        color = "Month") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "none")
 
 ggplotly(p4)
-
-```
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-
-# Heatmap for Number of Rainy Days
-p5 <- ggplot(rain_fall_summary, aes(x = Year, y = Month, fill = RainyDays)) +
-  geom_tile() + # Creates the heatmap tiles
-  scale_fill_gradient(low = "lightpink", high = "blue") + # Color gradient for number of rainy days
-  labs(
-    title = "Heatmap of Number of Rainy Days",
-    x = "Year",
-    y = "Month",
-    fill = "Number of Rainy Days"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_x_continuous(breaks = seq(1983, 2023, by = 10)) 
-
-ggplotly(p5)
 
 ```
 
@@ -613,32 +579,10 @@ p6 <- ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, c
        y = "Mean Daily Rainfall (mm)",
        color = "Month") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "none")
 
 ggplotly(p6)
 
-```
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-
-# Heatmap for Number of Rainy Days
-p7 <- ggplot(rain_fall_summary, aes(x = Year, y = Month, fill = MeanRainfall)) +
-  geom_tile() + # Creates the heatmap tiles
-  scale_fill_gradient(low = "lightpink", high = "blue") + # Color gradient for number of rainy days
-  labs(
-    title = "Heatmap of Mean Daily Rainfall over the years",
-    x = "Year",
-    y = "Month",
-    fill = "Mean Daily Rainfall (mm)"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_x_continuous(breaks = seq(1983, 2023, by = 10)) 
-
-ggplotly(p7)
 ```
 
 ::: callout-note
@@ -661,7 +605,7 @@ July_mean <- July_data %>%
 
 # Create the ggplot object with tooltips for individual points
 p_july <- ggplot(July_data, aes(x = Year, y = Daily_Rainfall_Total_mm)) +
-  geom_jitter(aes(color = as.factor(Year), text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
+  geom_jitter(aes(color = Year, text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
   geom_line(data = July_mean, aes(x = Year, y = MeanRainfall, group = 1), 
             color = "black", size = 0.5, linetype = "dotted") + 
   geom_point(data = July_mean, aes(x = Year, y = MeanRainfall), 
@@ -691,7 +635,7 @@ Dec_mean <- December_data %>%
 
 # Create the ggplot object with tooltips for individual points
 p_decem <- ggplot(December_data, aes(x = Year, y = Daily_Rainfall_Total_mm)) +
-  geom_jitter(aes(color = as.factor(Year), text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
+  geom_jitter(aes(color = Year, text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
   geom_line(data = Dec_mean, aes(x = Year, y = MeanRainfall, group = 1), 
             color = "black", size = 0.5, linetype = "dotted") + 
   geom_point(data = Dec_mean, aes(x = Year, y = MeanRainfall), 
