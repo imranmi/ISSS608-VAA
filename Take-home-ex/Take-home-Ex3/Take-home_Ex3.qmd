@@ -13,9 +13,9 @@ execute:
 
 According to an official report as shown in the infographic below,
 
--   Daily mean temperatures are projected to increase by 1.4 to 4.6, and
+-   The **contrast** between the wet months (November to January) and dry months (February and June to September) is likely to be more pronounced, and
 
--   The contrast between the wet months (November to January) and dry month (February and June to September) is likely to be more pronounced.
+-   The **intensity and frequency** of heavy rainfall events is expected to increase as the world gets warmer.
 
 ![](images/clipboard-3321996442.png)
 
@@ -23,30 +23,28 @@ According to an official report as shown in the infographic below,
 
 As a visual analytics greenhorn, we are keen to apply newly acquired visual interactivity and visualising uncertainty methods to validate the claims presented above.
 
-In this take-home exercise, we are required to:
+In this take-home exercise, I will:
 
--   Select a weather station and download [historical daily temperature or rainfall data](http://www.weather.gov.sg/climate-historical-daily/) from [Meteorological Service Singapore](http://www.weather.gov.sg/home/) website,
+-   Select a weather station and download [historical daily rainfall data](http://www.weather.gov.sg/climate-historical-daily/) from the [Meteorological Service Singapore](http://www.weather.gov.sg/home/) website,
 
--   Select either daily temperature or rainfall records of a month of the year 1983, 1993, 2003, 2013 and 2023 and create an analytics-driven data visualisation,
+-   Select rainfall records of a Dry month and a Wet month for the years 1983, 1993, 2003, 2013 and 2023, and
 
--   Apply appropriate interactive techniques to enhance the user experience in data discovery and/or visual story-telling.
+-   Create an analytics-driven data visualisation and apply appropriate interactive techniques to enhance the user experience in data discovery and visual story-telling.
 
 ## 2.1 Installing and Loading R packages
 
 ```{r}
 pacman::p_load(ungeviz, plotly, crosstalk, patchwork,
-               DT, ggdist, ggridges, ggstatsplot,
+               DT, ggdist, ggridges, ggstatsplot,ggthemes,
                colorspace, gganimate, tidyverse, dplyr, 
                readr, ggiraph)
 ```
 
 ## 2.2 Importing Data and Data Preparation
 
-I will download and import data for July (Dry) and December (Wet) for 1983, 1993, 2003, 2013, 2023.\
+I will download and import data for **July (Dry)** and **December (Wet)** for 1983, 1993, 2003, 2013, 2023.\
 \
-I have chosen Changi weather station, as it is one of the older weather stations with complete historical data for both daily rainfall and mean,max and min temperatures. For more information on the weather stations and the data period available, please refer to this [link.](http://www.weather.gov.sg/wp-content/uploads/2022/06/Station_Records.pdf)
-
-Additionally, I have chosen the months of July and December as they both have 31 days of data.
+I have chosen **Changi** weather station, as it is one of the older weather stations with daily rainfall data recorded since 1981. For more information on the weather stations and the historical data available, please refer to this [link.](http://www.weather.gov.sg/wp-content/uploads/2022/06/Station_Records.pdf)
 
 ```{r}
 #| code-fold: true
@@ -64,7 +62,7 @@ July_files <- c("data/DAILYDATA_S24_198307.csv", "data/DAILYDATA_S24_199307.csv"
 
 ```
 
-Upon inspecting the csv files for the 5 years, the below columns contain missing data for 4 out of the 5 years:
+Upon inspecting the csv files for the 5 years, the below columns were removed as they were only recorded since 2014:
 
 -   Highest  30-min Rainfall (mm)
 
@@ -72,13 +70,10 @@ Upon inspecting the csv files for the 5 years, the below columns contain missing
 
 -   Highest 120-min Rainfall (mm)
 
-Therefore, these columns will be excluded as we import the csv files into our R environment
+I will use the code below to import the csv files into our R environment
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-# Reading and combining the CSV files, by "stacking vertically"
+# Reading and combining the CSV files for December
 December_data <- lapply(December_files, read_csv, col_names = FALSE,
                         col_select = c(1, 2, 3, 4, 5, 9, 10, 11, 12, 13),
                         skip = 1) %>%
@@ -87,22 +82,16 @@ December_data <- lapply(December_files, read_csv, col_names = FALSE,
 ```
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-# Reading and combining the CSV files, by "stacking vertically"
+# Reading and combining the CSV files for July
 July_data <- lapply(July_files, read_csv, col_names = FALSE,
                         col_select = c(1, 2, 3, 4, 5, 9, 10, 11, 12, 13),
                         skip = 1) %>%
   bind_rows(.id = "file")
 ```
 
-Renaming the column names
+I will use the code below to rename the column names for the data sets.
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
 # Renaming the columns
 colnames(December_data) <- c("ID", "Station", "Year", "Month", "Day", 
                               "Daily_Rainfall_Total_mm", "Mean_Temperature_C", 
@@ -114,9 +103,6 @@ December_data$Year <- as.factor(December_data$Year)
 ```
 
 ```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
 # Renaming the columns
 colnames(July_data) <- c("ID", "Station", "Year", "Month", "Day", 
                               "Daily_Rainfall_Total_mm", "Mean_Temperature_C", 
@@ -128,10 +114,7 @@ July_data$Year <- as.factor(July_data$Year)
 
 ### 2.2.1 Inspecting the data for July
 
-```{r}
-head(July_data)
-
-```
+I will use the `datatable()` function to inspect the data set for July in an interactive way.
 
 ```{r}
 DT::datatable(July_data, class= "compact")
@@ -139,19 +122,19 @@ DT::datatable(July_data, class= "compact")
 
 ### 2.2.2 Inspecting the data for December
 
-```{r}
-head(December_data)
-```
+I will use the `datatable()` function to inspect the data set for December in an interactive way.
 
 ```{r}
 DT::datatable(December_data, class= "compact")
 ```
 
-# 3. Visualising daily rainfall from 1983 to 2023
+# 3. Visualising Daily rainfall from 1983 to 2023
+
+Since our data sets do not have any missing values and duplicates, I will proceed to explore the data visually.
 
 ## 3.1 Visualising Daily Rainfall for the month of July (Dry month) over the years
 
-First, I will plot a line plot that compares daily rainfall in July over the 5 years.
+First, I will use the code below and `ggplotly` to plot an interactive line plot that compares daily rainfall in July over the 5 years.
 
 ```{r}
 #| code-fold: true
@@ -177,7 +160,7 @@ ggplotly(p_july)
 
 ```
 
-### 3.1.1 Visualising through animation
+I will also use `gganimate` to create the transition through days.
 
 ```{r}
 #| code-fold: true
@@ -201,14 +184,14 @@ animate(p_july1, nframes = 31, fps = 5, width = 800, height = 600)
 ::: callout-note
 ## Note
 
-From the combined interactive plot above, there seems to be some difference in the daily rainfall for the month of July across the years, in terms of number of rain days and daily rain intensity.\
+From the plots above, there seems to be some difference in the daily rainfall for the month of July across the years, in terms of number of rain days and rainfall intensity.\
 \
-For example, 2023's daily rainfall intensity seems stronger compared to previous years, but the number of rain days is also lesser.
+For example, 2023 seem to have more "heavy" rainfall events relative to previous years, albeit with a lesser number of rain days.
 :::
 
 ## 3.2 Visualising Daily Rainfall for the month of December (Wet month) over the years
 
-First, I will plot a line plot that compares daily rainfall in December over the 5 years.
+First, I will use the code below and `ggplotly` to plot an interactive line plot that compares daily rainfall in December over the 5 years.
 
 ```{r}
 #| code-fold: true
@@ -233,7 +216,9 @@ p_dec <- ggplot(December_data, aes(x = Day, y = Daily_Rainfall_Total_mm, color =
 ggplotly(p_dec)
 ```
 
-### 3.2.1 Visualising through animation
+### 
+
+I will also use `gganimate` to create the transition through days.
 
 ```{r}
 #| code-fold: true
@@ -257,14 +242,14 @@ animate(p_dec1, nframes = 31, fps = 5, width = 800, height = 600)
 ::: callout-note
 ## Note
 
-From the combined interactive plot above, there seems to be some difference in the daily rainfall for the month of December across the years, in terms of number of rain days and daily rain intensity.
+From the plots above, there seems to be some difference in the rainfall for the month of December across the years, in terms of number of rain days and daily rain intensity.
 
-For example, among the 5 years, the heaviest rainfall event happened in 1983. While the intensity of the daily rainfall in 2023 seems to be the weakest relative to the previous years.
+For example, among the 5 years, the heaviest rainfall event happened in 1983. However, the intensity of "heavy" rainfall events in 2023 seemed to be the weakest relative to previous years.
 :::
 
-## 3.3 Comparing both July and December Daily Rainfall over the years (Dry Vs Wet month)
+## 3.3 Comparing the difference between July and December Rainfall over the years (Dry Vs Wet month)
 
-First we combine the July and December data sets.
+First, I will use the code below to combine the July and December data sets.
 
 ```{r}
 #| code-fold: true
@@ -281,55 +266,15 @@ combined_data <- rbind(July_data, December_data)
 
 ```
 
-```{r}
-head(combined_data)
-```
+I will use the `datatable()` function to inspect the combined data set in an interactive way.
 
 ```{r}
 DT::datatable(combined_data, class= "compact")
 ```
 
-### 3.3.1 Plotting both months to compare differences across years
+### 3.3.1 Comparing July and December's Daily Rainfall
 
-I will plot both months for each year to make a side by side comparison between July (Dry) and December (Wet) over the 5 years.
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-p_combined <- ggplot(combined_data, aes(x = Day, 
-                                        y = Daily_Rainfall_Total_mm, group = Month)) +
-  
-  # Use geom_area for one of the months, July in this case
-  geom_area(data = subset(combined_data, Month == "July"), 
-            aes(fill = as.factor(Year)), alpha = 0.3) +
-  
-  # Use geom_line for both months to ensure the line is on top of the fill
-  geom_line(aes(color = as.factor(Year), 
-                linetype = Month)) +
-  facet_wrap(~Year, ncol = 1) +
-  labs(title = "Daily Rainfall in July and December by Year",
-       x = "Day of the Month",
-       y = "Rainfall (mm)",
-       color = "Year",
-       fill = "Year",
-       linetype = "Month") +
-  theme_minimal() +
-  
-  guides(fill = guide_legend("Year"), color = guide_legend("Year"), 
-         linetype = guide_legend("Month"))
-
-```
-
-```{r}
-#| fig-width: 10
-#| fig-height: 7
-#| column: body-outset-right
-
-p_combined
-```
-
-Making it interactive using `ggploty()` method.
+I will use the code below to create an interactive line plot to compare July's and December's rainfall over the 5 years.
 
 ```{r}
 #| code-fold: true
@@ -351,7 +296,7 @@ p3 <- ggplot(combined_data, aes(x = Day, y = Daily_Rainfall_Total_mm)) +
          linetype = guide_legend("Month"))
 
 # Adjust linetype manually for clarity
-p_combined <- p_combined + scale_linetype_manual(values = c("July" = "dotted", "December" = "solid"))
+p_combined <- p3 + scale_linetype_manual(values = c("July" = "dotted", "December" = "solid"))
 
 ```
 
@@ -360,12 +305,12 @@ p_combined <- p_combined + scale_linetype_manual(values = c("July" = "dotted", "
 #| fig-height: 7
 #| column: body-outset-right
 
-ggplotly(p3)
+ggplotly(p3) |> config(displayModeBar = FALSE)
 ```
 
-### 3.3.2 Visualising through Animation
+### 
 
-I will also animate the combined plot of July and December Daily rainfall across the years, using `gganimate.`
+I will also animate the combined plot of July and December's Daily rainfall, using `gganimate.`
 
 ```{r}
 #| code-fold: true
@@ -401,42 +346,97 @@ animate(animated_plot_simple, nframes = 31, fps = 5, width = 800, height = 600)
 ::: callout-tip
 ## Observation 1
 
-The infographics had reported that:-
-
-1.  The contrast between wet months (Nov to Jan) and dry months (Feb and June to Sep) is likely to be more pronounced.
-
-2.  Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
-
 From the visualisations above, while there are visibly more rainy days in December relative to July over the years, there seems to be no substantial increase in the intensity and frequency of heavy rain events from 1983.\
 \
-For example, the highest recorded daily rainfall was in December 1983 at 164.4 mm, which has not yet been eclipsed.\
+For example, the highest recorded daily rainfall event was in December 1983 at 164.4 mm. This has not yet been eclipsed in subsequent years.\
 \
-Similarly, overall volume of rainfall in both July and December 2023 seems to be the least within the 5 years.
+Similarly, the overall volume of rainfall in both July and December 2023 seemed to be the least within the 5 years.
 :::
 
 # 4. Analysing statistical differences between months and years
 
-## 4.1 Differences between same months across the years
+## 4.1 Differences between the same months across the years
 
-Our previous visualisations seem to indicate that there are some differences in the daily rainfall for each of the months July and December, across the 5 years ie the difference between each July/December of 1983, 1993, 2003, 2013 and 2023.
+Our previous visualisations seemed to indicate that there were some differences in the daily rainfall for each of the months, July and December, across the 5 years.\
+\
+This leads to the hypothesis that there **might be a difference** between each July or each December from 1983 to 2023.
 
-We will validate this statistically. We will use `ggstatsbetween()` from the `ggstatplot` package to examine if there are any significant statistical differences between the median daily rainfall for the same month across the five years.
+We will need to validate this statistically and examine if there are any significant statistical differences between the daily rainfall for the same month across the five years.
 
-**First,** we will need to ascertain the nature of the distribution, whether it is normal or non-normal distributed.\
+First**,** we will need to ascertain the nature of the distribution, whether it is normal or non-normal distributed.
+
+We can first visualise this using ridgeline plots, using the code below.
 
 ```{r}
-shapiro.test(July_data$Daily_Rainfall_Total_mm)
-shapiro.test(December_data$Daily_Rainfall_Total_mm)
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(July_data, 
+       aes(x = Daily_Rainfall_Total_mm, 
+           y = Year)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = lighten("#7097BB", .3),
+    color = "white"
+  ) +
+  scale_x_continuous(
+    name = "Daily Rainfall (mm)",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  labs(title = "Distribution of the Daily Rainfall for July (1983-2023)")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(December_data, 
+       aes(x = Daily_Rainfall_Total_mm, 
+           y = Year)) +
+  geom_density_ridges(
+    scale = 3,
+    rel_min_height = 0.01,
+    bandwidth = 3.4,
+    fill = lighten("#7097BB", .3),
+    color = "white"
+  ) +
+  scale_x_continuous(
+    name = "Daily Rainfall (mm)",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  labs(title = "Distribution of the Daily Rainfall for December (1983-2023)")
 
 ```
 
-For both July and December daily rainfall data, the p-value is \< 0.05. Hence we can conclude that the distribution of data is non-normal. We will need to conduct non-parametric tests.
+::: callout-note
+## Note
+
+From the ridgeline plots above, we can see that the distribution for both July and December rainfall do not resemble a normal distribution, and that there is a right skewness.
+:::
+
+Besides visualising with Ridgeline plots, I will also use the code below to run the Shapiro-Wilk test.
+
+```{r}
+print(shapiro.test(July_data$Daily_Rainfall_Total_mm))
+print(shapiro.test(December_data$Daily_Rainfall_Total_mm))
+
+```
+
+From the output of the tests above, the p-value is \< 0.05 for both July's and December's daily Rainfall. Hence we can conclude that the distribution of data is non-normal and we will need to conduct non-parametric tests.
 
 **Our Hypothesis will be as such:**
 
 *H~0~: There is no difference between the median daily rainfall for the same month across the 5 years.*
 
 *H~1~: There is a difference between the median daily rainfall for the same month across the 5 years.*
+
+I will use `ggstatsbetween()` from the `ggstatplot` package.
 
 ```{r}
 #| code-fold: true
@@ -477,20 +477,24 @@ ggbetweenstats(
 ::: callout-tip
 ## Observation 2
 
-In both tests, the p-value is above 0.05. Hence we have insufficient evidence to reject the Null Hypothesis and can conclude that there is no strong evidence to indicate that there is a difference in the median daily rainfall for the same month across the years.
+In both the tests above, the p-value is above 0.05.
+
+Hence, we have insufficient evidence to reject the Null Hypothesis and can conclude that there is no strong evidence to indicate that there is a difference in the median daily rainfall for the same month across the years.
 :::
 
-## 4.2 Differences between the two months across the years
+## 4.2 Differences between July and December across the years
 
-Our previous visualisations seem to suggest that there is no substantial differences in the daily rainfall between the months of July and December, across the 5 years ie the difference/variation between the two months (July and December) for each of the 5 years.
+Our previous visualisations seemed to suggest that there is no substantial differences in the daily rainfall between the months of July and December, across the 5 years.
 
-We will validate this statistically. We will examine if there is any strong evidence to suggest that there is indeed a difference in the median daily rainfall between the two months (July and December).
+This leads to the hypothesis that there is **no difference** between each "July to December" period from 1983 to 2023.
+
+We will need to validate this statistically and examine if there is any strong evidence to suggest that there is indeed a difference in the daily rainfall between the two months (July to December).
 
 **Our Hypothesis will be as such:**
 
-*H~0~: There is no difference in the median daily rainfall between July and December.*
+*H~0~: There is no difference in the median daily rainfall between July and December across the 5 years*
 
-*H~1~: There is a difference in the median daily rainfall between July and December.*
+*H~1~: There is a difference in the median daily rainfall between July and December across the 5 years*
 
 Since we have rain fall data for 5 different years, we will use the `grouped_ggbetweenstats()` from the `ggstatplot` package.
 
@@ -516,16 +520,18 @@ grouped_ggbetweenstats(
 ::: callout-tip
 ## Observation 3
 
-In the 5 tests, the p-value is \> 0.05 for years 1983,1993,2003 and 2013.\
+In the tests above, the p-value is \> 0.05 for the years 1983,1993,2003 and 2013.\
 \
 However the p-value is \< 0.05 for year 2023.
 
-Hence we can reject the Null Hypothesis and can conclude that there is some evidence to indicate that there is a difference in the median daily rainfall between December and July across the 5 years.\
-\
-While there were no significant differences from 1983 to 2013. This is not the case for 2023.
+Hence we can reject the Null Hypothesis and can conclude that there is some evidence to suggest that **there is some difference** in the median daily rainfall between July to December, across the 5 years.\
 :::
 
-Let's show this by plotting the number of Rainy days and the mean daily Rainfall across the years
+To visualise this difference in the June-December periods, I will use the codes below to plot:
+
+1.  The number of Rain days, and
+
+2.  The mean Daily Rainfall across the years
 
 ```{r}
 #| code-fold: true
@@ -545,55 +551,67 @@ rain_fall_summary <- combined_data %>%
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p4 <- ggplot(rain_fall_summary, aes(x = Year, y = RainyDays, group = Month, color = Month)) +
+ggplot(rain_fall_summary, aes(x = Year, y = RainyDays, group = Month, color = Month)) +
   geom_line() +
   geom_point() +
-  facet_wrap(~Month) + # Separate plots for each month
-  labs(title = "Number of Rainy Days Over Years",
+  
+  labs(title = "The largest difference in the number of Rain Days between\nJuly and December was in 2023",
        x = "Year",
        y = "Number of Rainy Days",
        color = "Month") +
   theme_minimal() +
-  theme(legend.position = "none")
-
-ggplotly(p4)
-
+  theme(legend.position = "right")
 ```
-
-::: callout-note
-## Note
-
-With reference to our previous tests which showed a statistically difference between July and December for year 2023, we can see from the visualisations above that 2023 had the least rainy days for July and the most rainy days for December across the 5 years.
-:::
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 
-p6 <- ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, color = Month)) +
+ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, color = Month)) +
   geom_line() +
   geom_point() +
-  facet_wrap(~Month) + # Separate plots for each month
-  labs(title = "Mean Daily Rainfall Over the Years",
+  
+  labs(title = "Both July's and December's mean Daily Rainfall have\ntrended lower over the Years",
        x = "Year",
        y = "Mean Daily Rainfall (mm)",
        color = "Month") +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme(legend.position = "right")
 
-ggplotly(p6)
 
 ```
 
-::: callout-note
-## Note
+::: callout-tip
+## Observation 4
 
-With reference to our previous tests which showed a statistically difference between July and December for year 2023, we can see from the visualisations above that 2023 had the least mean daily rainfall for both July and December across the 5 years.
+2023 was likely flagged out (p-value \< 0.05) over the other 4 years due to:
+
+-   The difference in the number of rain days between July and December was the highest relative to previous years, and
+
+-   The mean daily rainfall for both months were the lowest relative to previous years
+
+The infographics had reported that:-
+
+1.  The contrast between wet months (Nov to Jan) and dry months (Feb and June to Sep) is likely to be more pronounced, and
+
+2.  The Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
+
+From our visualisations above:
+
+-   There has been an increase in rain days in December over the years, and
+
+-   There has been a decrease in the number of rain rains in July over the years
+
+This may lend credence to the claim that the contrast between Dry and Wet months is likely to be more pronounced.
+
+However, the mean daily rain fall in 2023 for both July and December was at its lowest relative to other years.
+
+Hence, this may not as yet, lead credence to the claim that the intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 :::
 
 ## 4.3 Visualising Uncertainty in Daily Rainfall
 
-Next, to visualize the uncertainty in both months, I will plot jittered scatter plots to show the mean daily rainfall and the range of daily rainfall measurements within the month.
+To visualize the uncertainty in the daily rainfall for both months, I will use the code below to plot jittered scatter plots to visualise the uncertainty of point estimates (daily mean rainfall).
 
 ```{r}
 #| code-fold: true
@@ -653,4 +671,76 @@ p_plotly <- ggplotly(p_decem) %>%
 
 # Display the plot
 p_plotly
+```
+
+I will also use the code below to plot Hypothetical Outcome Plots for July and December mean daily rainfall.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(data = July_data, 
+       (aes(x = Year, y = Daily_Rainfall_Total_mm))) +
+  geom_point(position = position_jitter(
+    height = 0.3, width = 0.05), 
+    size = 0.4, color = "#0072B2", alpha = 1/2) +
+  geom_hpline(data = sampler(20, group = Year), height = 0.6, color = "#D55E00") +
+  theme_bw() + 
+  # `.draw` is a generated column indicating the sample draw
+  transition_states(.draw, 1, 3) +
+  labs(
+    title = "Hypothetical Outcome Plots For July Rainfall")
+   
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot(data = December_data, 
+       (aes(x = Year, y = Daily_Rainfall_Total_mm))) +
+  geom_point(position = position_jitter(
+    height = 0.3, width = 0.05), 
+    size = 0.4, color = "#0072B2", alpha = 1/2) +
+  geom_hpline(data = sampler(20, group = Year), height = 0.6, color = "#D55E00") +
+  theme_bw() + 
+  # `.draw` is a generated column indicating the sample draw
+  transition_states(.draw, 1, 3) +
+  labs(
+    title = "Hypothetical Outcome Plots For December Rainfall")
+   
+```
+
+In the code below, [`stat_gradientinterval()`](https://mjskay.github.io/ggdist/reference/stat_gradientinterval.html) of **ggdist** is used to build a visual for displaying distribution of daily rainfall measurements for July and Decemeber by Year.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+July_data %>%
+  ggplot(aes(x = Year, 
+             y = Daily_Rainfall_Total_mm)) +
+  stat_gradientinterval(   
+    fill = "skyblue",      
+    show.legend = FALSE     
+  ) +                        
+  labs(
+    title = "Visualising confidence intervals of mean Daily rainfall in July",
+    subtitle = "Gradient + interval plot")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+December_data %>%
+  ggplot(aes(x = Year, 
+             y = Daily_Rainfall_Total_mm)) +
+  stat_gradientinterval(   
+    fill = "skyblue",      
+    show.legend = FALSE     
+  ) +                        
+  labs(
+    title = "Visualising confidence intervals of mean Daily rainfall in December",
+    subtitle = "Gradient + interval plot")
 ```
