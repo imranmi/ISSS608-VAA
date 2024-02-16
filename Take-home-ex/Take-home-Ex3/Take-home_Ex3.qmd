@@ -186,7 +186,7 @@ animate(p_july1, nframes = 31, fps = 5, width = 800, height = 600)
 
 From the plots above, there seems to be some difference in the daily rainfall for the month of July across the years, in terms of number of rain days and rainfall intensity.\
 \
-For example, 2023 seem to have more "heavy" rainfall events relative to previous years, albeit with a lesser number of rain days.
+For example, 2023 seemed to have more "heavy" rainfall events relative to previous years, albeit with a lesser number of rain days.
 :::
 
 ## 3.2 Visualising Daily Rainfall for the month of December (Wet month) over the years
@@ -244,7 +244,7 @@ animate(p_dec1, nframes = 31, fps = 5, width = 800, height = 600)
 
 From the plots above, there seems to be some difference in the rainfall for the month of December across the years, in terms of number of rain days and daily rain intensity.
 
-For example, among the 5 years, the heaviest rainfall event happened in 1983. However, the intensity of "heavy" rainfall events in 2023 seemed to be the weakest relative to previous years.
+For example, among the 5 years, the heaviest rainfall event happened in 1983. Additionally, the intensity of "heavy" rainfall events in 2023 seemed to be the weakest relative to previous years.
 :::
 
 ## 3.3 Comparing the difference between July and December Rainfall over the years (Dry Vs Wet month)
@@ -348,7 +348,7 @@ animate(animated_plot_simple, nframes = 31, fps = 5, width = 800, height = 600)
 
 From the visualisations above, while there are visibly more rainy days in December relative to July over the years, there seems to be no substantial increase in the intensity and frequency of heavy rain events from 1983.\
 \
-For example, the highest recorded daily rainfall event was in December 1983 at 164.4 mm. This has not yet been eclipsed in subsequent years.\
+For example, the highest recorded daily rainfall event was in December 1983 at 164.4 mm. This has not been eclipsed in subsequent years.\
 \
 Similarly, the overall volume of rainfall in both July and December 2023 seemed to be the least within the 5 years.
 :::
@@ -527,7 +527,7 @@ However the p-value is \< 0.05 for year 2023.
 Hence we can reject the Null Hypothesis and can conclude that there is some evidence to suggest that **there is some difference** in the median daily rainfall between July to December, across the 5 years.\
 :::
 
-To visualise this difference in the June-December periods, I will use the codes below to plot:
+To identify and visualise this difference for the June-December periods, I will use the codes below to plot:
 
 1.  The number of Rain days, and
 
@@ -606,7 +606,7 @@ This may lend credence to the claim that the contrast between Dry and Wet months
 
 However, the mean daily rain fall in 2023 for both July and December was at its lowest relative to other years.
 
-Hence, this may not as yet, lead credence to the claim that the intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
+Hence, this may not as yet, lend credence to the claim that the intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 :::
 
 ## 4.3 Visualising Uncertainty in Daily Rainfall
@@ -711,7 +711,7 @@ ggplot(data = December_data,
    
 ```
 
-In the code below, [`stat_gradientinterval()`](https://mjskay.github.io/ggdist/reference/stat_gradientinterval.html) of **ggdist** is used to build a visual for displaying distribution of daily rainfall measurements for July and Decemeber by Year.
+In the code below, [`stat_gradientinterval()`](https://mjskay.github.io/ggdist/reference/stat_gradientinterval.html) of **ggdist** is used to build a visual for displaying distribution of daily rainfall measurements for July and December by Year.
 
 ```{r}
 #| code-fold: true
