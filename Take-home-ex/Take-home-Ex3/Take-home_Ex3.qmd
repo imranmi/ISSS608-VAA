@@ -243,7 +243,7 @@ animate(animated_plot_simple, nframes = 31, fps = 5, width = 800, height = 600)
 ```
 
 ::: callout-tip
-## Observation 1 - Frequency and Intensity of Rainfall events
+## Observation 1 - Frequency and Intensity of Rainfall events show no substantial increase
 
 The infographics had reported that the Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 
@@ -449,6 +449,8 @@ p_3 <- ggplot(combined_data, aes(x = Year, y = Daily_Rainfall_Total_mm, fill = M
 Using Patchwork to combine the plots.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 #| fig-width: 12
 #| fig-height: 10
 #| column: body-outset-right
@@ -530,7 +532,7 @@ p_plotly
 ```
 
 ::: callout-tip
-## Observation 2 - Contrast between Dry and Wet Months
+## Observation 2 - Contrast between Dry and Wet Months are likely to be more pronounced
 
 The infographics had reported that the contrast between Dry and Wet months is likely to be more pronounced.
 
