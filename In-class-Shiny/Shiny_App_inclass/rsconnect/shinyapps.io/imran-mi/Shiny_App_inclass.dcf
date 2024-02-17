@@ -1,0 +1,12 @@
+name: Shiny_App_inclass
+title: Shiny_App_inclass
+username: imran-mi
+account: imran-mi
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11254306
+bundleId: 8266145
+url: https://imran-mi.shinyapps.io/Shiny_App_inclass/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
