@@ -13,9 +13,9 @@ execute:
 
 According to an official report as shown in the infographic below,
 
--   The **contrast** between the wet months (November to January) and dry months (February and June to September) is likely to be more pronounced, and
+-   The **intensity and frequency** of heavy rainfall events is expected to increase as the world gets warmer, and
 
--   The **intensity and frequency** of heavy rainfall events is expected to increase as the world gets warmer.
+-   The **contrast** between the wet months (November to January) and dry months (February and June to September) is likely to be more pronounced.
 
 ![](images/clipboard-3321996442.png)
 
@@ -37,7 +37,7 @@ In this take-home exercise, I will:
 pacman::p_load(ungeviz, plotly, crosstalk, patchwork,
                DT, ggdist, ggridges, ggstatsplot,ggthemes,
                colorspace, gganimate, tidyverse, dplyr, 
-               readr, ggiraph)
+               readr)
 ```
 
 ## 2.2 Importing Data and Data Preparation
@@ -127,19 +127,27 @@ I will use the `datatable()` function to inspect the combined data set in an i
 DT::datatable(combined_data, class= "compact")
 ```
 
-# 3. Comparing the Differences between July and December Rainfall over the years (Dry Vs Wet month)
+# 3. Visualising Differences in Daily Rainfall 
 
-Since our data sets do not have any missing values or duplicates, I will proceed to explore the data visually.
+The objective of these visualisations is to help us to:-
+
+-   Identify the trends and differences in Daily rainfall between the **same months** across the 5 years, and
+
+-   Identify the trends and differences between the **"July to December"** periods across the 5 years.
+
+This will assist us in validating the below claims that:
+
+1.  The intensity and frequency of heavy rainfall events is expected to increase as the world gets warmer, and
+
+2.  The contrast between the wet months (November to January) and dry months (February and June to September) is likely to be more pronounced.
+
+## 3.1 Frequency and Intensity of Rainfall events
 
 First, I will use the code below to create a static line plot to visualize July's and December's rainfall over the 5 years.
 
-The objective is to help us to:-
-
--   Spot the differences in the Daily rainfall between the **same months** across the 5 years, and
-
--   Spot the differences between the **"July to December"** periods across the 5 years
-
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
 #| fig-width: 10
 #| fig-height: 7
 #| column: body-outset-right
@@ -167,16 +175,6 @@ ggplot(combined_data, aes(x = Day,
   guides(fill = guide_legend("Year"), color = guide_legend("Year"), 
          linetype = guide_legend("Month"))
 ```
-
-::: callout-note
-## Note
-
-From the plots above, there seems to be some difference in the daily rainfall for each July, and each December across the years, in terms of number of rain days and rainfall intensity.
-
-For example, July 2023 has lesser rain days relative to previous years, but the intensity of those rain days seemed to be higher.
-
-Additionally, the heaviest rainfall event happened in December 1983, but this has not been eclipsed in subsequent Decembers.
-:::
 
 Next, to enable readers to specifically examine the rainfall measures in more detail, I will use the code below to add interactivity.
 
@@ -211,6 +209,8 @@ ggplotly(p3)
 
 I will also animate the combined plot of July and December's Daily rainfall, using `gganimate.`
 
+This animation will provide a visual comparison on how daily rainfall changes for each month, across the years.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -243,28 +243,30 @@ animate(animated_plot_simple, nframes = 31, fps = 5, width = 800, height = 600)
 ```
 
 ::: callout-tip
-## Observation 1
+## Observation 1 - Frequency and Intensity of Rainfall events
+
+The infographics had reported that the Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 
 From the visualisations above, in general, there are visibly more rain days in December relative to July over the years.
 
-However, there seems to be no substantial increase in the **intensity and frequency** of heavy rain events since 1983. The highest recorded daily rainfall event was in December 1983 at 164.4 mm, and this has not been eclipsed in subsequent years.\
+However, there seems to be **no substantial increase in the intensity of heavy rain events**. For example, we can see that the highest recorded daily rainfall event occured in December 1983 at 164.4 mm. However, this level of intensity has not been surpassed in subsequent years.\
 \
-Similarly, the overall volume of rainfall in both July and December 2023 seemed to be the least within the 5 years, which contradicts with the claim that the intensity and frequency of heavy rainfall events is expected to increase as the world gets warmer.
+Additionally, the volume of rainfall for both July and December 2023 is the least within the 5 years.
+
+This further challenges the claim that the intensity and frequency of heavy rainfall events is expected to increase as the world gets warmer.
 :::
 
-# 4. Applying statistical methods to validate the differences between months and years
+## 3.2 Validation through `ggstatsbetween()` method  
 
-## 4.1 Differences between the same months across the years
+The infographics had reported that the Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 
-Our previous visualisations had indicated that there were some differences in the daily rainfall for each July and each December, across the 5 years.\
-\
-This leads to the hypothesis that there **might be a difference** between each July or each December from 1983 to 2023.
+Our visualisations in the previous section have showed otherwise.
 
-We will need to validate this statistically and examine if there are any significant statistical differences between the daily rainfall for the same month across the five years.
+We can validate this statistically and examine if there are any significant statistical differences between the daily rainfall for each July, and each December, across the five years.
 
 First**,** we will need to ascertain the nature of the distribution, and see if it is normal or non-normal distributed.
 
-We can first visualise this using ridgeline plots, using the code below.
+We can first visualise the distribution of daily rainfall using ridgeline plots, using the code below.
 
 ```{r}
 #| code-fold: true
@@ -378,63 +380,22 @@ ggbetweenstats(
 ```
 
 ::: callout-tip
-## Observation 2
+## Validation results
 
-In both the tests above, the p-value is above 0.05.
+In both the tests above, the p-value is \> 0.05.
 
-Hence, we have insufficient evidence to reject the Null Hypothesis and can conclude that there is no strong evidence to indicate that there is a difference in the median daily rainfall for the same month across the years.
+Hence, we have insufficient evidence to reject the Null Hypothesis and can conclude that there is no strong evidence to indicate that there is a difference in the Daily rainfall for the same month across the years.
+
+This supports **Observation 1**, where we concluded that there seems to be no substantial increase in the frequency and intensity of heavy rain fall events.
 :::
 
-## 4.2 Differences between July and December across the years
+## 3.3 Differences between July and December across the years (Dry Vs Wet Months)
 
-Our previous visualisations seemed to suggest that there is no substantial differences in the daily rainfall between the months of July and December, across the 5 years.
+To visualise the differences for the June-December periods, I will use the codes below to examine:
 
-This leads to the hypothesis that there is **no difference** between each "July to December" period from 1983 to 2023.
+1.  The differences in the number of Rain days, and
 
-We will need to validate this statistically and examine if there is any strong evidence to suggest that there is indeed a difference in the daily rainfall between the two months (July to December).
-
-**Our Hypothesis will be as such:**
-
-*H~0~: There is no difference in the median daily rainfall between July and December across the 5 years*
-
-*H~1~: There is a difference in the median daily rainfall between July and December across the 5 years*
-
-Since we have rain fall data for 5 different years, we will use the `grouped_ggbetweenstats()` from the `ggstatplot` package.
-
-```{r}
-#| fig-width: 12
-#| fig-height: 10
-#| column: body-outset-right
-
-
-grouped_ggbetweenstats(
-  data = combined_data,
-  x = Month,
-  y = Daily_Rainfall_Total_mm,
-  grouping.var = Year,
-  type = "np", # for non-parametric
-  pairwise.comparisons = TRUE,
-  pairwise.display = "s",
-  p.adjust.method = "fdr", 
-  output = "plot" 
-)
-```
-
-::: callout-tip
-## Observation 3
-
-In the tests above, the p-value is \> 0.05 for the years 1983,1993,2003 and 2013.\
-\
-However the p-value is \< 0.05 for year 2023.
-
-Hence we can reject the Null Hypothesis and can conclude that there is some evidence to suggest that **there is some difference** in the median daily rainfall between July to December, across the 5 years.\
-:::
-
-To identify and visualise this difference for the June-December periods, I will use the codes below to plot:
-
-1.  The number of Rain days, and
-
-2.  The mean Daily Rainfall across the years
+2.  The differences in the Daily Rainfall, between the two months, across the years
 
 ```{r}
 #| code-fold: true
@@ -454,23 +415,17 @@ rain_fall_summary <- combined_data %>%
 #| code-fold: true
 #| code-summary: "Show the code"
 
-ggplot(rain_fall_summary, aes(x = Year, y = RainyDays, group = Month, color = Month)) +
+p_1 <- ggplot(rain_fall_summary, aes(x = Year, y = RainyDays, group = Month, color = Month)) +
   geom_line() +
   geom_point() +
-  
   labs(title = "The largest difference in the number of Rain Days between\nJuly and December was in 2023",
        x = "Year",
        y = "Number of Rainy Days",
        color = "Month") +
   theme_minimal() +
-  theme(legend.position = "right")
-```
+  theme(legend.position = "none")
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, color = Month)) +
+p_2 <- ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, color = Month)) +
   geom_line() +
   geom_point() +
   
@@ -481,40 +436,36 @@ ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, color =
   theme_minimal() +
   theme(legend.position = "right")
 
-
+p_3 <- ggplot(combined_data, aes(x = Year, y = Daily_Rainfall_Total_mm, fill = Month)) +
+  geom_boxplot() +
+  labs(title = "Unlike previous years, in 2023, the gap between July and December has reduced ",
+       x = "Year",
+       y = "Daily Rainfall (mm)",
+       fill = "Month") +
+  theme_minimal() +
+  theme(legend.position = "right")
 ```
 
-::: callout-tip
-## Observation 4
+Using Patchwork to combine the plots.
 
-2023 was likely flagged out (p-value \< 0.05) over the other 4 years due to:
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+#| column: body-outset-right
 
--   The difference in the number of rain days between July and December was the highest relative to previous years, and
+combined_plot <- (p_1 + p_2) / p_3 + 
+  plot_annotation(
+    title = "The contrast between July and December are more pronounced over the years",
+    theme = theme(
+      plot.title = element_text(size = 20, face = "bold")
+    )
+  ) +
+  theme(plot.title.position = "plot")
 
--   The mean daily rainfall for both months were the lowest relative to previous years
+combined_plot
+```
 
-The infographics had reported that:-
-
-1.  The contrast between wet months (Nov to Jan) and dry months (Feb and June to Sep) is likely to be more pronounced, and
-
-2.  The Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
-
-From our visualisations above:
-
--   There has been an increase in rain days in December over the years, and
-
--   There has been a decrease in the number of rain rains in July over the years
-
-This may lend credence to the claim that the contrast between Dry and Wet months is likely to be more pronounced.
-
-However, the mean daily rain fall in 2023 for both July and December was at its lowest relative to other years.
-
-Hence, this may not as yet, lend credence to the claim that the intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
-:::
-
-# 5. Visualising Uncertainty in Daily Rainfall
-
-To visualize the uncertainty in the daily rainfall for both months, I will use the code below to plot jittered scatter plots to visualise the uncertainty of point estimates (daily mean rainfall).
+Next, to enable readers to specifically examine the differences in the rainfall between the two months in more detail, I will use the code below to add interactivity.
 
 ```{r}
 #| code-fold: true
@@ -578,7 +529,82 @@ p_plotly <- ggplotly(p_decem) %>%
 p_plotly
 ```
 
-I will also use the code below to plot Hypothetical Outcome Plots for July and December daily rainfall.
+::: callout-tip
+## Observation 2 - Contrast between Dry and Wet Months
+
+The infographics had reported that the contrast between Dry and Wet months is likely to be more pronounced.
+
+Our plots above show that:-
+
+-   The difference in the number of rain days between July and December, in 2023, was at its highest, relative to previous years. The number of rain days in July has decreased, and the number of rain days in December has increased, over the years.
+
+-   The mean daily rain fall for both July and December 2023 was at its lowest relative to other years.
+
+-   In 2023, the gap of heavy rain fall events have been reduced. In previous years, there were more days with heavy rain fall in December relative to July.
+
+Hence, this lends credence to the claim that the contrast between Dry and Wet months is likely to be more pronounced.
+:::
+
+## 3.4 Validation through grouped_ggbetweenstats() method
+
+The infographics had reported that the **contrast** between wet months and dry months is likely to be more pronounced.
+
+Our visualisations in the previous section have corroborated this claim.
+
+We can validate this statistically and examine if there is any evidence to suggest that there is indeed a difference in the daily rainfall between the two months (July and December).
+
+**Our Hypothesis will be as such:**
+
+*H~0~: There is no difference in the median daily rainfall between July and December across the 5 years*
+
+*H~1~: There is a difference in the median daily rainfall between July and December across the 5 years*
+
+Since we have rain fall data for 5 different years, we will use the `grouped_ggbetweenstats()` from the `ggstatplot` package.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 12
+#| fig-height: 10
+#| column: body-outset-right
+
+
+group_plot <- grouped_ggbetweenstats(
+  data = combined_data,
+  x = Month,
+  y = Daily_Rainfall_Total_mm,
+  grouping.var = Year,
+  type = "np", # for non-parametric
+  pairwise.comparisons = TRUE,
+  pairwise.display = "s",
+  p.adjust.method = "fdr", 
+  output = "plot" 
+) 
+
+group_plot + plot_annotation(
+    title = "Differences between July and December over the years",
+    theme = theme(
+      plot.title = element_text(size = 20, face = "bold")
+    )
+  ) +
+  theme(plot.title.position = "plot")
+```
+
+::: callout-tip
+## Validation Results
+
+In the tests above, the p-value is \> 0.05 for the years 1983,1993,2003 and 2013.\
+\
+However the p-value is \< 0.05 for year 2023.
+
+Hence we can reject the Null Hypothesis and can conclude that there is some evidence to suggest that **there is some difference** in the daily rainfall between July to December, across the 5 years.
+
+This supports **Observation 3**, where we concluded that the contrast between Dry and Wet months is likely to be more pronounced.
+:::
+
+# 4. Visualising Uncertainty in Daily Rainfall
+
+I will use the code below to plot Hypothetical Outcome Plots for July and December daily rainfall.
 
 ```{r}
 #| code-fold: true
