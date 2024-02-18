@@ -121,13 +121,31 @@ December_data$Month <- 'December'
 combined_data <- rbind(July_data, December_data)
 ```
 
-I will use the `datatable()` function to inspect the combined data set in an interactive way.
+I will use the `datatable()` function to inspect the combined data set.
+
+::: panel-tabset
+## Data Table
 
 ```{r}
 DT::datatable(combined_data, class= "compact")
 ```
 
-# 3. Visualising Differences in Daily Rainfall 
+## Data Structure
+
+```{r}
+str(combined_data)
+```
+
+## Missing Values?
+
+```{r}
+sum(is.na(combined_data))
+```
+
+There are no missing values in our data set.
+:::
+
+# 3. Visualising the Differences in Daily Rainfall
 
 The objective of these visualisations is to help us to:-
 
@@ -187,7 +205,7 @@ p3 <- ggplot(combined_data, aes(x = Day, y = Daily_Rainfall_Total_mm)) +
   # Use geom_line for both months, specifying linetype based on Month
   geom_line(aes(color = Year, linetype = Month)) +
   facet_wrap(~Year, ncol = 1) +
-  labs(title = "Daily Rainfall in July and December by Year",
+  labs(title = "Daily Rainfall in July and December by Year (1983-2023)",
        x = "Day of the Month",
        y = "Rainfall (mm)",
        color = "Year",
@@ -256,13 +274,13 @@ Additionally, the volume of rainfall for both July and December 2023 is the leas
 This further challenges the claim that the intensity and frequency of heavy rainfall events is expected to increase as the world gets warmer.
 :::
 
-## 3.2 Validation through `ggstatsbetween()` method  
+## 3.2 One-way Anova test on Daily Rainfall for the same month, by year
 
 The infographics had reported that the Intensity and frequency of heavy rain fall events is expected to increase as the world gets warmer.
 
 Our visualisations in the previous section have showed otherwise.
 
-We can validate this statistically and examine if there are any significant statistical differences between the daily rainfall for each July, and each December, across the five years.
+We can validate this statistically and examine if there are any significant statistical differences between the daily rainfall for **each July**, and **each December**, across the five years.
 
 First**,** we will need to ascertain the nature of the distribution, and see if it is normal or non-normal distributed.
 
@@ -323,19 +341,9 @@ ggplot(December_data,
 From the ridgeline plots above, we can see that the distribution for both July and December rainfall do not resemble a normal distribution, and that there is a right skewness.
 :::
 
-Besides visualising with Ridgeline plots, I will also use the code below to run the Shapiro-Wilk test.
+Since the distribution of rainfall is non-normal, I will conduct non-parametric tests.
 
-```{r}
-print(shapiro.test(July_data$Daily_Rainfall_Total_mm))
-print(shapiro.test(December_data$Daily_Rainfall_Total_mm))
-
-```
-
-From the output of the tests above, the p-value is \< 0.05 for both July's and December's daily Rainfall.
-
-Hence we can conclude that the distribution of data is non-normal and we will need to conduct non-parametric tests.
-
-**Our Hypothesis will be as such:**
+**The Hypothesis will be as such:**
 
 *H~0~: There is no difference between the median daily rainfall for the same month across the 5 years.*
 
@@ -358,7 +366,7 @@ ggbetweenstats(
   p.adjust.method = "fdr",
   messages = FALSE
 ) +
-  ggtitle("Daily Rainfall for July across the years")
+  ggtitle("Daily Rainfall for July across the years (1983-2023)")
 ```
 
 ```{r}
@@ -376,7 +384,7 @@ ggbetweenstats(
   p.adjust.method = "fdr",
   messages = FALSE
 ) +
-  ggtitle("Daily Rainfall for December across the years")
+  ggtitle("Daily Rainfall for December across the years (1983-2023)")
 ```
 
 ::: callout-tip
@@ -438,7 +446,8 @@ p_2 <- ggplot(rain_fall_summary, aes(x = Year, y = MeanRainfall, group = Month, 
 
 p_3 <- ggplot(combined_data, aes(x = Year, y = Daily_Rainfall_Total_mm, fill = Month)) +
   geom_boxplot() +
-  labs(title = "Unlike previous years, in 2023, the gap between July and December has reduced ",
+  labs(title = "The gap between July and December has reduced in 2023 ",
+       subtitle = "The intensity of December's heavy rainfall events seem to be diminishing",
        x = "Year",
        y = "Daily Rainfall (mm)",
        fill = "Month") +
@@ -457,7 +466,7 @@ Using Patchwork to combine the plots.
 
 combined_plot <- (p_1 + p_2) / p_3 + 
   plot_annotation(
-    title = "The contrast between July and December are more pronounced over the years",
+    title = "The contrast between July and December has become more pronounced over the years",
     theme = theme(
       plot.title = element_text(size = 20, face = "bold")
     )
@@ -488,7 +497,7 @@ p_combined <- ggplot(combined_data, aes(x = Year, y = Daily_Rainfall_Total_mm, c
   scale_color_manual(values = c("July" = "blue", "December" = "red")) +
   labs(title = "Daily Rainfall in July and December (1983-2023)",
        x = "Year",
-       y = "Rainfall Total (mm)") +
+       y = "Daily Rainfall Total (mm)") +
   theme_minimal() +
   
   
@@ -528,7 +537,7 @@ Our plots above show that:-
 Hence, this lends credence to the claim that the contrast between Dry and Wet months is likely to be more pronounced.
 :::
 
-## 3.4 Validation through grouped_ggbetweenstats() method
+## 3.4 Two-sample mean test: July Vs December, by Year
 
 The infographics had reported that the **contrast** between wet months and dry months is likely to be more pronounced.
 
@@ -536,13 +545,13 @@ Our visualisations in the previous section have corroborated this claim.
 
 We can validate this statistically and examine if there is any evidence to suggest that there is indeed a difference in the daily rainfall between the two months (July and December).
 
-**Our Hypothesis will be as such:**
+**The Hypothesis will be as such:**
 
 *H~0~: There is no difference in the median daily rainfall between July and December across the 5 years*
 
 *H~1~: There is a difference in the median daily rainfall between July and December across the 5 years*
 
-Since we have rain fall data for 5 different years, we will use the `grouped_ggbetweenstats()` from the `ggstatplot` package.
+Since we have rain fall data for 5 different years, I will use `grouped_ggbetweenstats()` from the `ggstatplot` package.
 
 ```{r}
 #| code-fold: true
@@ -565,7 +574,7 @@ group_plot <- grouped_ggbetweenstats(
 ) 
 
 group_plot + plot_annotation(
-    title = "Differences between July and December over the years",
+    title = "Differences between July and December over the years (1983-2023)",
     theme = theme(
       plot.title = element_text(size = 20, face = "bold")
     )
@@ -583,4 +592,175 @@ However the p-value is \< 0.05 for year 2023.
 Hence we can reject the Null Hypothesis and can conclude that there is some evidence to suggest that **there is some difference** in the daily rainfall between July to December, across the 5 years.
 
 This supports **Observation 2**, where we concluded that the contrast between Dry and Wet months is likely to be more pronounced.
+:::
+
+# 4. Visualising Uncertainty of Point Estimates in Rainfall data
+
+The code below will be used to derive the necessary summary statistics ie mean, standard deviation and standard error.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+July_rain <- July_data %>%
+  group_by(Year) %>%
+  summarise(
+    n=n(),
+    mean=mean(Daily_Rainfall_Total_mm),
+    sd=sd(`Daily_Rainfall_Total_mm`)
+    ) %>%
+  mutate(se=sd/sqrt(n-1))
+
+Dec_rain <- December_data %>%
+  group_by(Year) %>%
+  summarise(
+    n=n(),
+    mean=mean(Daily_Rainfall_Total_mm),
+    sd=sd(`Daily_Rainfall_Total_mm`)
+    ) %>%
+  mutate(se=sd/sqrt(n-1))
+```
+
+## 4.1 Interactive Error Bars
+
+We can also visualise the uncertainty of point estimates by plotting interactive error bars for the 99% confidence interval of mean Daily Rainfall in July and December by year as shown in the figures below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 12
+#| fig-height: 10
+#| column: body-outset-right
+
+shared_df = SharedData$new(July_rain)
+
+bscols(widths = c(6,6),
+       ggplotly((ggplot(shared_df) +
+                   geom_errorbar(aes(
+                     x=reorder(Year, -mean),
+                     ymin=mean-2.58*se, 
+                     ymax=mean+2.58*se), 
+                     width=0.2, 
+                     colour="black", 
+                     alpha=0.9, 
+                     size=0.5) +
+                   geom_point(aes(
+                     x=Year, 
+                     y=mean, 
+                     text = paste("Year:", `Year`, 
+                                  "<br>N:", `n`,
+                                  "<br>Avg. Rainfall:", round(mean, digits = 2),
+                                  "<br>95% CI:[", 
+                                  round((mean-2.58*se), digits = 2), ",",
+                                  round((mean+2.58*se), digits = 2),"]")),
+                     stat="identity", 
+                     color="red", 
+                     size = 1.5, 
+                     alpha=1) + 
+                   xlab("Year") + 
+                   ylab("Average Daily Rainfall (mm)") + 
+                   theme_minimal() + 
+                   theme(axis.text.x = element_text(
+                     angle = 45, vjust = 0.5, hjust=1)) +
+                   ggtitle("99% Confidence Interval of<br>Avg Rainfall in July by Year")), 
+                tooltip = "text"), 
+       DT::datatable(shared_df, 
+                     rownames = FALSE, 
+                     class="compact", 
+                     width="100%", 
+                     options = list(pageLength = 14,
+                                    scrollX=T), 
+                     colnames = c("No. of observations", 
+                                  "Avg Daily Rainfall",
+                                  "Std Dev",
+                                  "Std Error")) %>%
+         formatRound(columns=c('mean', 'sd', 'se'),
+                     digits=2))
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| fig-width: 12
+#| fig-height: 10
+#| column: body-outset-right
+
+shared_df2 = SharedData$new(Dec_rain)
+
+bscols(widths = c(6,6),
+       ggplotly((ggplot(shared_df2) +
+                   geom_errorbar(aes(
+                     x=reorder(Year, -mean),
+                     ymin=mean-2.58*se, 
+                     ymax=mean+2.58*se), 
+                     width=0.2, 
+                     colour="black", 
+                     alpha=0.9, 
+                     size=0.5) +
+                   geom_point(aes(
+                     x=Year, 
+                     y=mean, 
+                     text = paste("Year:", `Year`, 
+                                  "<br>N:", `n`,
+                                  "<br>Avg. Rainfall:", round(mean, digits = 2),
+                                  "<br>95% CI:[", 
+                                  round((mean-2.58*se), digits = 2), ",",
+                                  round((mean+2.58*se), digits = 2),"]")),
+                     stat="identity", 
+                     color="red", 
+                     size = 1.5, 
+                     alpha=1) + 
+                   xlab("Year") + 
+                   ylab("Average Daily Rainfall (mm)") + 
+                   theme_minimal() + 
+                   theme(axis.text.x = element_text(
+                     angle = 45, vjust = 0.5, hjust=1)) +
+                   ggtitle("99% Confidence Interval of<br>Avg Rainfall in Dec by Year")), 
+                tooltip = "text"), 
+       DT::datatable(shared_df2, 
+                     rownames = FALSE, 
+                     class="compact", 
+                     width="100%", 
+                     options = list(pageLength = 14,
+                                    scrollX=T), 
+                     colnames = c("No. of observations", 
+                                  "Avg Daily Rainfall",
+                                  "Std Dev",
+                                  "Std Error")) %>%
+         formatRound(columns=c('mean', 'sd', 'se'),
+                     digits=2))
+```
+
+::: callout-tip
+## Observations from Interactive Error bars
+
+**July Trends:**
+
+-   2023's Average rainfall was the lowest, at 5.10 mm.
+
+-   The increasing standard deviations (sd) from 2013 to 2023, indicates a trend of more variability in daily rainfall relative to the past.
+
+**December Trends:**
+
+-   2023's Average rainfall was the lowest, at 8.26 mm.
+
+-   The standard deviation shows a decrease over the 40-year span, indicating less variability in daily rainfall in December over time.
+
+**July vs. December Relationship:**
+
+The differences in standard deviation (sd) between December and July for each respective year are as follows:
+
+-   1983: 18.92 mm
+
+-   1993: 4.24 mm
+
+-   2003: 10.12 mm
+
+-   2013: 15.59 mm
+
+-   2023: 0.82 mm
+
+The difference in variability between December and July was much higher in 1983, but has significantly decreased by 2023.
+
+The year 2023 stands out, with the variability in December being almost similar to that in July, indicating a convergence in the variability of rainfall between the two months in that year.
 :::
