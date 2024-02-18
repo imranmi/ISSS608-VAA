@@ -473,61 +473,42 @@ Next, to enable readers to specifically examine the differences in the rainfall 
 #| code-fold: true
 #| code-summary: "Show the code"
 
-July_mean <- July_data %>%
-  group_by(Year) %>%
-  summarise(MeanRainfall = round(mean(Daily_Rainfall_Total_mm, na.rm = TRUE), 2))
+combined_mean <- combined_data %>%
+  group_by(Year, Month) %>%
+  summarise(MeanRainfall = round(mean(Daily_Rainfall_Total_mm, na.rm = TRUE), 2)) %>%
+  ungroup()
 
-# Create the ggplot object with tooltips for individual points
-p_july <- ggplot(July_data, aes(x = Year, y = Daily_Rainfall_Total_mm)) +
-  geom_jitter(aes(color = Year, text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
-  geom_line(data = July_mean, aes(x = Year, y = MeanRainfall, group = 1), 
-            color = "black", size = 0.5, linetype = "dotted") + 
-  geom_point(data = July_mean, aes(x = Year, y = MeanRainfall), 
-             color = "black", size = 3, show.legend = FALSE) + 
-  labs(title = "Daily Rainfall in July (1983-2023)",
+# Create the ggplot object
+p_combined <- ggplot(combined_data, aes(x = Year, y = Daily_Rainfall_Total_mm, color = Month)) +
+  geom_jitter(aes(text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
+  geom_line(data = combined_mean, aes(x = Year, y = MeanRainfall, group = Month), 
+            size = 0.5, linetype = "dotted") + 
+  geom_point(data = combined_mean, aes(x = Year, y = MeanRainfall), 
+             size = 3, show.legend = FALSE) + 
+  scale_color_manual(values = c("July" = "blue", "December" = "red")) +
+  labs(title = "Daily Rainfall in July and December (1983-2023)",
        x = "Year",
        y = "Rainfall Total (mm)") +
   theme_minimal() +
-  theme(legend.position = "none") +
-  annotate("text", x = 2, y = 11, label = "Mean Rainfall", color = "black")
+  
+  
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(title = "Month"))
 
-# Convert the ggplot object to a plotly object
-p_plotly <- ggplotly(p_july) %>%
-  layout(hovermode = 'closest') %>%
-  config(displayModeBar = FALSE)
 
-# Display the plot
-p_plotly
 ```
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| fig-width: 10
+#| fig-height: 8
+#| column: body-outset-right
 
-Dec_mean <- December_data %>%
-  group_by(Year) %>%
-  summarise(MeanRainfall = round(mean(Daily_Rainfall_Total_mm, na.rm = TRUE), 2))
 
-# Create the ggplot object with tooltips for individual points
-p_decem <- ggplot(December_data, aes(x = Year, y = Daily_Rainfall_Total_mm)) +
-  geom_jitter(aes(color = Year, text = paste('Day:', Day, 'Month:', Month)), width = 0.2, alpha = 0.5) + 
-  geom_line(data = Dec_mean, aes(x = Year, y = MeanRainfall, group = 1), 
-            color = "black", size = 0.5, linetype = "dotted") + 
-  geom_point(data = Dec_mean, aes(x = Year, y = MeanRainfall), 
-             color = "black", size = 3, show.legend = FALSE) + 
-  labs(title = "Daily Rainfall in December (1983-2023)",
-       x = "Year",
-       y = "Rainfall Total (mm)") +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  annotate("text", x = 2, y = 16, label = "Mean Rainfall", color = "black")
+p_plotly <- ggplotly(p_combined) %>%
+  layout(hovermode = 'closest') 
 
-# Convert the ggplot object to a plotly object
-p_plotly <- ggplotly(p_decem) %>%
-  layout(hovermode = 'closest') %>%
-  config(displayModeBar = FALSE)
-
-# Display the plot
 p_plotly
 ```
 
