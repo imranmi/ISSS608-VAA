@@ -1684,6 +1684,13 @@
     "href": "Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html#plotting-the-slopegraph",
     "title": "Hands-on Exercise 6 - Visualising and Analysing Time-oriented Data",
     "section": "6.5.2 Plotting the Slopegraph",
-    "text": "6.5.2 Plotting the Slopegraph\nThe code below will be used to plot a basic slopegraph.\n\nrice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980)) %&gt;%\n  newggslopegraph(Year, Yield, Country,\n                Title = \"Rice Yield of Top 11 Asian Counties\",\n                SubTitle = \"1961-1980\")\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nFor effective data visualisation design, factor() is used convert the value type of Year field from numeric to factor."
+    "text": "6.5.2 Plotting the Slopegraph\nThe code below will be used to plot a basic slopegraph.\n\nrice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980)) %&gt;%\n  newggslopegraph(Year, Yield, Country,\n                Title = \"Rice Yield of Top 11 Asian Counties\",\n                SubTitle = \"1961-1980\",\n                Caption = NULL)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nFor effective data visualisation design, factor() is used convert the value type of Year field from numeric to factor."
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#additional-plots---for-self-reviewpractise",
+    "href": "Take-home-ex/Take-home-Ex3/Take-home_Ex3.html#additional-plots---for-self-reviewpractise",
+    "title": "Take-Home Exercise 3 - Be Weatherwise or Otherwise",
+    "section": "4.2 Additional Plots - for Self Review/Practise",
+    "text": "4.2 Additional Plots - for Self Review/Practise\n\npacman::p_load(CGPfunctions)\n\nThe below plots were added after the deadline, and just represents some new ideas on how to re-design the previous plots.\n1) Slopegraphs, instead of line plots\n\nrain_fall_summary %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1983, 1993, 2003, 2013, 2023)) %&gt;%\n  newggslopegraph(Year, RainyDays, Month,\n                Title = \"The number of rain days have increased in December, and decreased in July\",\n                SubTitle = \"1983-2023\",\n                Caption = \"Changi Climate station\") +\n  theme_tufte() + \n  theme(legend.position = \"none\")\n\n\n\n\n\nrain_fall_summary %&gt;%\n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1983, 1993, 2003, 2013, 2023)) %&gt;%\n  mutate(Mean_Rainfall = round(MeanRainfall, 2)) %&gt;%\n  newggslopegraph(Year, Mean_Rainfall, Month,\n                  Title = \"Average Rainfall has trended lower over the years (1983-2023)\",\n                  SubTitle = NULL,\n                  Caption = \"Changi Climate Station\") +\n                  theme_tufte() +\n                  theme(legend.position = \"none\")"
   }
 ]

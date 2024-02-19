@@ -116,6 +116,11 @@ kable(head(attacks))
 # 6.3 Calendar Heatmaps
 
 ```{r}
+#| fig-width: 12
+#| fig-height: 6
+#| column: body-outset-right
+
+
 grouped <- attacks %>% 
   count(wkday, hour) %>% 
   ungroup() %>%
@@ -196,6 +201,11 @@ top4_attacks <- attacks %>%
 Step 3: Plotting the Multiple Calender Heatmap by using ggplot2 package.
 
 ```{r}
+#| fig-width: 12
+#| fig-height: 6
+#| column: body-outset-right
+
+
 ggplot(top4_attacks, 
        aes(hour, 
            wkday, 
@@ -321,7 +331,8 @@ rice %>%
   filter(Year %in% c(1961, 1980)) %>%
   newggslopegraph(Year, Yield, Country,
                 Title = "Rice Yield of Top 11 Asian Counties",
-                SubTitle = "1961-1980")
+                SubTitle = "1961-1980",
+                Caption = NULL)
 ```
 
 ::: callout-tip
@@ -332,7 +343,53 @@ For effective data visualisation design, `factor()` is used convert the value 
 
 # 6.6 Plotting Practise
 
-Below are additional plots for practise
+Below are additional plots for practise.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+combined_data <- read_csv("data/combined_data.csv")
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+rain_fall_summary <- combined_data %>%
+  group_by(Year, Month) %>%
+  summarize(
+    MeanRainfall = mean(Daily_Rainfall_Total_mm, na.rm = TRUE),
+    RainyDays = sum(Daily_Rainfall_Total_mm > 0, na.rm = TRUE), # Count days with rain
+    .groups = 'drop'
+  )
+```
+
+```{r}
+rain_fall_summary %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1983, 1993, 2003, 2013, 2023)) %>%
+  newggslopegraph(Year, RainyDays, Month,
+                Title = "The number of rain days have increased in December,and decreased in July",
+                SubTitle = "1983-2023",
+                Caption = "Changi Climate station") +
+  theme_tufte() + 
+  theme(legend.position = "none")
+```
+
+```{r}
+rain_fall_summary %>%
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1983, 1993, 2003, 2013, 2023)) %>%
+  mutate(Mean_Rainfall = round(MeanRainfall, 2)) %>%
+  newggslopegraph(Year, Mean_Rainfall, Month,
+                  Title = "Average Rainfall has trended lower over the years (1983-2023)",
+                  SubTitle = NULL,
+                  Caption = "Changi Climate Station") +
+                  theme_tufte() +
+                  theme(legend.position = "none")
+  
+```
 
 # 6.7 References
 
