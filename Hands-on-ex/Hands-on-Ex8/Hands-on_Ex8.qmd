@@ -6,5 +6,7 @@ toc: true
 execute: 
   eval: true
   echo: true
+  freeze: true
   warning: false
+  message: false
 ---
