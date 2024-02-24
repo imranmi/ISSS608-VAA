@@ -1,0 +1,16 @@
+{
+  "hash": "f136f60fc48e087cb8f4a236ce39c840",
+  "result": {
+    "markdown": "---\ntitle: \"In-Class Exercise 3 - Creating Horizon plots\"\nAuthor: \"Imran Ibrahim\"\ndate: \"February 24, 2024\"\ndate-modified: \"last-modified\"\ntoc: true\nexecute: \n  eval: true\n  echo: true\n  freeze: true\n  message:  false\n  warning: false\n---\n\n\n# Getting Started\n\n## Loading R package and Importing Data\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse, ggHoriPlot, ggthemes, dplyr)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\naverp <- read_csv(\"data/AVERP.csv\") %>%\n  mutate(`Date` = dmy(`Date`))\n```\n:::\n\n\n## Plotting the horizon graph\n\n\n::: {.cell .column-body-outset-right}\n\n```{.r .cell-code}\naverp %>% \n  filter(Date >= \"2018-01-01\") %>%\n  ggplot() +\n  geom_horizon(aes(x = Date, y=Values), \n               origin = \"midpoint\", \n               horizonscale = 6)+\n  facet_grid(`Consumer Items`~.) +\n    theme_few() +\n  scale_fill_hcl(palette = 'RdBu') +\n  theme(panel.spacing.y=unit(0, \"lines\"), strip.text.y = element_text(\n    size = 5, angle = 0, hjust = 0),\n    legend.position = 'none',\n    axis.text.y = element_blank(),\n    axis.text.x = element_text(size=7),\n    axis.title.y = element_blank(),\n    axis.title.x = element_blank(),\n    axis.ticks.y = element_blank(),\n    panel.border = element_blank()\n    ) +\n    scale_x_date(expand=c(0,0), date_breaks = \"3 month\", date_labels = \"%b%y\") +\n  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')\n```\n\n::: {.cell-output-display}\n![](In-class_Ex3_files/figure-html/unnamed-chunk-3-1.png){width=1152}\n:::\n:::\n\n\n\\\n\\\n",
+    "supporting": [
+      "In-class_Ex3_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

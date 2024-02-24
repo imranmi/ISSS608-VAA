@@ -1,0 +1,14 @@
+{
+  "hash": "d17320f83c1564b2418cfffd574d03a4",
+  "result": {
+    "markdown": "---\ntitle: \"Take-home Exercise 1b\"\ndate: January 13, 2024\ndate-modified: \"last-modified\"\ntoc: true\nexecute: \n  eval: true\n  echo: true\n  freeze: true\n  warning: false\n  message: false\n---\n\n\n# Getting Started\n\n## Loading R package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse)\n```\n:::\n\n\n# Importing Data\n\n## Wrangling Data\n\nThe next segment of this exercise consists of improving existing visualizations ie Data Viz makeover.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
