@@ -1,0 +1,14 @@
+{
+  "hash": "4b18377488fc5d62907b89a7b4441fbc",
+  "result": {
+    "markdown": "---\ntitle: \"Hands-on Exercise 7a - Chropleth Mapping in R\"\ndate: February 25, 2024\nauthor: \"Imran Ibrahim\"\ndate-modified: \"last-modified\"\ntoc: true\nexecute: \n  eval: true\n  echo: true\n  freeze: true\n  warning: false\n  message: false\n---\n\n\n# Getting Started\n\n## Loading R package\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse)\n```\n:::\n\n\n# Importing Data\n\n## Wrangling Data\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

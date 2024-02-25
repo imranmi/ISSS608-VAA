@@ -1,6 +1,7 @@
 ---
 title: "Take-Home Exercise 3 - Be Weatherwise or Otherwise"
 date: February 5, 2024
+author: "Imran Ibrahim"
 date-modified: "last-modified"
 toc: true
 execute: 

@@ -1,6 +1,7 @@
 ---
-title: "Hands-on Exercise 7"
-date: January 1, 2024
+title: "Hands-on Exercise 7a - Chropleth Mapping in R"
+date: February 25, 2024
+author: "Imran Ibrahim"
 date-modified: "last-modified"
 toc: true
 execute: 

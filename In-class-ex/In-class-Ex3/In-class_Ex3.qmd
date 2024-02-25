@@ -1,6 +1,6 @@
 ---
 title: "In-Class Exercise 3 - Creating Horizon plots"
-Author: "Imran Ibrahim"
+author: "Imran Ibrahim"
 date: "February 24, 2024"
 date-modified: "last-modified"
 toc: true

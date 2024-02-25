@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 8 - Modelling, Visualising and Analysing Network Data with R"
+title: "Hands-on Exercise 7c - Analytical Mapping"
 date: February 25, 2024
 author: "Imran Ibrahim"
 date-modified: "last-modified"

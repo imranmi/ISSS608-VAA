@@ -35,10 +35,18 @@ website:
             href: Hands-on-ex/Hands-on-Ex5e/Hands-on_Ex5e.html
           - text: Hands-on Exercise 6 - Visualising and Analysing Time-oriented Data
             href: Hands-on-ex/Hands-on-Ex6/Hands-on_Ex6.html
-          - text: Hands-on Exercise 7
-            href: Hands-on-ex/Hands-on-Ex7/Hands-on_Ex7.html
-          - text: Hands-on Exercise 8
+          - text: Hands-on Exercise 7a - Chropleth Mapping in R
+            href: Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html
+          - text: Hands-on Exercise 7b - Visualising Geospatial Point Data
+            href: Hands-on-ex/Hands-on-Ex7b/Hands-on_Ex7b.html
+          - text: Hands-on Exercise 7c - Analytical Mapping
+            href: Hands-on-ex/Hands-on-Ex7c/Hands-on_Ex7c.html
+          - text: Hands-on Exercise 8 - Modelling, Visualising and Analysing Network Data with R
             href: Hands-on-ex/Hands-on-Ex8/Hands-on_Ex8.html
+          - text: Hands-on Exercise 9 - Visualising and Analysing Text Data
+            href: Hands-on-ex/Hands-on-Ex9/Hands-on_Ex9.html
+          - text: Hands-on Exercise 10 - Information Dashboard Design:R methods
+            href: Hands-on-ex/Hands-on-Ex10/Hands-on_Ex10.html
       - text: In-class Exercises
         menu: 
           - text: In-class Exercise 1

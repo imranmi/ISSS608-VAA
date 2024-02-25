@@ -1594,5 +1594,26 @@
     "title": "In-Class Exercise 3 - Creating Horizon plots",
     "section": "",
     "text": "averp %&gt;% \n  filter(Date &gt;= \"2018-01-01\") %&gt;%\n  ggplot() +\n  geom_horizon(aes(x = Date, y=Values), \n               origin = \"midpoint\", \n               horizonscale = 6)+\n  facet_grid(`Consumer Items`~.) +\n    theme_few() +\n  scale_fill_hcl(palette = 'RdBu') +\n  theme(panel.spacing.y=unit(0, \"lines\"), strip.text.y = element_text(\n    size = 5, angle = 0, hjust = 0),\n    legend.position = 'none',\n    axis.text.y = element_blank(),\n    axis.text.x = element_text(size=7),\n    axis.title.y = element_blank(),\n    axis.title.x = element_blank(),\n    axis.ticks.y = element_blank(),\n    panel.border = element_blank()\n    ) +\n    scale_x_date(expand=c(0,0), date_breaks = \"3 month\", date_labels = \"%b%y\") +\n  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html",
+    "href": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html",
+    "title": "Hands-on Exercise 7a - Chropleth Mapping in R",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html#loading-r-package",
+    "href": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html#loading-r-package",
+    "title": "Hands-on Exercise 7a - Chropleth Mapping in R",
+    "section": "",
+    "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html#wrangling-data",
+    "href": "Hands-on-ex/Hands-on-Ex7a/Hands-on_Ex7a.html#wrangling-data",
+    "title": "Hands-on Exercise 7a - Chropleth Mapping in R",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data"
   }
 ]
