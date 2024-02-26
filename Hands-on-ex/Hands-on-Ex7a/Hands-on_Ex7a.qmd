@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 7a - Chropleth Mapping in R"
+title: "Hands-on Exercise 7a - Choropleth Mapping in R"
 date: February 25, 2024
 author: "Imran Ibrahim"
 date-modified: "last-modified"
@@ -40,13 +40,13 @@ pacman::p_load(sf, tmap, tidyverse)
 
 Two data set will be used to create the choropleth map. They are:
 
--   Master Plan 2014 Subzone Boundary (Web) (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format. It can be downloaded at [data.gov.sg](https://data.gov.sg/) This is a geospatial data. It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2014.
+-   Master Plan 2014 Subzone Boundary (Web) (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format. It can be downloaded at [data.gov.sg](https://data.gov.sg/) This is geospatial data and consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA's Master Plan 2014.
 
--   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is an aspatial data fie. It can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, but it’s PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
+-   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is aspatial data and can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, it’s PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
 
 ## 7.3.1 Importing Geospatial Data into R
 
-The code chunk below uses the *st_read()* function of **sf** package to import `MP14_SUBZONE_WEB_PL` shapefile into R as a simple feature data frame called `mpsz`.
+The code below uses the *st_read()* function of **sf** package to import `MP14_SUBZONE_WEB_PL` shapefile into R as a simple feature data frame called `mpsz`.
 
 ```{r}
 mpsz <- st_read(dsn = "data/geospatial", 
@@ -61,7 +61,7 @@ mpsz
 
 ## 7.3.2 Importing Attribute Data into R
 
-Next, we will import *respopagsex2011to2020.csv* file into RStudio and save the file into an R dataframe called *popagsex*.
+Next, we will import *respopagsex2011to2020.csv* file into RStudio and save the file into an R dataframe called *popdata*.
 
 The task will be performed by using *read_csv()* function of **readr** package.
 
@@ -190,7 +190,7 @@ In the following sub-section, we will go through the tmap functions that used to
 
 ### 7.4.2.1 Drawing a base map
 
-The basic building block of **tmap** is *tm_shape()* followed by one or more layer elemments such as *tm_fill()* and *tm_polygons()*.
+The basic building block of **tmap** is *tm_shape()* followed by one or more layer elements such as *tm_fill()* and *tm_polygons()*.
 
 In the code chunk below, *tm_shape()* is used to define the input data (i.e *mpsz_pop2020*) and *tm_polygons()* is used to draw the planning subzone polygons
 
