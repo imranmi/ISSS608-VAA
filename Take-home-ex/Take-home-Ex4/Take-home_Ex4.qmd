@@ -16,7 +16,10 @@ execute:
 
 ```{r}
 pacman::p_load(sf, tidyverse, tmap, dplyr,
-               raster, spatstat, spdep)
+               raster, spatstat, spdep,
+               lubridate, leaflet,
+               plotly, DT, viridis,
+               ggplot2, sfdep)
 ```
 
 ## Importing the ACLED data
@@ -44,7 +47,7 @@ ACLED captures event data from national, sub-national and other credible media s
 \
 However, due to the dynamic nature of conflict and politics, country/administrative boundaries and borders can sometimes be fluid. Names of administrative areas were found to have changed; either disaggregated into new countries/administrative areas or previously active but now defunct. Further, some administrative areas were agglomerated and upgraded into higher tier administrative areas.
 
-As part of our data cleaning and preparation process, we had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with our downloaded shape files from MIMU.
+As part of our data cleaning and preparation process, I had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with my downloaded shape files from MIMU.
 :::
 
 # Data Preparation and Cleaning
@@ -82,7 +85,7 @@ unique_acled_regions1 <- unique(ACLED_MMR$admin1)
 unique_acled_regions1
 ```
 
-We will write a simple function to identify the discrepancies between the shape file and our region names in our main dataset.
+I will write a simple function to identify the discrepancies between the shape file and the region names in our main dataset.
 
 ```{r}
 # Find the unique region names that are in 'unique_acled_regions1' but not in 'unique_regions_mimu1'
@@ -171,7 +174,7 @@ unique_acled_regions2 <- unique(ACLED_MMR$admin2)
 unique_acled_regions2
 ```
 
-We will write a simple function to identify the discrepancies between the shape file and our state/district names in our main dataset.
+I will write a simple function to identify the discrepancies between the shape file and our state/district names in our main dataset.
 
 ```{r}
 # Find the unique region names that are in 'unique_acled_regions2' but not in 'unique_regions_mimu2'
@@ -290,7 +293,53 @@ ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, data_prepared_2,
                             by = c("DT" = "admin2"))
 ```
 
-### Choropleth Map of Incidents & Fatalities
+```{r}
+class(ACLED_MMR_admin1)
+```
+
+```{r}
+class(ACLED_MMR_admin2)
+```
+
+Checking that the total number of Incidents and Fatalities in the new datasets match the original attribute file
+
+```{r}
+total_incidents3 <- sum(ACLED_MMR_admin1$Incidents)
+
+# Calculate the total number of fatalities
+total_fatalities3 <- sum(ACLED_MMR_admin1$Fatalities)
+
+# Print the totals
+print(paste("Total Incidents:", total_incidents3))
+print(paste("Total Fatalities:", total_fatalities3))
+```
+
+```{r}
+total_incidents4 <- sum(ACLED_MMR_admin2$Incidents)
+
+# Calculate the total number of fatalities
+total_fatalities4 <- sum(ACLED_MMR_admin2$Fatalities)
+
+# Print the totals
+print(paste("Total Incidents:", total_incidents4))
+print(paste("Total Fatalities:", total_fatalities4))
+```
+
+# Choropleth Maps
+
+## Choropleth Map of Incidents & Fatalities by Admin1 (Region/State)
+
+In the Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
+
+-   variable ie Incidents or Fatalities
+
+-   specific year,
+
+-   year range,
+
+-   data classification type, and
+
+-   number of clusters (n)
 
 ```{r}
 tm_shape(ACLED_MMR_admin1)+
@@ -300,51 +349,67 @@ tm_shape(ACLED_MMR_admin1)+
   tm_borders(alpha = 0.5)
 ```
 
-```{r}
-tm_shape(ACLED_MMR_admin1)+
-  tm_fill("Fatalities",
-          n = 5,
-          style = "quantile") +
-  tm_borders(alpha = 0.5)
-```
+## Choropleth map of Incidents & Fatalities by Admin2 level (by District)
 
-```{r}
-tm_shape(ACLED_MMR_admin2)+
-  tm_fill("Incidents",
-          n = 5,
-          style = "quantile") +
-  tm_borders(alpha = 0.5)
-```
+Similarly, in the Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
 
-```{r}
-tm_shape(ACLED_MMR_admin2)+
-  tm_fill("Fatalities",
-          n = 5,
-          style = "quantile") +
-  tm_borders(alpha = 0.5)
-```
+-   Variable ie Incidents or Fatalities
+
+-   specific year,
+
+-   year range,
+
+-   data classification type, and
+
+-   number of clusters (n)
 
 ::: panel-tabset
-## Fatalities
-
-```{r}
-tm_shape(ACLED_MMR_admin1) +
-  tm_fill("Fatalities",
-          style = "quantile",
-          palette = "Reds",
-          thres.poly = 0) + 
-  tm_facets(by="ST", 
-            free.coords=TRUE, 
-            drop.shapes=TRUE) +
-  tm_layout(legend.show = FALSE,
-            title.position = c("center", "center"), 
-            title.size = 20) +
-  tm_borders(alpha = 0.5)
-```
-
 ## Incidents
 
 ```{r}
+tm_shape(ACLED_MMR_admin2)+
+  tm_fill("Incidents",
+          n = 6,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Fatalities
+
+```{r}
+tm_shape(ACLED_MMR_admin2)+
+  tm_fill("Fatalities",
+          n = 6,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+:::
+
+## Incidents and Fatalities by individual regions using `tm_facet()`
+
+::: panel-tabset
+## Fatalities by Region
+
+```{r}
+tm_shape(ACLED_MMR_admin1) +
+  tm_fill("Fatalities",
+          style = "quantile",
+          palette = "Reds",
+          thres.poly = 0) + 
+  tm_facets(by="ST", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+
+## Incidents by Region
+
+```{r}
 tm_shape(ACLED_MMR_admin1) +
   tm_fill("Incidents",
           style = "quantile",
@@ -357,5 +422,174 @@ tm_shape(ACLED_MMR_admin1) +
             title.position = c("center", "center"), 
             title.size = 20) +
   tm_borders(alpha = 0.5)
+```
+:::
+
+Instead on the plots above, which does not provide specific information on the trends, we can also consider the below line charts.
+
+::: panel-tabset
+## Line plots - Fatalities by Region over time
+
+```{r}
+ggplot(ACLED_MMR_admin1, aes(x = year, y = Fatalities, group = ST, color = ST)) +
+  geom_line() + # Creates line plots
+  facet_wrap(~ ST, scales = "free_y") + # Creates a separate plot for each region
+  theme_minimal() + # Uses a minimal theme for the plot
+  labs(title = "Fatalities Over Time by Region",
+       x = "Time",
+       y = "Fatalities") +
+  theme(legend.position = "none")
+```
+
+## Line plots - Incidents by Region over time
+
+```{r}
+ggplot(ACLED_MMR_admin1, aes(x = year, y = Incidents, group = ST, color = ST)) +
+  geom_line() + # Creates line plots
+  facet_wrap(~ ST, scales = "free_y") + # Creates a separate plot for each region
+  theme_minimal() + # Uses a minimal theme for the plot
+  labs(title = "Incidents Over Time by Region",
+       x = "Time",
+       y = "Fatalities") +
+  theme(legend.position = "none")
+```
+:::
+
+# Proportional Symbol Maps
+
+Proportional symbol maps (also known as graduate symbol maps) are a class of maps that use the visual variable of size to represent differences in the magnitude of a discrete, abruptly changing phenomenon, e.g. counts of people.
+
+First I will convert the ACLED_MMR_1 data set to become an sf object
+
+```{r}
+# Convert conflict data to an sf object
+conflict_sf <- st_as_sf(ACLED_MMR_1, coords = c("longitude", "latitude"), crs = 4326)
+
+```
+
+```{r}
+class(conflict_sf)
+```
+
+```{r}
+conflict_sf
+```
+
+First I create subsets for each event type, by default each event subset will inherit the SF object characteric
+
+```{r}
+Battles <- filter(conflict_sf, event_type == "Battles")
+Violence_CV <- filter(conflict_sf, event_type == "Violence against civilians")
+Protests <- filter(conflict_sf, event_type == "Protests")
+Riots <- filter(conflict_sf, event_type == "Riots")
+Explosions <- filter(conflict_sf, event_type == "Explosions/Remote violence")
+Strategic_dev <- filter(conflict_sf, event_type == "Strategic developments")
+```
+
+```{r}
+class(Battles)
+```
+
+## Visualising of Fatalities by Event Type
+
+In the shiny App , we can enable users to filter by
+
+-   specific year,
+
+-   year range, and
+
+-   event_type
+
+-   range of number of fatalities
+
+By using subsets of event types which have been converted to sf objects.
+
+I will use the Geometry points from our data sets to plot the points of events in the maps from the leaflet package.
+
+::: panel-tabset
+## Battles
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Battles) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = mmr_shp_mimu_1, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  
+  addCircleMarkers(popup = ~paste("Event: Battles<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Violence against civilians
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Violence_CV) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = mmr_shp_mimu_1, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  
+  addCircleMarkers(popup = ~paste("Event: Violence on Civillians<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Protests
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Protests) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = mmr_shp_mimu_1, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  
+  addCircleMarkers(popup = ~paste("Event: Protests<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Riots
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Riots) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = mmr_shp_mimu_1, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  
+  addCircleMarkers(popup = ~paste("Event: Riots<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Explosions/Remote Devices
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Explosions) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = mmr_shp_mimu_1, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  
+  addCircleMarkers(popup = ~paste("Event: Explosions<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
 ```
 :::
