@@ -6,7 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-01">
+<meta name="author" content="Imran Ibrahim">
+<meta name="dcterms.date" content="2024-02-25">
 
 <title>Imran’s Visual Analytics page - Take-Home Exercise 4</title>
 <style>
@@ -286,10 +287,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a>
   <ul class="collapse">
   <li><a href="#loading-r-package" id="toc-loading-r-package" class="nav-link" data-scroll-target="#loading-r-package">Loading R package</a></li>
+  <li><a href="#importing-the-acled-data" id="toc-importing-the-acled-data" class="nav-link" data-scroll-target="#importing-the-acled-data">Importing the ACLED data</a></li>
+  <li><a href="#downloading-and-loading-the-shape-files-for-country" id="toc-downloading-and-loading-the-shape-files-for-country" class="nav-link" data-scroll-target="#downloading-and-loading-the-shape-files-for-country">Downloading and loading the shape files for country</a></li>
   </ul></li>
-  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data">Importing Data</a>
+  <li><a href="#data-preparation-and-cleaning" id="toc-data-preparation-and-cleaning" class="nav-link" data-scroll-target="#data-preparation-and-cleaning">Data Preparation and Cleaning</a>
   <ul class="collapse">
-  <li><a href="#wrangling-data" id="toc-wrangling-data" class="nav-link" data-scroll-target="#wrangling-data">Wrangling Data</a></li>
+  <li><a href="#loading-admin1administrative-regionarea-shape-files" id="toc-loading-admin1administrative-regionarea-shape-files" class="nav-link" data-scroll-target="#loading-admin1administrative-regionarea-shape-files">Loading Admin1(administrative region/area) shape files</a></li>
+  <li><a href="#loading-admin2-administrative-regionarea-shape-files" id="toc-loading-admin2-administrative-regionarea-shape-files" class="nav-link" data-scroll-target="#loading-admin2-administrative-regionarea-shape-files">Loading Admin2 (administrative region/area) shape files</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#choropleth-map-of-incidents-fatalities" id="toc-choropleth-map-of-incidents-fatalities" class="nav-link" data-scroll-target="#choropleth-map-of-incidents-fatalities">Choropleth Map of Incidents &amp; Fatalities</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -306,18 +314,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Imran Ibrahim </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 1, 2024</p>
+      <p class="date">February 25, 2024</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 7, 2024</p>
+      <p class="date-modified">March 1, 2024</p>
     </div>
   </div>
     
@@ -331,14 +345,508 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="loading-r-package" class="level2">
 <h2 class="anchored" data-anchor-id="loading-r-package">Loading R package</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, tidyverse, tmap, dplyr,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               raster, spatstat, spdep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importing-the-acled-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-the-acled-data">Importing the ACLED data</h2>
+<p>Country specific data from the Armed Conflict Location &amp; Event Data Project (ACLED) can be downloaded at <a href="https://acleddata.com/data-export-tool/" class="uri">https://acleddata.com/data-export-tool/</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ACLED_MMR <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/MMR.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ACLED_MMR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame" </code></pre>
+</div>
+</div>
+</section>
+<section id="downloading-and-loading-the-shape-files-for-country" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-and-loading-the-shape-files-for-country">Downloading and loading the shape files for country</h2>
+<p>Shape files can be downloaded from the <a href="https://themimu.info/about-us">Myanmmar Information Management Unit (MIMU)</a> website at <a href="https://geonode.themimu.info/layers/?limit=100&amp;offset=0" class="uri">https://geonode.themimu.info/layers/?limit=100&amp;offset=0</a></p>
+<p>This source was chosen over <a href="https://gadm.org/data.html">GADM</a> and <a href="https://www.geoboundaries.org/">GeoBoundaries</a> due to its updated administrative region information and map levels.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important- Data Quality Issue with ACLED data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ACLED captures event data from national, sub-national and other credible media sources, and populates event locations based on the last known information.<br>
+<br>
+However, due to the dynamic nature of conflict and politics, country/administrative boundaries and borders can sometimes be fluid. Names of administrative areas were found to have changed; either disaggregated into new countries/administrative areas or previously active but now defunct. Further, some administrative areas were agglomerated and upgraded into higher tier administrative areas.</p>
+<p>As part of our data cleaning and preparation process, we had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with our downloaded shape files from MIMU.</p>
+</div>
 </div>
 </section>
 </section>
-<section id="importing-data" class="level1">
-<h1>Importing Data</h1>
-<section id="wrangling-data" class="level2">
-<h2 class="anchored" data-anchor-id="wrangling-data">Wrangling Data</h2>
+<section id="data-preparation-and-cleaning" class="level1">
+<h1>Data Preparation and Cleaning</h1>
+<section id="loading-admin1administrative-regionarea-shape-files" class="level2">
+<h2 class="anchored" data-anchor-id="loading-admin1administrative-regionarea-shape-files">Loading Admin1(administrative region/area) shape files</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mmr_shp_mimu_1 <span class="ot">&lt;-</span>  <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial3"</span>,  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"mmr_polbnda2_adm1_250k_mimu_1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `mmr_polbnda2_adm1_250k_mimu_1' from data source 
+  `C:\imranmi\ISSS608-VAA\Take-home-ex\Take-home-Ex4\data\geospatial3' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 18 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.1721 ymin: 9.696844 xmax: 101.17 ymax: 28.54554
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mmr_shp_mimu_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sf"         "data.frame"</code></pre>
+</div>
+</div>
+<p>The Shape file for admin1 level map, is an SF object, with geometry type: Multipolygon</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_geometry</span>(mmr_shp_mimu_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 18 features 
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.1721 ymin: 9.696844 xmax: 101.17 ymax: 28.54554
+Geodetic CRS:  WGS 84
+First 5 geometries:</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>unique_regions_mimu1 <span class="ot">&lt;-</span> <span class="fu">unique</span>(mmr_shp_mimu_1<span class="sc">$</span>ST)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>unique_regions_mimu1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Ayeyarwady"   "Bago (East)"  "Bago (West)"  "Chin"         "Kachin"      
+ [6] "Kayah"        "Kayin"        "Magway"       "Mandalay"     "Mon"         
+[11] "Nay Pyi Taw"  "Rakhine"      "Sagaing"      "Shan (East)"  "Shan (North)"
+[16] "Shan (South)" "Tanintharyi"  "Yangon"      </code></pre>
+</div>
+</div>
+<p>There are 18 admin1 levels or states/regions in mmr_shp_mimu_1</p>
+<p>Lets compare with our admin1 levels in our main dataset ACLED_MMR</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>unique_acled_regions1 <span class="ot">&lt;-</span> <span class="fu">unique</span>(ACLED_MMR<span class="sc">$</span>admin1)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>unique_acled_regions1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Rakhine"     "Bago-East"   "Sagaing"     "Shan-North"  "Mandalay"   
+ [6] "Mon"         "Yangon"      "Shan-South"  "Kayin"       "Kachin"     
+[11] "Magway"      "Ayeyarwady"  "Nay Pyi Taw" "Kayah"       "Chin"       
+[16] "Bago-West"   "Tanintharyi" "Shan-East"  </code></pre>
+</div>
+</div>
+<p>We will write a simple function to identify the discrepancies between the shape file and our region names in our main dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique region names that are in 'unique_acled_regions1' but not in 'unique_regions_mimu1'</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mismatched_admin1 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(unique_acled_regions1, unique_regions_mimu1)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(mismatched_admin1) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"The following region names from 'acled_mmr' do not match any in 'mimu1':"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mismatched_admin1)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"All unique region names in 'acled_mmr' match the unique region names in 'mimu1.'"</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "The following region names from 'acled_mmr' do not match any in 'mimu1':"
+[1] "Bago-East"  "Shan-North" "Shan-South" "Bago-West"  "Shan-East" </code></pre>
+</div>
+</div>
+<p>Lets harmonize the names in both data files. I will resave it to a new data set called ACLED_MMR_1</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ACLED_MMR_1 <span class="ot">&lt;-</span> ACLED_MMR <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">admin1 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    admin1 <span class="sc">==</span> <span class="st">"Bago-East"</span> <span class="sc">~</span> <span class="st">"Bago (East)"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    admin1 <span class="sc">==</span> <span class="st">"Bago-West"</span> <span class="sc">~</span> <span class="st">"Bago (West)"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    admin1 <span class="sc">==</span> <span class="st">"Shan-North"</span> <span class="sc">~</span> <span class="st">"Shan (North)"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    admin1 <span class="sc">==</span> <span class="st">"Shan-South"</span> <span class="sc">~</span> <span class="st">"Shan (South)"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    admin1 <span class="sc">==</span> <span class="st">"Shan-East"</span> <span class="sc">~</span> <span class="st">"Shan (East)"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as.character</span>(admin1)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Checking if our changes are successful.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique admin 1 region names from 'ACLED_MMR_1'</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>unique_acled_regions1 <span class="ot">&lt;-</span> <span class="fu">unique</span>(ACLED_MMR_1<span class="sc">$</span>admin1)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique region names from 'mmr_shp_mimu_1'</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>unique_map_regions_mimu1 <span class="ot">&lt;-</span> <span class="fu">unique</span>(mmr_shp_mimu_1<span class="sc">$</span>ST)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique region names that are in 'unique_acled_regions1' but not in 'unique_map_regions_mimu1'</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>mismatched_regions <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(unique_acled_regions1, unique_map_regions_mimu1)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(mismatched_regions) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"The following region names from 'acled_mmr_1' do not match any in 'mmr_shp_mimu_1':"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mismatched_regions)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"All unique region names in 'acled_mmr_1' match the unique region names in 'mmmr_shp_mimu_1.'"</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "All unique region names in 'acled_mmr_1' match the unique region names in 'mmmr_shp_mimu_1.'"</code></pre>
+</div>
+</div>
+<p>Lets do a sample plot to see how our country map looks like at admin1 level</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mmr_shp_mimu_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="loading-admin2-administrative-regionarea-shape-files" class="level2">
+<h2 class="anchored" data-anchor-id="loading-admin2-administrative-regionarea-shape-files">Loading Admin2 (administrative region/area) shape files</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mmr_shp_mimu_2 <span class="ot">&lt;-</span>  <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial3"</span>,  </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">layer =</span> <span class="st">"mmr_polbnda_adm2_250k_mimu"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `mmr_polbnda_adm2_250k_mimu' from data source 
+  `C:\imranmi\ISSS608-VAA\Take-home-ex\Take-home-Ex4\data\geospatial3' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 80 features and 7 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.1721 ymin: 9.696844 xmax: 101.17 ymax: 28.54554
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mmr_shp_mimu_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sf"         "data.frame"</code></pre>
+</div>
+</div>
+<p>The Shape file for admin2 level map, is an SF object, with geometry type: Multipolygon</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_geometry</span>(mmr_shp_mimu_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Geometry set for 80 features 
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.1721 ymin: 9.696844 xmax: 101.17 ymax: 28.54554
+Geodetic CRS:  WGS 84
+First 5 geometries:</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>unique_regions_mimu2 <span class="ot">&lt;-</span> <span class="fu">unique</span>(mmr_shp_mimu_2<span class="sc">$</span>DT)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>unique_regions_mimu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Hinthada"                        "Labutta"                        
+ [3] "Maubin"                          "Myaungmya"                      
+ [5] "Pathein"                         "Pyapon"                         
+ [7] "Bago"                            "Taungoo"                        
+ [9] "Pyay"                            "Thayarwady"                     
+[11] "Falam"                           "Hakha"                          
+[13] "Matupi"                          "Mindat"                         
+[15] "Bhamo"                           "Mohnyin"                        
+[17] "Myitkyina"                       "Puta-O"                         
+[19] "Bawlake"                         "Loikaw"                         
+[21] "Hpa-An"                          "Hpapun"                         
+[23] "Kawkareik"                       "Myawaddy"                       
+[25] "Gangaw"                          "Magway"                         
+[27] "Minbu"                           "Pakokku"                        
+[29] "Thayet"                          "Kyaukse"                        
+[31] "Maungdaw"                        "Mrauk-U"                        
+[33] "Sittwe"                          "Thandwe"                        
+[35] "Hkamti"                          "Kale"                           
+[37] "Kanbalu"                         "Katha"                          
+[39] "Kawlin"                          "Mawlaik"                        
+[41] "Monywa"                          "Naga Self-Administered Zone"    
+[43] "Sagaing"                         "Shwebo"                         
+[45] "Tamu"                            "Yinmarbin"                      
+[47] "Kengtung"                        "Monghsat"                       
+[49] "Tachileik"                       "Hopang"                         
+[51] "Kokang Self-Administered Zone"   "Kyaukme"                        
+[53] "Lashio"                          "Matman"                         
+[55] "Mongmit"                         "Muse"                           
+[57] "Pa Laung Self-Administered Zone" "Danu Self-Administered Zone"    
+[59] "Langkho"                         "Loilen"                         
+[61] "Pa-O Self-Administered Zone"     "Taunggyi"                       
+[63] "Dawei"                           "Kawthoung"                      
+[65] "Mandalay"                        "Meiktila"                       
+[67] "Myingyan"                        "Nyaung-U"                       
+[69] "Pyinoolwin"                      "Yamethin"                       
+[71] "Mawlamyine"                      "Thaton"                         
+[73] "Det Khi Na"                      "Oke Ta Ra"                      
+[75] "Kyaukpyu"                        "Myeik"                          
+[77] "Yangon (East)"                   "Yangon (North)"                 
+[79] "Yangon (South)"                  "Yangon (West)"                  </code></pre>
+</div>
+</div>
+<p>There are 80 admin2 levels or states/districts in mmr_shp_mimu_2</p>
+<p>Lets compare with our admin2 levels in our main dataset ACLED_MMR</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>unique_acled_regions2 <span class="ot">&lt;-</span> <span class="fu">unique</span>(ACLED_MMR<span class="sc">$</span>admin2)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>unique_acled_regions2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Maungdaw"                        "Bago"                           
+ [3] "Shwebo"                          "Kyaukme"                        
+ [5] "Pyinoolwin"                      "Muse"                           
+ [7] "Sittwe"                          "Yinmarbin"                      
+ [9] "Thaton"                          "Yangon-North"                   
+[11] "Pa-O Self-Administered Zone"     "Hpapun"                         
+[13] "Kyaukpyu"                        "Yangon-West"                    
+[15] "Mongmit"                         "Bhamo"                          
+[17] "Mrauk-U"                         "Yangon-East"                    
+[19] "Yangon-South"                    "Monywa"                         
+[21] "Gangaw"                          "Pathein"                        
+[23] "Katha"                           "Taungoo"                        
+[25] "Kanbalu"                         "Lashio"                         
+[27] "Mawlamyine"                      "Myitkyina"                      
+[29] "Kawkareik"                       "Loilen"                         
+[31] "Mandalay"                        "Kawlin"                         
+[33] "Kyaukse"                         "Magway"                         
+[35] "Meiktila"                        "Pakokku"                        
+[37] "Taunggyi"                        "Tamu"                           
+[39] "Nay Pyi Taw"                     "Mohnyin"                        
+[41] "Kale"                            "Det Khi Na"                     
+[43] "Myingyan"                        "Loikaw"                         
+[45] "Matupi"                          "Pyay"                           
+[47] "Sagaing"                         "Myeik"                          
+[49] "Dawei"                           "Thayarwady"                     
+[51] "Thandwe"                         "Mawlaik"                        
+[53] "Bawlake"                         "Pyapon"                         
+[55] "Hinthada"                        "Thayet"                         
+[57] "Pa Laung Self-Administered Zone" "Mindat"                         
+[59] "Hkamti"                          "Kokang Self-Administered Zone"  
+[61] "Hpa-An"                          "Danu Self-Administered Zone"    
+[63] "Myawaddy"                        "Maubin"                         
+[65] "Hakha"                           "Falam"                          
+[67] "Minbu"                           "Monghsat"                       
+[69] "Puta-O"                          "Hopang"                         
+[71] "Nyaung-U"                        "Kawthoung"                      
+[73] "Yamethin"                        "Yangon"                         
+[75] "Myaungmya"                       "Mong Pawk (Wa SAD)"             
+[77] "Oke Ta Ra"                       "Matman"                         
+[79] "Kengtung"                        "Naga Self-Administered Zone"    
+[81] "Labutta"                         "Langkho"                        
+[83] "Tachileik"                      </code></pre>
+</div>
+</div>
+<p>We will write a simple function to identify the discrepancies between the shape file and our state/district names in our main dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique region names that are in 'unique_acled_regions2' but not in 'unique_regions_mimu2'</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>mismatched_admin2 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(unique_acled_regions2, unique_regions_mimu2)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(mismatched_admin2) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"The following region names from 'acled_mmr' do not match any in 'mimu2':"</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mismatched_admin2)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"All unique region names in 'acled_mmr' match the unique region names in 'mimu2.'"</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "The following region names from 'acled_mmr' do not match any in 'mimu2':"
+[1] "Yangon-North"       "Yangon-West"        "Yangon-East"       
+[4] "Yangon-South"       "Nay Pyi Taw"        "Yangon"            
+[7] "Mong Pawk (Wa SAD)"</code></pre>
+</div>
+</div>
+<p>Lets harmonize the names in both data files. I will resave it to the previous data set called ACLED_MMR_1</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ACLED_MMR_1 <span class="ot">&lt;-</span> ACLED_MMR_1 <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">admin2 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Yangon-East"</span> <span class="sc">~</span> <span class="st">"Yangon (East)"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Yangon-West"</span> <span class="sc">~</span> <span class="st">"Yangon (West)"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Yangon-North"</span> <span class="sc">~</span> <span class="st">"Yangon (North)"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Yangon-South"</span> <span class="sc">~</span> <span class="st">"Yangon (South)"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Mong Pawk (Wa SAD)"</span> <span class="sc">~</span> <span class="st">"Tachileik"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Nay Pyi Taw"</span> <span class="sc">~</span> <span class="st">"Det Khi Na"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    admin2 <span class="sc">==</span> <span class="st">"Yangon"</span> <span class="sc">~</span> <span class="st">"Yangon (West)"</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as.character</span>(admin2)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Checking if our changes are successful.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique admin 2 district names from 'ACLED_MMR_1'</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>unique_acled_regions2 <span class="ot">&lt;-</span> <span class="fu">unique</span>(ACLED_MMR_1<span class="sc">$</span>admin2)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique district names from 'mmr_shp_mimu_2'</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>unique_map_regions_mimu2 <span class="ot">&lt;-</span> <span class="fu">unique</span>(mmr_shp_mimu_2<span class="sc">$</span>DT)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the unique district names that are in 'unique_acled_regions2' but not in 'unique_map_regions_mimu2'</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>mismatched_regions2 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(unique_acled_regions2, unique_map_regions_mimu2)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(mismatched_regions2) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"The following district names from 'acled_mmr_1' do not match any in 'mmr_shp_mimu_2':"</span>)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mismatched_regions2)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"All unique district names in 'acled_mmr_1' match the unique district names in 'mmmr_shp_mimu_2.'"</span>)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "All unique district names in 'acled_mmr_1' match the unique district names in 'mmmr_shp_mimu_2.'"</code></pre>
+</div>
+</div>
+<p>Lets do a sample plot to see how our country map looks like at admin2 (districts) level.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mmr_shp_mimu_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="data-wrangling" class="level1">
+<h1>Data Wrangling</h1>
+<p>For the purposes of plotting choropleth maps, I will first create subsets for each admin level</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>data_prepared_1 <span class="ot">&lt;-</span> ACLED_MMR_1 <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(year, admin1) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">Incidents =</span> <span class="fu">n</span>(),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fatalities =</span> <span class="fu">sum</span>(fatalities, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Checking the total sums of incidents and fatalities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total number of incidents</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>total_incidents1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(data_prepared_1<span class="sc">$</span>Incidents)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total number of fatalities</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>total_fatalities1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(data_prepared_1<span class="sc">$</span>Fatalities)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the totals</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Total Incidents:"</span>, total_incidents1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Total Incidents: 57198"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Total Fatalities:"</span>, total_fatalities1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Total Fatalities: 57593"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>data_prepared_2 <span class="ot">&lt;-</span> ACLED_MMR_1 <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(year, admin2) <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">Incidents =</span> <span class="fu">n</span>(),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">Fatalities =</span> <span class="fu">sum</span>(fatalities, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Checking the total sums of incidents and fatalities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total number of incidents</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>total_incidents2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(data_prepared_2<span class="sc">$</span>Incidents)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total number of fatalities</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>total_fatalities2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(data_prepared_2<span class="sc">$</span>Fatalities)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the totals</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Total Incidents:"</span>, total_incidents2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Total Incidents: 57198"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Total Fatalities:"</span>, total_fatalities2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Total Fatalities: 57593"</code></pre>
+</div>
+</div>
+<p>Next, I will do a spatial join between my shape files and attribute files</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ACLED_MMR_admin1 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(mmr_shp_mimu_1, data_prepared_1,</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"ST"</span> <span class="ot">=</span> <span class="st">"admin1"</span>))</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>ACLED_MMR_admin2 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(mmr_shp_mimu_2, data_prepared_2,</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"DT"</span> <span class="ot">=</span> <span class="st">"admin2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="choropleth-map-of-incidents-fatalities" class="level3">
+<h3 class="anchored" data-anchor-id="choropleth-map-of-incidents-fatalities">Choropleth Map of Incidents &amp; Fatalities</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin1)<span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Incidents"</span>,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin1)<span class="sc">+</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Fatalities"</span>,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>) <span class="sc">+</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin2)<span class="sc">+</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Incidents"</span>,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin2)<span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Fatalities"</span>,</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Fatalities</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Incidents</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin1) <span class="sc">+</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Fatalities"</span>,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">"Reds"</span>,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">thres.poly =</span> <span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_facets</span>(<span class="at">by=</span><span class="st">"ST"</span>, </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">free.coords=</span><span class="cn">TRUE</span>, </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">drop.shapes=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.show =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">title.position =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"center"</span>), </span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">title.size =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ACLED_MMR_admin1) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"Incidents"</span>,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"quantile"</span>,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">"Reds"</span>,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">thres.poly =</span> <span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_facets</span>(<span class="at">by=</span><span class="st">"ST"</span>, </span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">free.coords=</span><span class="cn">TRUE</span>, </span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">drop.shapes=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.show =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">title.position =</span> <span class="fu">c</span>(<span class="st">"center"</span>, <span class="st">"center"</span>), </span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">title.size =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex4_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 </section>

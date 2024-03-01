@@ -112,7 +112,7 @@ tm_bubbles(col = "red",
            border.lwd = 1)
 ```
 
-## 7.3.3 Using a different colour 
+## 7.3.3 Using a different colour
 
 The proportional symbol map can be further improved by using the colour visual attribute. In the code chunks below, *OUTLET_TYPE* variable is used as the colour attribute variable.
 
@@ -124,7 +124,7 @@ tm_bubbles(col = "OUTLET TYPE",
           border.lwd = 1)
 ```
 
-## 7.3.4 Faceted plots using  `tm_facets()` method
+## 7.3.4 Faceted plots using `tm_facets()` method
 
 The argument *sync* in *tm_facets()* can be used to produce multiple maps with synchronised zoom and pan settings.
 

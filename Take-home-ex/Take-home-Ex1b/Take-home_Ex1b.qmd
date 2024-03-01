@@ -16,11 +16,202 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, sf, lubridate, leaflet, tmap,
+               raster, spatstat, plotly, DT, classInt, viridis,
+               ggplot2, sfdep)
 ```
 
-# Importing Data
+```{r}
+# Load conflict data
+conflict_data <- read_csv("data/MMR.csv")
 
-## Wrangling Data
+mmr_shp <-  st_read(dsn = "data/geospatial",  
+                  layer = "gadm41_MMR_1")
 
-The next segment of this exercise consists of improving existing visualizations ie Data Viz makeover.
+# Convert conflict data to an sf object
+conflict_sf <- st_as_sf(conflict_data, coords = c("longitude", "latitude"), crs = 4326)
+
+```
+
+Use the SF file, with geometry column
+
+```{r}
+# Filter for battles only
+conflict_sf_battles_year <- conflict_sf %>%
+  filter(event_type == "Battles", year == 2010)
+
+# Plot using leaflet
+leaflet(conflict_sf_battles_year) %>%
+  addTiles() %>%
+  addCircleMarkers(popup = ~paste("Event: Battles, 2010<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2))
+
+```
+
+using the original acled file with long and lat columns
+
+```{r}
+# Filter for battles only
+conflict_battles_year <- conflict_data %>%
+  filter(event_type == "Battles", year == 2010)
+
+
+# Generate the map
+leaflet() %>%
+  addProviderTiles(providers$CartoDB.Positron) %>% # Base map layer
+  addCircleMarkers(data = conflict_battles_year, 
+                   popup = ~paste("Event: Battles, 2010<br>Admin1:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2),
+                   radius = 8, # Adjust the size of the markers as needed
+                   fillColor = "red", fillOpacity = 0.8, color = "#FFFFFF", weight = 1) 
+
+```
+
+adding an additional layer of base map, mmr_shp to highlight visually MMR alone
+
+```{r}
+
+leaflet() %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(data = conflict_sf_battles_year, 
+                   popup = ~paste("Event: Battles, 2010<br>Region/State:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2),
+                   radius = 8,
+                   fillColor = "red", fillOpacity = 0.8, color = "#FFFFFF", weight = 1) %>%
+  addPolygons(data = mmr_shp, color = "#444444", weight = 1, fillOpacity = 0.5) %>% # Adding borders
+  setView(lng = 96.1603, lat = 19.745, zoom = 6) # Center and zoom the map on Myanmar
+
+```
+
+```{r}
+st_geometry(conflict_sf_battles_year) |> 
+  plot()
+```
+
+```{r}
+class(conflict_sf)
+```
+
+```{r}
+class(mmr_shp)
+```
+
+```{r}
+class(conflict_data)
+```
+
+```{r}
+mmr_shp[3,]
+```
+
+```{r}
+conflict_sf
+```
+
+```{r}
+plot(st_geometry(conflict_sf))
+```
+
+```{r}
+Battles <- filter(conflict_sf, event_type == "Battles")
+Violence_CV <- filter(conflict_sf, event_type == "Violence against civilians")
+Protests <- filter(conflict_sf, event_type == "Protests")
+Riots <- filter(conflict_sf, event_type == "Riots")
+Explosions <- filter(conflict_sf, event_type == "Explosions/Remote violence")
+Strategic_dev <- filter(conflict_sf, event_type == "Strategic developments")
+
+```
+
+```{r}
+class(Explosions)
+```
+
+## Visualising of Fatalities by Event Type
+
+In shiny App , we will need to enable users to filter by
+
+-   specific year,
+
+-   year range, and
+
+-   event_type
+
+Using subsets of event types which have been converted to sf objects
+
+::: panel-tabset
+## Battles
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Battles) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(popup = ~paste("Event: Battles<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Violence against Civilians
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Violence_CV) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(popup = ~paste("Event: Violence on Civillians<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Protests
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Protests) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(popup = ~paste("Event: Protests<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Riots
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Riots) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(popup = ~paste("Event: Riots<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+                   fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+```
+
+## Explosions/Remote Devices
+
+```{r}
+scaleFactor <- 2  
+
+leaflet(Explosions) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircleMarkers(popup = ~paste("Event: Explosions<br>State/Region:", admin1, 
+                                  "<br>Actor1:", actor1, "<br>Actor2:", actor2,
+                                  "<br>Year:", year, "<br>Fatalities:", fatalities),
+                   radius = ~sqrt(fatalities) * scaleFactor,
+fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>% 
+  setView(lng = 96.1603, lat = 19.745, zoom = 6)
+
+```
+:::

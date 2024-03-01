@@ -1,6 +1,7 @@
 ---
 title: "Take-Home Exercise 4"
-date: January 1, 2024
+date: February 25, 2024
+author: "Imran Ibrahim"
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -14,9 +15,347 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(sf, tidyverse, tmap, dplyr,
+               raster, spatstat, spdep)
 ```
 
-# Importing Data
+## Importing the ACLED data
 
-## Wrangling Data
+Country specific data from the Armed Conflict Location & Event Data Project (ACLED) can be downloaded at <https://acleddata.com/data-export-tool/>
+
+```{r}
+ACLED_MMR <- read_csv("data/MMR.csv")
+```
+
+```{r}
+class(ACLED_MMR)
+```
+
+## Downloading and loading the shape files for country
+
+Shape files can be downloaded from the [Myanmmar Information Management Unit (MIMU)](https://themimu.info/about-us) website at <https://geonode.themimu.info/layers/?limit=100&offset=0>
+
+This source was chosen over [GADM](https://gadm.org/data.html) and [GeoBoundaries](https://www.geoboundaries.org/) due to its updated administrative region information and map levels.
+
+::: callout-important
+## Important- Data Quality Issue with ACLED data
+
+ACLED captures event data from national, sub-national and other credible media sources, and populates event locations based on the last known information.\
+\
+However, due to the dynamic nature of conflict and politics, country/administrative boundaries and borders can sometimes be fluid. Names of administrative areas were found to have changed; either disaggregated into new countries/administrative areas or previously active but now defunct. Further, some administrative areas were agglomerated and upgraded into higher tier administrative areas.
+
+As part of our data cleaning and preparation process, we had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with our downloaded shape files from MIMU.
+:::
+
+# Data Preparation and Cleaning
+
+## Loading Admin1(administrative region/area) shape files
+
+```{r}
+mmr_shp_mimu_1 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda2_adm1_250k_mimu_1")
+```
+
+```{r}
+class(mmr_shp_mimu_1)
+```
+
+The Shape file for admin1 level map, is an SF object, with geometry type: Multipolygon
+
+```{r}
+st_geometry(mmr_shp_mimu_1)
+```
+
+```{r}
+unique_regions_mimu1 <- unique(mmr_shp_mimu_1$ST)
+
+unique_regions_mimu1
+```
+
+There are 18 admin1 levels or states/regions in mmr_shp_mimu_1
+
+Lets compare with our admin1 levels in our main dataset ACLED_MMR
+
+```{r}
+unique_acled_regions1 <- unique(ACLED_MMR$admin1)
+
+unique_acled_regions1
+```
+
+We will write a simple function to identify the discrepancies between the shape file and our region names in our main dataset.
+
+```{r}
+# Find the unique region names that are in 'unique_acled_regions1' but not in 'unique_regions_mimu1'
+
+mismatched_admin1 <- setdiff(unique_acled_regions1, unique_regions_mimu1)
+
+if (length(mismatched_admin1) > 0) {
+  print("The following region names from 'acled_mmr' do not match any in 'mimu1':")
+  print(mismatched_admin1)
+} else {
+  print("All unique region names in 'acled_mmr' match the unique region names in 'mimu1.'")
+}
+```
+
+Lets harmonize the names in both data files. I will resave it to a new data set called ACLED_MMR_1
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR %>%
+  mutate(admin1 = case_when(
+    admin1 == "Bago-East" ~ "Bago (East)",
+    admin1 == "Bago-West" ~ "Bago (West)",
+    admin1 == "Shan-North" ~ "Shan (North)",
+    admin1 == "Shan-South" ~ "Shan (South)",
+    admin1 == "Shan-East" ~ "Shan (East)",
+    TRUE ~ as.character(admin1)
+  ))
+```
+
+Checking if our changes are successful.
+
+```{r}
+# Get unique admin 1 region names from 'ACLED_MMR_1'
+unique_acled_regions1 <- unique(ACLED_MMR_1$admin1)
+
+# Get unique region names from 'mmr_shp_mimu_1'
+unique_map_regions_mimu1 <- unique(mmr_shp_mimu_1$ST)
+
+# Find the unique region names that are in 'unique_acled_regions1' but not in 'unique_map_regions_mimu1'
+
+mismatched_regions <- setdiff(unique_acled_regions1, unique_map_regions_mimu1)
+
+if (length(mismatched_regions) > 0) {
+  print("The following region names from 'acled_mmr_1' do not match any in 'mmr_shp_mimu_1':")
+  print(mismatched_regions)
+} else {
+  print("All unique region names in 'acled_mmr_1' match the unique region names in 'mmmr_shp_mimu_1.'")
+}
+```
+
+Lets do a sample plot to see how our country map looks like at admin1 level
+
+```{r}
+plot(mmr_shp_mimu_1)
+```
+
+## Loading Admin2 (administrative region/area) shape files
+
+```{r}
+mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda_adm2_250k_mimu")
+```
+
+```{r}
+class(mmr_shp_mimu_2)
+```
+
+The Shape file for admin2 level map, is an SF object, with geometry type: Multipolygon
+
+```{r}
+st_geometry(mmr_shp_mimu_2)
+```
+
+```{r}
+unique_regions_mimu2 <- unique(mmr_shp_mimu_2$DT)
+
+unique_regions_mimu2
+```
+
+There are 80 admin2 levels or states/districts in mmr_shp_mimu_2
+
+Lets compare with our admin2 levels in our main dataset ACLED_MMR
+
+```{r}
+unique_acled_regions2 <- unique(ACLED_MMR$admin2)
+
+unique_acled_regions2
+```
+
+We will write a simple function to identify the discrepancies between the shape file and our state/district names in our main dataset.
+
+```{r}
+# Find the unique region names that are in 'unique_acled_regions2' but not in 'unique_regions_mimu2'
+
+mismatched_admin2 <- setdiff(unique_acled_regions2, unique_regions_mimu2)
+
+if (length(mismatched_admin2) > 0) {
+  print("The following region names from 'acled_mmr' do not match any in 'mimu2':")
+  print(mismatched_admin2)
+} else {
+  print("All unique region names in 'acled_mmr' match the unique region names in 'mimu2.'")
+}
+```
+
+Lets harmonize the names in both data files. I will resave it to the previous data set called ACLED_MMR_1
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR_1 %>%
+  mutate(admin2 = case_when(
+    admin2 == "Yangon-East" ~ "Yangon (East)",
+    admin2 == "Yangon-West" ~ "Yangon (West)",
+    admin2 == "Yangon-North" ~ "Yangon (North)",
+    admin2 == "Yangon-South" ~ "Yangon (South)",
+    admin2 == "Mong Pawk (Wa SAD)" ~ "Tachileik",
+    admin2 == "Nay Pyi Taw" ~ "Det Khi Na",
+    admin2 == "Yangon" ~ "Yangon (West)",
+    TRUE ~ as.character(admin2)
+  ))
+```
+
+Checking if our changes are successful.
+
+```{r}
+# Get unique admin 2 district names from 'ACLED_MMR_1'
+unique_acled_regions2 <- unique(ACLED_MMR_1$admin2)
+
+# Get unique district names from 'mmr_shp_mimu_2'
+unique_map_regions_mimu2 <- unique(mmr_shp_mimu_2$DT)
+
+# Find the unique district names that are in 'unique_acled_regions2' but not in 'unique_map_regions_mimu2'
+
+mismatched_regions2 <- setdiff(unique_acled_regions2, unique_map_regions_mimu2)
+
+if (length(mismatched_regions2) > 0) {
+  print("The following district names from 'acled_mmr_1' do not match any in 'mmr_shp_mimu_2':")
+  print(mismatched_regions2)
+} else {
+  print("All unique district names in 'acled_mmr_1' match the unique district names in 'mmmr_shp_mimu_2.'")
+}
+```
+
+Lets do a sample plot to see how our country map looks like at admin2 (districts) level.
+
+```{r}
+plot(mmr_shp_mimu_2)
+```
+
+# Data Wrangling
+
+For the purposes of plotting choropleth maps, I will first create subsets for each admin level
+
+```{r}
+data_prepared_1 <- ACLED_MMR_1 %>%
+    group_by(year, admin1) %>%
+    summarise(Incidents = n(),
+              Fatalities = sum(fatalities, na.rm = TRUE)) %>%
+              
+    ungroup()
+```
+
+Checking the total sums of incidents and fatalities.
+
+```{r}
+# Calculate the total number of incidents
+total_incidents1 <- sum(data_prepared_1$Incidents)
+
+# Calculate the total number of fatalities
+total_fatalities1 <- sum(data_prepared_1$Fatalities)
+
+# Print the totals
+print(paste("Total Incidents:", total_incidents1))
+print(paste("Total Fatalities:", total_fatalities1))
+
+```
+
+```{r}
+data_prepared_2 <- ACLED_MMR_1 %>%
+    group_by(year, admin2) %>%
+    summarise(Incidents = n(),
+              Fatalities = sum(fatalities, na.rm = TRUE)) %>%
+              
+    ungroup()
+```
+
+Checking the total sums of incidents and fatalities.
+
+```{r}
+# Calculate the total number of incidents
+total_incidents2 <- sum(data_prepared_2$Incidents)
+
+# Calculate the total number of fatalities
+total_fatalities2 <- sum(data_prepared_2$Fatalities)
+
+# Print the totals
+print(paste("Total Incidents:", total_incidents2))
+print(paste("Total Fatalities:", total_fatalities2))
+```
+
+Next, I will do a spatial join between my shape files and attribute files
+
+```{r}
+ACLED_MMR_admin1 <- left_join(mmr_shp_mimu_1, data_prepared_1,
+                            by = c("ST" = "admin1"))
+
+ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, data_prepared_2,
+                            by = c("DT" = "admin2"))
+```
+
+### Choropleth Map of Incidents & Fatalities
+
+```{r}
+tm_shape(ACLED_MMR_admin1)+
+  tm_fill("Incidents",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5)
+```
+
+```{r}
+tm_shape(ACLED_MMR_admin1)+
+  tm_fill("Fatalities",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5)
+```
+
+```{r}
+tm_shape(ACLED_MMR_admin2)+
+  tm_fill("Incidents",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5)
+```
+
+```{r}
+tm_shape(ACLED_MMR_admin2)+
+  tm_fill("Fatalities",
+          n = 5,
+          style = "quantile") +
+  tm_borders(alpha = 0.5)
+```
+
+::: panel-tabset
+## Fatalities
+
+```{r}
+tm_shape(ACLED_MMR_admin1) +
+  tm_fill("Fatalities",
+          style = "quantile",
+          palette = "Reds",
+          thres.poly = 0) + 
+  tm_facets(by="ST", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+
+## Incidents
+
+```{r}
+tm_shape(ACLED_MMR_admin1) +
+  tm_fill("Incidents",
+          style = "quantile",
+          palette = "Reds",
+          thres.poly = 0) + 
+  tm_facets(by="ST", 
+            free.coords=TRUE, 
+            drop.shapes=TRUE) +
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20) +
+  tm_borders(alpha = 0.5)
+```
+:::
