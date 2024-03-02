@@ -12,7 +12,7 @@ execute:
 
 # Getting Started
 
-## Loading R package
+## Loading R packages
 
 ```{r}
 pacman::p_load(sf, tidyverse, tmap, dplyr,
@@ -36,7 +36,7 @@ class(ACLED_MMR)
 
 ## Downloading and loading the shape files for country
 
-Shape files can be downloaded from the [Myanmmar Information Management Unit (MIMU)](https://themimu.info/about-us) website at <https://geonode.themimu.info/layers/?limit=100&offset=0>
+Shape files were downloaded from the [Myanmmar Information Management Unit (MIMU)](https://themimu.info/about-us) website at <https://geonode.themimu.info/layers/?limit=100&offset=0>
 
 This source was chosen over [GADM](https://gadm.org/data.html) and [GeoBoundaries](https://www.geoboundaries.org/) due to its updated administrative region information and map levels.
 
@@ -47,7 +47,7 @@ ACLED captures event data from national, sub-national and other credible media s
 \
 However, due to the dynamic nature of conflict and politics, country/administrative boundaries and borders can sometimes be fluid. Names of administrative areas were found to have changed; either disaggregated into new countries/administrative areas or previously active but now defunct. Further, some administrative areas were agglomerated and upgraded into higher tier administrative areas.
 
-As part of our data cleaning and preparation process, I had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with my downloaded shape files from MIMU.
+As part of our data cleaning and preparation process, I had to identify discrepancies in both admin1 and admin2 data levels and re-name some administrative areas to sync with the downloaded shape files from MIMU.
 :::
 
 # Data Preparation and Cleaning
@@ -234,62 +234,49 @@ plot(mmr_shp_mimu_2)
 
 # Data Wrangling
 
-For the purposes of plotting choropleth maps, I will first create subsets for each admin level
+For the purposes of plotting choropleth maps, I will first create attributes subsets for each admin level (1&2) grouped by year, admin region, event type and sub event type.
 
 ```{r}
-data_prepared_1 <- ACLED_MMR_1 %>%
-    group_by(year, admin1) %>%
+Data1 <- ACLED_MMR_1 %>%
+    group_by(year, admin1, event_type, sub_event_type) %>%
     summarise(Incidents = n(),
               Fatalities = sum(fatalities, na.rm = TRUE)) %>%
               
     ungroup()
-```
 
-Checking the total sums of incidents and fatalities.
 
-```{r}
-# Calculate the total number of incidents
-total_incidents1 <- sum(data_prepared_1$Incidents)
-
-# Calculate the total number of fatalities
-total_fatalities1 <- sum(data_prepared_1$Fatalities)
-
-# Print the totals
-print(paste("Total Incidents:", total_incidents1))
-print(paste("Total Fatalities:", total_fatalities1))
-
-```
-
-```{r}
-data_prepared_2 <- ACLED_MMR_1 %>%
-    group_by(year, admin2) %>%
+Data2 <- ACLED_MMR_1 %>%
+    group_by(year, admin2, event_type, sub_event_type) %>%
     summarise(Incidents = n(),
               Fatalities = sum(fatalities, na.rm = TRUE)) %>%
               
     ungroup()
+
+
 ```
 
-Checking the total sums of incidents and fatalities.
+Checking the total sum of incidents and fatalities
 
 ```{r}
-# Calculate the total number of incidents
-total_incidents2 <- sum(data_prepared_2$Incidents)
 
-# Calculate the total number of fatalities
-total_fatalities2 <- sum(data_prepared_2$Fatalities)
+total_incidents1 <- sum(Data1$Incidents)
+total_incidents2 <- sum(Data2$Incidents)
+total_fatalities1 <- sum(Data1$Fatalities)
+total_fatalities2 <- sum(Data2$Fatalities)
 
-# Print the totals
-print(paste("Total Incidents:", total_incidents2))
-print(paste("Total Fatalities:", total_fatalities2))
+total_incidents1
+total_incidents2
+total_fatalities1
+total_fatalities2
 ```
 
 Next, I will do a spatial join between my shape files and attribute files
 
 ```{r}
-ACLED_MMR_admin1 <- left_join(mmr_shp_mimu_1, data_prepared_1,
+ACLED_MMR_admin1 <- left_join(mmr_shp_mimu_1, Data1,
                             by = c("ST" = "admin1"))
 
-ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, data_prepared_2,
+ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, Data2,
                             by = c("DT" = "admin2"))
 ```
 
@@ -301,86 +288,138 @@ class(ACLED_MMR_admin1)
 class(ACLED_MMR_admin2)
 ```
 
-Checking that the total number of Incidents and Fatalities in the new datasets match the original attribute file
-
-```{r}
-total_incidents3 <- sum(ACLED_MMR_admin1$Incidents)
-
-# Calculate the total number of fatalities
-total_fatalities3 <- sum(ACLED_MMR_admin1$Fatalities)
-
-# Print the totals
-print(paste("Total Incidents:", total_incidents3))
-print(paste("Total Fatalities:", total_fatalities3))
-```
-
-```{r}
-total_incidents4 <- sum(ACLED_MMR_admin2$Incidents)
-
-# Calculate the total number of fatalities
-total_fatalities4 <- sum(ACLED_MMR_admin2$Fatalities)
-
-# Print the totals
-print(paste("Total Incidents:", total_incidents4))
-print(paste("Total Fatalities:", total_fatalities4))
-```
-
 # Choropleth Maps
 
 ## Choropleth Map of Incidents & Fatalities by Admin1 (Region/State)
 
 In the Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
 
--   variable ie Incidents or Fatalities
+-   Variable: Count of Incidents or Fatalities
 
--   specific year,
+-   specific year or year range
 
--   year range,
-
--   data classification type, and
-
--   number of clusters (n)
-
-```{r}
-tm_shape(ACLED_MMR_admin1)+
-  tm_fill("Incidents",
-          n = 5,
-          style = "quantile") +
-  tm_borders(alpha = 0.5)
-```
-
-## Choropleth map of Incidents & Fatalities by Admin2 level (by District)
-
-Similarly, in the Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
-
--   Variable ie Incidents or Fatalities
-
--   specific year,
-
--   year range,
+-   event type and sub event type
 
 -   data classification type, and
 
 -   number of clusters (n)
 
 ::: panel-tabset
-## Incidents
+## Fatalities in Battles in 2022, by Quantiles
 
 ```{r}
-tm_shape(ACLED_MMR_admin2)+
-  tm_fill("Incidents",
-          n = 6,
+ACLED_MMR_admin1 %>%
+  filter(year == 2022, event_type == "Battles") %>%
+  tm_shape() +
+  tm_fill("Fatalities",
+          n = 5,
           style = "quantile",
           palette = "Reds") +
   tm_borders(alpha = 0.5)
 ```
 
-## Fatalities
+## Fatalities in Violence against civilians in 2022, by quantiles
 
 ```{r}
-tm_shape(ACLED_MMR_admin2)+
+ACLED_MMR_admin1 %>%
+  filter(year == 2022, event_type == "Violence against civilians") %>%
+  tm_shape() +
   tm_fill("Fatalities",
-          n = 6,
+          n = 5,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Incidents of Riots in 2021, by jenks
+
+```{r}
+ACLED_MMR_admin1 %>%
+  filter(year == 2021, event_type == "Riots") %>%
+  tm_shape() +
+  tm_fill("Incidents",
+          n = 5,
+          style = "jenks",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Fatalities in Battles, by sub event = Armed clash, in 2023 (Quantile)
+
+```{r}
+ACLED_MMR_admin1 %>%
+  filter(year == 2023, event_type == "Battles", sub_event_type == "Armed clash" ) %>%
+  tm_shape() +
+  tm_fill("Fatalities",
+          n = 5,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Fatalities in Explosions, by sub event = Shelling/Artillery, in 2023 (Quantile)
+
+```{r}
+ACLED_MMR_admin1 %>%
+  filter(year == 2023, event_type == "Explosions/Remote violence", sub_event_type == "Shelling/artillery/missile attack" ) %>%
+  tm_shape() +
+  tm_fill("Fatalities",
+          n = 5,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+:::
+
+## Choropleth map of Incidents & Fatalities by Admin2 level (by District)
+
+Similarly, in the Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
+
+-   Variable: Count of Incidents or Fatalities
+
+-   specific year or year range
+
+-   event type and sub event type
+
+-   data classification type, and
+
+-   number of clusters (n)
+
+::: panel-tabset
+## Fatalities in Battles in 2023, by districts (Quantile)
+
+```{r}
+ACLED_MMR_admin2 %>%
+  filter(year == 2023, event_type == "Battles") %>%
+  tm_shape() +
+  tm_fill("Fatalities",
+          n = 5,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Incidents in Violence against civilians by sub event = Attack in 2021 (Quantile)
+
+```{r}
+ACLED_MMR_admin2 %>%
+  filter(year == 2021, event_type == "Violence against civilians", sub_event_type == "Attack" ) %>%
+  tm_shape() +
+  tm_fill("Incidents",
+          n = 5,
+          style = "quantile",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+## Fatalities in Explosions, sub event= Air/drone strike in 2023
+
+```{r}
+ACLED_MMR_admin2 %>%
+  filter(year == 2023, event_type == "Explosions/Remote violence", sub_event_type == "Air/drone strike" ) %>%
+  tm_shape() +
+  tm_fill("Incidents",
+          n = 5,
           style = "quantile",
           palette = "Reds") +
   tm_borders(alpha = 0.5)
@@ -390,10 +429,12 @@ tm_shape(ACLED_MMR_admin2)+
 ## Incidents and Fatalities by individual regions using `tm_facet()`
 
 ::: panel-tabset
-## Fatalities by Region
+## Fatalities in Battles, sub event = Armed Clash in 2023 by Region
 
 ```{r}
-tm_shape(ACLED_MMR_admin1) +
+ACLED_MMR_admin1 %>%
+  filter(year == 2023, event_type == "Battles", sub_event_type == "Armed clash" ) %>%
+tm_shape( ) +
   tm_fill("Fatalities",
           style = "quantile",
           palette = "Reds",
@@ -407,10 +448,12 @@ tm_shape(ACLED_MMR_admin1) +
   tm_borders(alpha = 0.5)
 ```
 
-## Incidents by Region
+## Incidents of Violence against civilians in 2022 by Region
 
 ```{r}
-tm_shape(ACLED_MMR_admin1) +
+ACLED_MMR_admin1 %>%
+  filter(year == 2022, event_type == "Violence against civilians") %>%
+tm_shape( ) +
   tm_fill("Incidents",
           style = "quantile",
           palette = "Reds",
@@ -422,36 +465,6 @@ tm_shape(ACLED_MMR_admin1) +
             title.position = c("center", "center"), 
             title.size = 20) +
   tm_borders(alpha = 0.5)
-```
-:::
-
-Instead on the plots above, which does not provide specific information on the trends, we can also consider the below line charts.
-
-::: panel-tabset
-## Line plots - Fatalities by Region over time
-
-```{r}
-ggplot(ACLED_MMR_admin1, aes(x = year, y = Fatalities, group = ST, color = ST)) +
-  geom_line() + # Creates line plots
-  facet_wrap(~ ST, scales = "free_y") + # Creates a separate plot for each region
-  theme_minimal() + # Uses a minimal theme for the plot
-  labs(title = "Fatalities Over Time by Region",
-       x = "Time",
-       y = "Fatalities") +
-  theme(legend.position = "none")
-```
-
-## Line plots - Incidents by Region over time
-
-```{r}
-ggplot(ACLED_MMR_admin1, aes(x = year, y = Incidents, group = ST, color = ST)) +
-  geom_line() + # Creates line plots
-  facet_wrap(~ ST, scales = "free_y") + # Creates a separate plot for each region
-  theme_minimal() + # Uses a minimal theme for the plot
-  labs(title = "Incidents Over Time by Region",
-       x = "Time",
-       y = "Fatalities") +
-  theme(legend.position = "none")
 ```
 :::
 
@@ -504,7 +517,7 @@ In the shiny App , we can enable users to filter by
 
 By using subsets of event types which have been converted to sf objects.
 
-I will use the Geometry points from our data sets to plot the points of events in the maps from the leaflet package.
+I will use the Geometry points from our data sets to plot the points of events in the maps using the leaflet package.
 
 ::: panel-tabset
 ## Battles
