@@ -606,3 +606,496 @@ fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>%
   setView(lng = 96.1603, lat = 19.745, zoom = 6)
 ```
 :::
+
+# Data Preparation for Spatial Analysis
+
+First we create subsets of our Events happening in admin region 1 & 2, summarized with the number of incidents and fatalities.
+
+```{r}
+Events1 <- ACLED_MMR_1 %>%
+    group_by(year, admin1, event_type) %>%
+    summarise(Incidents = n(),
+              Fatalities = sum(fatalities, na.rm = TRUE)) %>%
+              
+    ungroup()
+
+
+Events2 <- ACLED_MMR_1 %>%
+    group_by(year, admin2, event_type) %>%
+    summarise(Incidents = n(),
+              Fatalities = sum(fatalities, na.rm = TRUE)) %>%
+              
+    ungroup()
+
+```
+
+Next, we will perform a relational join to update our admin 1 and admin 2 level shape files with attributes fields of the above event related data.
+
+```{r}
+Events_admin1 <- left_join(mmr_shp_mimu_1, Events1,
+                            by = c("ST" = "admin1"))
+
+Events_admin2 <- left_join(mmr_shp_mimu_2, Events2,
+                            by = c("DT" = "admin2"))
+```
+
+The class of the file is SF objects file
+
+```{r}
+class(Events_admin1)
+```
+
+```{r}
+st_geometry(Events_admin2)
+```
+
+Next, I will create a subset of the event type and year. The codes below will analyse for Event type = Battles, for year 2023\
+\
+Subsequently, we can enable users to choose the event type and year in the Shiny App.
+
+I will name the object as `Event_Year`, as it will be used to take in user selections in different event types and years.
+
+### Filtering the Event and Year
+
+```{r}
+Event_Year <- Events_admin2 %>%
+  filter(year == 2023, event_type == "Battles")
+```
+
+### Computing Contiguity Spatial Weights
+
+Before we can compute any spatial statistics, we need to construct a spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units (i.e. admin2) in the study area (Myanmar).
+
+In the code below, [`poly2nb()`](https://r-spatial.github.io/spdep/reference/poly2nb.html) of **spdep** package is used to compute contiguity weight matrices for the study area. This function builds a neighbours list based on regions with contiguous boundaries.
+
+We can pass a “queen” argument that takes TRUE or FALSE as options. If we do not set argument, queen = FALSE, then by default this function will return a list of first order neighbours using the Queen criteria.
+
+```{r}
+wm_q <- poly2nb(Event_Year, 
+                queen=TRUE)
+summary(wm_q)
+```
+
+The summary report above shows that there are 74 area units for this subset.\
+\
+There are two most connected area units with 10 neighbours. There are three area units with only one neighbours.
+
+### Row-standardised weights matrix
+
+Next, we need to assign weights to each neighboring polygon. In our case, each neighboring polygon will be assigned equal weight (style=“W”). This is accomplished by assigning the fraction 1/(#ofneighbors) to each neighboring admin2 (district) and then summing the weighted income values.
+
+This has one drawback in that polygons along the edges of the study area will base their lagged values on fewer polygons thus potentially over- or under-estimating the true nature of the spatial autocorrelation in the data.
+
+For this example, we’ll stick with the style=“W” option for simplicity’s sake but note that other more robust options are available, notably style=“B”.
+
+```{r}
+rswm_q <- nb2listw(wm_q, 
+                   style="W", 
+                   zero.policy = TRUE)
+rswm_q
+```
+
+# Cluster and Outlier Analysis
+
+Local Indicators of Spatial Association or LISA are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable. For example, in this analysis, we are studying if there are areas that have higher or lower incidents of Battles than is to be expected by chance alone, ie the values occurring are above or below those of a random distribution in space.
+
+## Computing local Moran’s I
+
+To compute local Moran’s I, the [*localmoran()*](https://r-spatial.github.io/spdep/reference/localmoran.html) function of **spdep** will be used. It computes *Ii* values, given a set of *zi* values and a listw object providing neighbour weighting information for the polygon associated with the zi values.
+
+```{r}
+fips <- order(Event_Year$DT)
+localMI <- localmoran(Event_Year$Incidents, rswm_q)
+head(localMI)
+```
+
+*localmoran()* function returns a matrix of values whose columns are:
+
+-   Ii: the local Moran’s I statistics
+
+-   E.Ii: the expectation of local moran statistic under the randomisation hypothesis
+
+-   Var.Ii: the variance of local moran statistic under the randomisation hypothesis
+
+-   Z.Ii:the standard deviate of local moran statistic
+
+-   Pr(): the p-value of local moran statistic
+
+The code chunk below list the content of the local Moran matrix derived by using [*printCoefmat()*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/printCoefmat).
+
+```{r}
+printCoefmat(data.frame(
+  localMI[fips,], 
+  row.names=Event_Year$DT[fips]),
+  check.names=FALSE)
+```
+
+## Mapping the local Moran’s I
+
+Before mapping the local Moran’s I map, we will append the local Moran’s I dataframe (i.e. localMI) onto the Battles_2023 SpatialPolygonDataFrame.
+
+```{r}
+Event_Year.localMI <- cbind(Event_Year,localMI) %>%
+  rename(Pr.Ii = Pr.z....E.Ii..)
+```
+
+## Mapping both local Moran’s I values and p-values
+
+For effective interpretation, it is better to plot both the local Moran’s I values map and its corresponding p-values map next to each other.
+
+The choropleth shows there is evidence for both positive and negative Ii values. However, it is useful to also consider the p-values for each of these values.
+
+The code below will be used to create such visualisation.
+
+```{r}
+localMI.map <- tm_shape(Event_Year.localMI) +
+  tm_fill(col = "Ii", 
+          style = "pretty", 
+          title = "local moran statistics") +
+  tm_borders(alpha = 0.5)
+
+pvalue.map <- tm_shape(Event_Year.localMI) +
+  tm_fill(col = "Pr.Ii", 
+          breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
+          palette="-Blues", 
+          title = "local Moran's I p-values") +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
+```
+
+# Creating a LISA Cluster Map
+
+The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation. The first step before we can generate the LISA cluster map is to plot the Moran scatterplot.
+
+## Plotting Moran scatterplot
+
+The Moran scatterplot is an illustration of the relationship between the values of the chosen attribute at each location and the average value of the same attribute at neighboring locations.
+
+The code chunk below plots the Moran scatterplot of 2023 Battles by using [*moran.plot()*](https://r-spatial.github.io/spdep/reference/moran.plot.html) of **spdep**.
+
+```{r}
+nci <- moran.plot(Event_Year$Incidents, rswm_q,
+                  labels=as.character(Event_Year$DT), 
+                  xlab="Event_Year", 
+                  ylab="Spatially Lagged Events,Year")
+```
+
+The plot is split in 4 quadrants. The top right corner belongs to areas that have high Incidents of Battles and are surrounded by other areas that have the average level/number of Battles. This is the high-high locations.
+
+## Plotting Moran scatterplot with standardised variable
+
+First we will use [*scale()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale) to centers and scales the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.
+
+```{r}
+Event_Year$Z.Incidents <- scale(Event_Year$Incidents) %>% 
+  as.vector 
+```
+
+The [*as.vector()*](https://www.rdocumentation.org/packages/pbdDMAT/versions/0.5-1/topics/as.vector) added to the end is to make sure that the data type we get out of this is a vector, that maps neatly into our dataframe.
+
+Next, we plot the Moran scatterplot again by using the code below.
+
+```{r}
+nci2 <- moran.plot(Event_Year$Z.Incidents, rswm_q,
+                   labels=as.character(Event_Year$DT),
+                   xlab="z-Events Years", 
+                   ylab="Spatially Lag z-Events_Years")
+```
+
+### Moran Scatterplots from 2020-2023 , Battles
+
+2020
+
+![](images/clipboard-2694083671.png)
+
+2021
+
+![](images/clipboard-1000411604.png)
+
+2022
+
+![](images/clipboard-466306435.png)
+
+2023
+
+![](images/clipboard-392064135.png)
+
+## Preparing LISA map classes
+
+```{r}
+quadrant <- vector(mode="numeric",length=nrow(localMI))
+```
+
+Next, we derive the spatially lagged variable of interest (i.e. Incidents) and centers the spatially lagged variable around its mean.
+
+```{r}
+Event_Year$lag_Incidents <- lag.listw(rswm_q, Event_Year$Incidents)
+DV <- Event_Year$lag_Incidents - mean(Event_Year$lag_Incidents)     
+```
+
+This is follow by centering the local Moran’s around the mean.
+
+```{r}
+LM_I <- localMI[,1] - mean(localMI[,1])    
+```
+
+Next, we will set a statistical significance level for the local Moran.
+
+```{r}
+signif <- 0.05       
+```
+
+These four command lines define the low-low (1), low-high (2), high-low (3) and high-high (4) categories.
+
+```{r}
+quadrant[DV <0 & LM_I>0] <- 1
+quadrant[DV >0 & LM_I<0] <- 2
+quadrant[DV <0 & LM_I<0] <- 3  
+quadrant[DV >0 & LM_I>0] <- 4      
+```
+
+Lastly, we place non-significant Moran in the category 0.
+
+```{r}
+quadrant[localMI[,5]>signif] <- 0
+```
+
+In fact, we can combined all the steps into one single code chunk as shown below:
+
+```{r}
+quadrant <- vector(mode="numeric",length=nrow(localMI))
+Event_Year$lag_Incidents <- lag.listw(rswm_q, Event_Year$Incidents)
+DV <- Event_Year$lag_Incidents - mean(Event_Year$lag_Incidents)     
+LM_I <- localMI[,1]   
+signif <- 0.05       
+quadrant[DV <0 & LM_I>0] <- 1
+quadrant[DV >0 & LM_I<0] <- 2
+quadrant[DV <0 & LM_I<0] <- 3  
+quadrant[DV >0 & LM_I>0] <- 4    
+quadrant[localMI[,5]>signif] <- 0
+```
+
+## Plotting LISA Map
+
+Now, we can build the LISA map by using the code below.
+
+```{r}
+Event_Year.localMI$quadrant <- quadrant
+colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+tm_shape(Event_Year.localMI) +
+  tm_fill(col = "quadrant", 
+          style = "cat", 
+          palette = colors[c(sort(unique(quadrant)))+1], 
+          labels = clusters[c(sort(unique(quadrant)))+1],
+          popup.vars = c("")) +
+  tm_view(set.zoom.limits = c(11,17)) +
+  tm_borders(alpha=0.5)
+```
+
+We can also plot the choropleth map of incidents of Battles together with the LISA map
+
+```{r}
+Incidents <- qtm(Event_Year, "Incidents")
+
+Event_Year.localMI$quadrant <- quadrant
+colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+LISAmap <- tm_shape(Event_Year.localMI) +
+  tm_fill(col = "quadrant", 
+          style = "cat", 
+          palette = colors[c(sort(unique(quadrant)))+1], 
+          labels = clusters[c(sort(unique(quadrant)))+1],
+          popup.vars = c("")) +
+  tm_view(set.zoom.limits = c(11,17)) +
+  tm_borders(alpha=0.5)
+
+tmap_arrange(Incidents, LISAmap,
+             asp=1, ncol=2)
+```
+
+We can also include the local Moran’s I map and p-value map as shown below for easy comparison.
+
+```{r}
+tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
+```
+
+To see the full effect of the LISA maps by event type, we will need to view this over time to see it has changed over time.\
+
+#### LISA Maps for Battles in 2020-2023 
+
+2020
+
+![](images/clipboard-170596739.png)
+
+2021
+
+![](images/clipboard-1503795972.png)
+
+2022
+
+![](images/clipboard-1875261868.png)
+
+2023
+
+![](images/clipboard-3383112591.png)
+
+# Hot Spot and Cold Spot Area Analysis
+
+Beside detecting cluster and outliers, localised spatial statistics can be also used to detect hot spot and/or cold spot areas.
+
+The term ‘hot spot’ has been used generically across disciplines to describe a region or value that is higher relative to its surroundings (Lepers et al 2005, Aben et al 2012, Isobe et al 2015).
+
+## Getis and Ord’s G-Statistics
+
+An alternative spatial statistics to detect spatial anomalies is the Getis and Ord’s G-statistics (Getis and Ord, 1972; Ord and Getis, 1995). It looks at neighbours within a defined proximity to identify where either high or low values cluster spatially.
+
+Here, statistically significant hot-spots are recognised as areas of high values where other areas within a neighbourhood range also share high values too.
+
+The analysis consists of three steps:
+
+-   Deriving spatial weight matrix
+
+-   Computing Gi statistics
+
+-   Mapping Gi statistics
+
+### Deriving distance-based weight matrix
+
+First, we need to define a new set of neighbours. Whist the spatial autocorrelation considered units which shared borders, for Getis-Ord we are defining neighbours based on distance.
+
+There are two type of distance-based proximity matrix, they are:
+
+-   fixed distance weight matrix; and
+
+-   adaptive distance weight matrix.
+
+### Deriving the centroid
+
+We will need points to associate with each polygon before we can make our connectivity graph. It will be a little more complicated than just running *st_centroid()* on the sf object: **us.bound**. We need the coordinates in a separate data frame for this to work. To do this we will use a mapping function. The mapping function applies a given function to each element of a vector and returns a vector of the same length. Our input vector will be the geometry column of us.bound. Our function will be *st_centroid()*. We will be using map_dbl variation of map from the purrr package. For more documentation, check out map documentation
+
+To get our longitude values we map the *st_centroid()* function over the geometry column of us.bound and access the longitude value through double bracket notation \[\[\]\] and 1. This allows us to get only the longitude, which is the first value in each centroid.
+
+```{r}
+longitude <- map_dbl(Event_Year$geometry, ~st_centroid(.x)[[1]])
+```
+
+We do the same for latitude with one key difference. We access the second value per each centroid with \[\[2\]\].
+
+```{r}
+latitude <- map_dbl(Event_Year$geometry, ~st_centroid(.x)[[2]])
+```
+
+Now that we have latitude and longitude, we use cbind to put longitude and latitude into the same object.
+
+```{r}
+coords <- cbind(longitude, latitude)
+```
+
+### Determine the cut-off distance
+
+Firstly, we need to determine the upper limit for distance band by using the steps below:
+
+-   Return a matrix with the indices of points belonging to the set of the k nearest neighbours of each other by using [*knearneigh()*](https://r-spatial.github.io/spdep/reference/knearneigh.html) of **spdep**.
+
+-   Convert the knn object returned by *knearneigh()* into a neighbours list of class nb with a list of integer vectors containing neighbour region number ids by using [*knn2nb()*](https://r-spatial.github.io/spdep/reference/knn2nb.html).
+
+-   Return the length of neighbour relationship edges by using [*nbdists()*](https://r-spatial.github.io/spdep/reference/nbdists.html) of **spdep**. The function returns in the units of the coordinates if the coordinates are projected, in km otherwise.
+
+-   Remove the list structure of the returned object by using [**unlist()**](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unlist).
+
+```{r}
+#coords <- coordinates(hunan)
+k1 <- knn2nb(knearneigh(coords))
+k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
+summary(k1dists)
+```
+
+The summary report shows that the largest first nearest neighbour distance is 196.85 km, so using this as the upper threshold gives certainty that all units will have at least one neighbour.
+
+```{r}
+wm_d62 <- dnearneigh(coords, 0, 62, longlat = TRUE)
+wm_d62
+```
+
+```{r}
+#wm62_lw <- nb2listw(wm_d62, style = 'B')
+#summary(wm62_lw)
+```
+
+### Computing adaptive distance weight matrix
+
+*#there is a problem with using fixed distance weight matrix, as our subset of Battles 2023, has some empty neighbours, as not all districts have battles in 2023.*
+
+![](images/clipboard-3286789079.png)
+
+One of the characteristics of fixed distance weight matrix is that more densely settled areas (usually the urban areas) tend to have more neighbours and the less densely settled areas (usually the rural counties) tend to have lesser neighbours.
+
+Having many neighbours smoothes the neighbour relationship across more neighbours.
+
+It is possible to control the numbers of neighbours directly using k-nearest neighbours, either accepting asymmetric neighbours or imposing symmetry as shown in the code below.
+
+```{r}
+knn <- knn2nb(knearneigh(coords, k=8))
+knn
+```
+
+```{r}
+knn_lw <- nb2listw(knn, style = 'B')
+summary(knn_lw)
+```
+
+## Computing Gi statistics
+
+### Gi statistics using adaptive distance
+
+The code below is used to compute the Gi values for Incidents of Battles in 2023 by using an adaptive distance weight matrix (i.e *knb_lw*).
+
+```{r}
+fips <- order(Event_Year$DT)
+gi.adaptive <- localG(Event_Year$Incidents, knn_lw)
+Event_Year.gi <- cbind(Event_Year, as.matrix(gi.adaptive)) %>%
+  rename(gstat_adaptive = as.matrix.gi.adaptive.)
+```
+
+## Mapping Gi values with adaptive distance weights
+
+Now we visualise the locations of hot spot and cold spot areas. The choropleth mapping functions of **tmap** package will be used to map the Gi values.
+
+The code below shows the functions used to map the Gi values derived using fixed distance weight matrix.
+
+```{r}
+Events_Years<- qtm(Event_Year, "Incidents")
+
+Gimap <- tm_shape(Event_Year.gi) + 
+  tm_fill(col = "gstat_adaptive", 
+          style = "pretty", 
+          palette="-RdBu", 
+          title = "local Gi") + 
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(Events_Years, 
+             Gimap, 
+             asp=1, 
+             ncol=2)
+```
+
+To see the full effect of the HOT & Cold spots by event type, we will need to view this over time to see how hot and cold spots have changed over time.\
+\
+
+#### Hot & Cold Spots for Battles in 2020-2023
+
+2020
+
+![2021](images/clipboard-3169172241.png)
+
+![2022](images/clipboard-3172227594.png)
+
+![](images/clipboard-264827815.png)
+
+2023
+
+![](images/clipboard-2567179488.png)
