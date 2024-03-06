@@ -1,5 +1,5 @@
 ---
-title: "Take-Home Exercise 4 - Detailed version"
+title: "Take-Home Exercise 4 - Detailed version (not for submission)"
 date: February 25, 2024
 author: "Imran Ibrahim"
 date-modified: "last-modified"
@@ -240,6 +240,12 @@ if (length(mismatched_regions2) > 0) {
 } else {
   print("All unique district names in 'acled_mmr_1' match the unique district names in 'mmmr_shp_mimu_2.'")
 }
+```
+
+```{r}
+# Assuming your data frame is named 'my_data_frame'
+write.csv(ACLED_MMR_1, file = "ACLED_MMR.csv", row.names = FALSE)
+
 ```
 
 Lets do a sample plot to see how our country map looks like at admin2 (districts) level.
@@ -1126,18 +1132,18 @@ summary(k1dists)
 The summary report shows that the largest first nearest neighbour distance is 196.85 km, so using this as the upper threshold gives certainty that all units will have at least one neighbour.
 
 ```{r}
-wm_d62 <- dnearneigh(coords, 0, 62, longlat = TRUE)
-wm_d62
+wm_d197 <- dnearneigh(coords, 0, 197, longlat = TRUE)
+wm_d197
 ```
+
+Next, *nb2listw()* is used to convert the nb object into spatial weights object.
 
 ```{r}
-#wm62_lw <- nb2listw(wm_d62, style = 'B')
-#summary(wm62_lw)
+wm197_lw <- nb2listw(wm_d197, style = 'B')
+summary(wm197_lw)
 ```
 
-*#there is a problem with using fixed distance weight matrix, as our subset of Battles 2023, has some empty neighbours, as not all districts have battles in 2023.*
-
-![](images/clipboard-3286789079.png)
+The output spatial weights object is called `wm197_lw`.
 
 ### Computing adaptive distance weight matrix
 
@@ -1163,6 +1169,40 @@ summary(knn_lw)
 
 ### Gi statistics using adaptive distance
 
+```{r}
+fips <- order(Battles_2023$DT)
+gi.fixed <- localG(Battles_2023$Incidents, wm197_lw)
+gi.fixed
+```
+
+Next, we will join the Gi values to their corresponding hunan sf data frame by using the code chunk below.
+
+```{r}
+Battles_2023.gi <- cbind(Battles_2023, as.matrix(gi.fixed)) %>%
+  rename(gstat_fixed = as.matrix.gi.fixed.)
+```
+
+The code above performs three tasks. First, it convert the output vector (i.e. *gi.fixed*) into r matrix object by using *as.matrix()*. Next, *cbind()* is used to join Battles_2023\@data and *gi.fixed* matrix to produce a new SpatialPolygonDataFrame called *Battles_2023.gi*. Lastly, the field name of the gi values is renamed to *gstat_fixed* by using *rename()*.
+
+## Mapping Gi values with fixed distance weights
+
+The code below shows the functions used to map the Gi values derived using fixed distance weight matrix.
+
+```{r}
+Events_Years <- qtm(Battles_2023, "Incidents")
+
+Gimap <-tm_shape(Battles_2023.gi) +
+  tm_fill(col = "gstat_fixed", 
+          style = "pretty",
+          palette="-RdBu",
+          title = "Fixed Distance\nlocal Gi") +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(Events_Years, Gimap, asp=1, ncol=2)
+```
+
+### Gi statistics using adaptive distance
+
 The code below is used to compute the Gi values for Incidents of Battles in 2023 by using an adaptive distance weight matrix (i.e *knb_lw*).
 
 ```{r}
@@ -1185,7 +1225,7 @@ Gimap <- tm_shape(Battles_2023.gi) +
   tm_fill(col = "gstat_adaptive", 
           style = "pretty", 
           palette="-RdBu", 
-          title = "local Gi") + 
+          title = "Adaptive Distance\nlocal Gi") + 
   tm_borders(alpha = 0.5)
 
 tmap_arrange(Events_Years, 
@@ -1194,10 +1234,17 @@ tmap_arrange(Events_Years,
              ncol=2)
 ```
 
-To see the full effect of the HOT & Cold spots by event type, we will need to view this over time to see how hot and cold spots have changed over time.\
-\
+### Comparing Fixed distance and Adaptive Distance
 
-#### Hot & Cold Spots for Battles in 2020-2023
+![](images/clipboard-2611857874.png)
+
+![](images/clipboard-1647384731.png)
+
+There is a few subtle differences between the Fixed and Adaptive distances.
+
+Lastly, to see the full effect of the HOT & Cold spots by event type, we can also view the maps over time to see how hot and cold spots have changed.\
+
+#### Hot & Cold Spots for Battles in 2020-2023 (adaptive distance)
 
 **2020**
 
