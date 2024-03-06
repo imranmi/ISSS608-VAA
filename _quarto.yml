@@ -71,6 +71,8 @@ website:
             href: Take-home-ex/Take-home-Ex3/Take-home_Ex3.html
           - text: Take-home Exercise 4
             href: Take-home-ex/Take-home-Ex4/Take-home_Ex4.html
+          - text: Take-home Exercise 4a - Prototyping Modules for Visual Analytics Shiny App 
+            href: Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html  
     right: 
       - href: index.qmd
         text: Home

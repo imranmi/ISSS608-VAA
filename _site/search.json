@@ -1972,5 +1972,19 @@
     "title": "Take-Home Exercise 4 - Detailed version (not for submission)",
     "section": "Mapping Gi values with fixed distance weights",
     "text": "Mapping Gi values with fixed distance weights\nThe code below shows the functions used to map the Gi values derived using fixed distance weight matrix.\n\nEvents_Years &lt;- qtm(Battles_2023, \"Incidents\")\n\nGimap &lt;-tm_shape(Battles_2023.gi) +\n  tm_fill(col = \"gstat_fixed\", \n          style = \"pretty\",\n          palette=\"-RdBu\",\n          title = \"Fixed Distance\\nlocal Gi\") +\n  tm_borders(alpha = 0.5)\n\ntmap_arrange(Events_Years, Gimap, asp=1, ncol=2)\n\n\n\n\n\nGi statistics using adaptive distance\nThe code below is used to compute the Gi values for Incidents of Battles in 2023 by using an adaptive distance weight matrix (i.e knb_lw).\n\nfips &lt;- order(Battles_2023$DT)\ngi.adaptive &lt;- localG(Battles_2023$Incidents, knn_lw)\nBattles_2023.gi &lt;- cbind(Battles_2023, as.matrix(gi.adaptive)) %&gt;%\n  rename(gstat_adaptive = as.matrix.gi.adaptive.)"
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html",
+    "href": "Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html",
+    "title": "Take-Home Exercise 4a - Prototyping Modules for Visual Analytics Shiny Application",
+    "section": "",
+    "text": "In this take-home exercise, we are required to select one of the module of our proposed Shiny application and complete the following tasks:\n\nTo evaluate and determine the necessary R packages needed for our Shiny application are supported in R CRAN,\nTo prepare and test the specific R codes can be run and returns the correct output as expected,\nTo determine the parameters and outputs that will be exposed on the Shiny applications,\nTo select the appropriate Shiny UI components for exposing the parameters determine above, and\nWe are required to include a section called UI design for the different components of the UIs for the proposed design."
+  },
+  {
+    "objectID": "Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html#loading-r-packages",
+    "href": "Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html#loading-r-packages",
+    "title": "Take-Home Exercise 4a - Prototyping Modules for Visual Analytics Shiny Application",
+    "section": "Loading R packages",
+    "text": "Loading R packages"
   }
 ]

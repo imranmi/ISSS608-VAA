@@ -1,0 +1,31 @@
+---
+title: "Take-Home Exercise 4a - Prototyping Modules for Visual Analytics Shiny Application"
+date: February 25, 2024
+author: "Imran Ibrahim"
+date-modified: "last-modified"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  warning: false
+---
+
+# The Task
+
+In this take-home exercise, we are required to select one of the module of our proposed Shiny application and complete the following tasks:
+
+-   To evaluate and determine the necessary R packages needed for our Shiny application are supported in R CRAN,
+
+-   To prepare and test the specific R codes can be run and returns the correct output as expected,
+
+-   To determine the parameters and outputs that will be exposed on the Shiny applications,
+
+-   To select the appropriate Shiny UI components for exposing the parameters determine above, and
+
+-   We are required to include a section called UI design for the different components of the UIs for the proposed design.
+
+# Getting Started
+
+For this project on the visualisation of Armed conflicts in Myanmar, I will be preparing the codes and UI for the sections on EDA (Proportional Symbol maps), Cluster & Outlier Analysis (LISA) and Hot/Cold zone analysis.
+
+## Loading R packages
