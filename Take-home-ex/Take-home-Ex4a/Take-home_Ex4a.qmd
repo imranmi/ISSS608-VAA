@@ -178,7 +178,7 @@ Lets do a sample plot to see how our country map looks like at admin2 (districts
 plot(mmr_shp_mimu_2)
 ```
 
-## 4.3.2 Data Wrangling 
+## 4.3.2 Data Wrangling
 
 For the purposes of plotting choropleth maps, I will first create attributes subsets for each admin level (1&2) grouped by year, admin region, event type and sub event type.
 
@@ -222,7 +222,7 @@ total_incidents_check
 total_fatalities_check
 ```
 
-# 4.4 Choropleth Maps 
+# 4.4 Choropleth Maps
 
 For the module on **Cluster & Outlier Analysis (LISA)**, I will first be creating both Choropleth and Proportional Symbol Maps, as part of the initial Interactive Exploratory Visualisation.
 

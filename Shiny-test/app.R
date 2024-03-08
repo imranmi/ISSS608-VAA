@@ -2,7 +2,7 @@ pacman::p_load(shiny, tidyverse, shinydashboard,dplyr,
                spatstat, spdep,
                lubridate, leaflet,
                plotly, DT, viridis,
-               ggplot2, sf, tmap, readr)
+               ggplot2, sf, tmap, readr, purrr)
 
 
 ACLED_MMR <- read_csv("data/MMR.csv")
@@ -28,16 +28,16 @@ sidebar <- dashboardSidebar(
              href = "https://acleddata.com/")))
 
 
-
-
+#Cluster and Outlier Analysis, 1st Tab
+#####################################
 Cluster1 <- fluidRow(
   box(title = "Location of Conflict Events",
       status = "danger",
       solidHeader = TRUE,
       collapsible = TRUE,
       align = "center",
-      leafletOutput("Pointmap", height = "600px"),
-      sliderInput("slider1", "year:", 2010, 2024, 2021),
+      leafletOutput("Pointmap", height = "750px"),
+      sliderInput("slider1", "Year:", 2010, 2024, 2021),
       selectInput("eventType1", "Event Type:",
                   choices = c("Battles" = "Battles",
                               "Violence against civilians" = "Violence against civilians",
@@ -53,7 +53,7 @@ Cluster1 <- fluidRow(
     collapsible = TRUE,
     align = "center",
     plotOutput("choropleth", height = "600px"),
-    sliderInput("slider2", "Years:", 2010, 2024, 2021),
+    sliderInput("slider2", "Year:", 2010, 2024, 2021),
     selectInput("eventType2", "Event Type:",
                 choices = c("Battles" = "Battles",
                             "Violence against civilians" = "Violence against civilians",
@@ -62,12 +62,19 @@ Cluster1 <- fluidRow(
                             "Explosions/Remote violence" = "Explosions/Remote violence",
                             "Strategic developments" = "Strategic developments"),
                 selected = "Battles"),
-    radioButtons("metricType", "Metric Type:",
+    radioButtons("metricType", "Count Type:",
                  choices = c("Incidents" = "Incidents",
                              "Fatalities" = "Fatalities"),
-                 selected = "Fatalities"))
+                 selected = "Fatalities",
+                 inline = TRUE),
+    radioButtons("mapStyle", "Classification Type:",
+                 choices = c("quantile", "equal", "jenks", "kmeans"),
+                 selected = "quantile",
+                 inline = TRUE))
 )
 
+#Cluster and Outlier Analysis, 2nd Tab
+#####################################
 
 Cluster2 <- fluidRow(
   box(
@@ -76,7 +83,7 @@ Cluster2 <- fluidRow(
     solidHeader = TRUE,
     collapsible = TRUE,
     align = "center",
-    plotOutput("LocalMoranMap", height = "600px", width = "100%"),
+    plotOutput("LocalMoranMap", height = "500px", width = "100%"),
     sliderInput("slider3", "Years:", 2010, 2024, 2021),
     selectInput("eventType3", "Event Type:",
                 choices = c("Battles" = "Battles",
@@ -92,11 +99,21 @@ Cluster2 <- fluidRow(
     solidHeader = TRUE,
     collapsible = TRUE,
     align = "center",
-    plotOutput("LocalMoranPval", height = "600px", width = "100%"))
-  
-  
+    plotOutput("LocalMoranPval", height = "650px", width = "100%"))
+  ,box(
+    title = "Local Moran's I Results",
+    status = "danger",
+    solidHeader = TRUE,
+    collapsible = TRUE,
+    width = 12,
+    align = "center",
+    dataTableOutput("localMoranDataTable")
+  )
 )
 
+
+#Cluster and Outlier Analysis, 3rd Tab
+#####################################
 
 Cluster3 <- fluidRow(
   box(title = "Moran Scatter Plot"
@@ -132,7 +149,8 @@ Cluster3 <- fluidRow(
                 selected = "Battles"))
 )
 
-
+#Hot and Cold Spot Analysis
+#####################################
 
 HotCold1 <- fluidRow(
   box(title = "Hot and Cold Spots"
@@ -140,7 +158,7 @@ HotCold1 <- fluidRow(
       ,solidHeader = TRUE 
       ,collapsible = TRUE
       ,align = "center"
-      ,plotOutput("Gimap", height = "600px", width = 12)  
+      ,plotOutput("Gimap", height = "600px")  
       ,sliderInput("slider7", "Years:", 2010, 2024, 2021),
       selectInput("eventType6", "Event Type:",
                   choices = c("Battles" = "Battles",
@@ -150,9 +168,15 @@ HotCold1 <- fluidRow(
                               "Explosions/Remote violence" = "Explosions/Remote violence",
                               "Strategic developments" = "Strategic developments"),
                   selected = "Battles"))
-  
+  ,box(title = "GI Statistics",
+       status = "danger",
+       solidHeader = TRUE,
+       collapsible = TRUE,
+       width = 12,
+       align = "center",
+       dataTableOutput("GiStat")
+  )
 )
-
 
 
 
@@ -182,6 +206,7 @@ body <- dashboardBody(
     ),
     # 3rd tab content
     tabItem(tabName = "Cluster",
+            
             ClusterSubTabs # add the sub tabs which was defined above
     ),
     #4th tab content
@@ -238,7 +263,7 @@ server <- function(input, output) {
   
   #Calculating Spacial weights for Local Morans statistics
   ######################################################
-  
+  #KIV
   
   
   
@@ -298,11 +323,11 @@ server <- function(input, output) {
     tm_map <- tm_shape(data_filtered) +
       tm_fill(fillColumn,
               n = 5,
-              style = "quantile",
+              style = input$mapStyle,
               palette = "Reds") +
       tm_borders(alpha = 0.5)
     
-    print(tm_map)  # Print the map to render it in Shiny
+    print(tm_map)  
   })
   
   # Local Morans's I Map in Cluster 2  
@@ -365,6 +390,20 @@ server <- function(input, output) {
       tm_borders(alpha = 0.5)
     
     pvalue_map
+  })
+  
+  # Local Morans's I Data Table in Cluster 2  
+  ###############################################
+  
+  # Render the data table for Local Moran's I results
+  output$localMoranDataTable <- renderDataTable({
+    df <- localMIResults()
+    
+    # Check if data is available
+    if (!is.null(df)) {
+      
+      df
+    }
   })
   
   
@@ -463,12 +502,64 @@ server <- function(input, output) {
   # Hot cold Map in HotCold1 
   ####################################  
   
-  #KIV
+  HotColdData <- reactive({
+    filtered_data2 <- Events_admin2 %>%
+      filter(year == input$slider7, event_type == input$eventType6)
+    
+    # Calculate centroids for filtered data
+    longitude <- map_dbl(filtered_data2$geometry, ~st_centroid(.x)[[1]])
+    latitude <- map_dbl(filtered_data2$geometry, ~st_centroid(.x)[[2]])
+    coords <- cbind(longitude, latitude)
+    
+    # Adaptive distance weight matrix
+    knn <- knn2nb(knearneigh(coords, k=8))
+    knn_lw <- nb2listw(knn, style = 'B')
+    
+    # Calculate Gi statistics for the filtered data
+    gi.adaptive <- localG(filtered_data2$Incidents, knn_lw)
+    
+    # Convert the "localG" object to a matrix and bind it to filtered_data2
+    gi_values <- as.matrix(gi.adaptive)
+    
+    # Check if the number of rows match before combining
+    if(nrow(filtered_data2) == nrow(gi_values)) {
+      # Add the Gi values as a new column to the filtered data
+      filtered_data2 <- cbind(filtered_data2, gstat_adaptive = gi_values)
+    } else {
+      stop("The number of rows in filtered_data2 does not match the number of Gi values.")
+    }
+    
+    filtered_data2
+  })
+  
+  output$Gimap <- renderPlot({
+    df <- HotColdData()
+    
+    # Exit if there's no data to plot
+    if(is.null(df) || nrow(df) == 0) {
+      return()
+    }
+    
+    # Create the choropleth map for GI stats
+    Gi_map <- tm_shape(df) +
+      tm_fill(col = "gstat_adaptive", 
+              style = "pretty", 
+              palette = "-RdBu", 
+              title = "Adaptive Distance\nlocal Gi") +
+      tm_borders(alpha = 0.5)
+    
+    Gi_map
+  })
   
   
+  output$GiStat <- renderDataTable({
+    data_with_gi <- HotColdData()  # Reactive function for data preparation
+    if(is.null(data_with_gi)) {
+      return(data.frame())  # Return an empty data frame if data is null
+    }
+    return(data_with_gi)
+  })
   
 }
-
 # Run the app
 shinyApp(ui = ui, server = server)
-

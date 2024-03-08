@@ -1090,12 +1090,20 @@ We will need points to associate with each polygon before we can make our connec
 
 We need the coordinates in a separate data frame for this to work. To do this we will use a mapping function. The mapping function applies a given function to each element of a vector and returns a vector of the same length.
 
-Our input vector will be the geometry column of us.bound. Our function will be *st_centroid()*. We will be using map_dbl variation of map from the purrr package.
+Our input vector will be the geometry column of Battles_2023 dataset. Our function will be *st_centroid()*. We will be using map_dbl variation of map from the purrr package.
 
-To get our longitude values we map the *st_centroid()* function over the geometry column of us.bound and access the longitude value through double bracket notation \[\[\]\] and 1. This allows us to get only the longitude, which is the first value in each centroid.
+To get our longitude values we map the *st_centroid()* function over the geometry column of our Battles_2023 dataset and access the longitude value through double bracket notation \[\[\]\] and 1. This allows us to get only the longitude, which is the first value in each centroid.
 
 ```{r}
 longitude <- map_dbl(Battles_2023$geometry, ~st_centroid(.x)[[1]])
+```
+
+```{r}
+class(longitude)
+```
+
+```{r}
+longitude
 ```
 
 We do the same for latitude with one key difference. We access the second value per each centroid with \[\[2\]\].
@@ -1104,10 +1112,26 @@ We do the same for latitude with one key difference. We access the second value 
 latitude <- map_dbl(Battles_2023$geometry, ~st_centroid(.x)[[2]])
 ```
 
+```{r}
+class(latitude)
+```
+
+```{r}
+latitude
+```
+
 Now that we have latitude and longitude, we use cbind to put longitude and latitude into the same object.
 
 ```{r}
 coords <- cbind(longitude, latitude)
+```
+
+```{r}
+class(coords)
+```
+
+```{r}
+coords
 ```
 
 ### Determine the cut-off distance
@@ -1123,9 +1147,32 @@ Firstly, we need to determine the upper limit for distance band by using the ste
 -   Remove the list structure of the returned object by using [**unlist()**](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unlist).
 
 ```{r}
-
 k1 <- knn2nb(knearneigh(coords))
+
+```
+
+```{r}
+class(k1)
+```
+
+```{r}
+k1
+```
+
+```{r}
 k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
+
+```
+
+```{r}
+class(k1dists)
+```
+
+```{r}
+k1dists
+```
+
+```{r}
 summary(k1dists)
 ```
 
@@ -1143,6 +1190,10 @@ wm197_lw <- nb2listw(wm_d197, style = 'B')
 summary(wm197_lw)
 ```
 
+```{r}
+class(wm197_lw)
+```
+
 The output spatial weights object is called `wm197_lw`.
 
 ### Computing adaptive distance weight matrix
@@ -1158,6 +1209,10 @@ knn <- knn2nb(knearneigh(coords, k=8))
 knn
 ```
 
+```{r}
+class(knn)
+```
+
 Next, *nb2listw()* is used to convert the nb object into spatial weights object.
 
 ```{r}
@@ -1165,24 +1220,48 @@ knn_lw <- nb2listw(knn, style = 'B')
 summary(knn_lw)
 ```
 
+```{r}
+class(knn_lw)
+```
+
 ## Computing Gi statistics
 
-### Gi statistics using adaptive distance
+### Gi statistics using fixed distance
 
 ```{r}
 fips <- order(Battles_2023$DT)
+fips
+```
+
+```{r}
+class(fips)
+```
+
+```{r}
 gi.fixed <- localG(Battles_2023$Incidents, wm197_lw)
 gi.fixed
 ```
 
-Next, we will join the Gi values to their corresponding hunan sf data frame by using the code chunk below.
+```{r}
+class(gi.fixed)
+```
+
+Next, we will join the Gi values to their corresponding sf data frame by using the code chunk below.
 
 ```{r}
 Battles_2023.gi <- cbind(Battles_2023, as.matrix(gi.fixed)) %>%
   rename(gstat_fixed = as.matrix.gi.fixed.)
 ```
 
-The code above performs three tasks. First, it convert the output vector (i.e. *gi.fixed*) into r matrix object by using *as.matrix()*. Next, *cbind()* is used to join Battles_2023\@data and *gi.fixed* matrix to produce a new SpatialPolygonDataFrame called *Battles_2023.gi*. Lastly, the field name of the gi values is renamed to *gstat_fixed* by using *rename()*.
+```{r}
+class(Battles_2023.gi)
+```
+
+```{r}
+Battles_2023.gi
+```
+
+The code above performs three tasks. First, it converts the output vector (i.e. *gi.fixed*) into r matrix object by using *as.matrix()*. Next, *cbind()* is used to join Battles_2023 and *gi.fixed* matrix to produce a new SpatialPolygonDataFrame called *Battles_2023.gi*. Lastly, the field name of the gi values is renamed to *gstat_fixed* by using *rename()*.
 
 ## Mapping Gi values with fixed distance weights
 
@@ -1208,8 +1287,24 @@ The code below is used to compute the Gi values for Incidents of Battles in 2023
 ```{r}
 fips <- order(Battles_2023$DT)
 gi.adaptive <- localG(Battles_2023$Incidents, knn_lw)
+
+```
+
+```{r}
+gi.adaptive
+```
+
+```{r}
+class(gi.adaptive)
+```
+
+```{r}
 Battles_2023.gi <- cbind(Battles_2023, as.matrix(gi.adaptive)) %>%
   rename(gstat_adaptive = as.matrix.gi.adaptive.)
+```
+
+```{r}
+datatable(Battles_2023.gi)
 ```
 
 ## Mapping Gi values with adaptive distance weights
