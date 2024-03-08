@@ -375,10 +375,6 @@ For the symbol map, I have populated the tool tip to communicate the event type,
 
 Instead of implementing a global filter which can enable users to filter and affect both plots, I have chosen to apply seperate filter selections for each plot. This is to enable users to explore different data independently. For example, users can explore "Battles" in 2021 via the symbol map and "Violence against civilians" in 2021 via the choropleth map.
 
-## 4.6.1 Shiny code considerations
-
-In terms of code implementation \>
-
 # 4.7 Data Preparation for Spatial Analysis
 
 In the next part of our UI, we will be exploring Spatial statistics.
@@ -605,10 +601,6 @@ The below is a visual of the prototype.
 
 Here, I have chosen to implement a single point for users to filter and select, as users are likely to want to see all 3 plots communicating the same statistics.
 
-## 4.9.1 Shiny code considerations
-
-In terms of code implementation \>
-
 # 4.10 Creating the LISA cluster map
 
 As mentioned, for the next tab of our Cluster and Outlier Analysis module, I will be creating Moran Scatter plots and the LISA cluster map.
@@ -754,10 +746,6 @@ The below is a visual of the prototype.
 [**Additional considerations**]{.underline}
 
 Instead of implementing a global filter which can enable users to filter and affect both plots, I have chosen to apply seperate filter selections for each plot. This is to enable users to explore different data independently. For example, users can explore “Battles” in 2021 via the scatter plot and “Violence against civilians” in 2021 via the LISA cluster map.
-
-## 4.11.1 Shiny Code considerations
-
-In terms of code implementation \>
 
 # 4.12 Hot & Cold Spot Area Analysis
 
@@ -993,10 +981,6 @@ Here, I have chosen to implement a single point for users to filter and select, 
 
 Additionally, I will first implement adaptive distance weights, instead of having both fixed and adaptive. This is due the the additional complexity of the shiny code required to accomodate the selection of either adaptive or distance weights within the same reactive statement.
 
-## 4.13.1 Shiny code considerations
-
-In terms of code implementation \>
-
-# References
+# 4.14 References
 
 Main reference: Kam, T.S. (2024). [Local Measures of Spatial Autocorrelation](https://r4gdsa.netlify.app/chap10#overview)

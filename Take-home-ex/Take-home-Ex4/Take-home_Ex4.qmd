@@ -1353,6 +1353,56 @@ Lastly, to see the full effect of the HOT & Cold spots by event type, we can als
 
 ![](images/clipboard-2567179488.png)
 
+# Shiny code considerations/reflections
+
+[**UI - functionality/Interactivity**]{.underline}
+
+The UI section is straightforward, but gets more complicated as more interactivity in terms of user selections is implemented.
+
+As we introduce more interactivity at the UI level, we also need to consider the added complexity of the code at the server side to 1) handle and react to user input correctly, and 2) to output the correct and expected results
+
+Increase in interactivity makes the the code in both UI and Server sections to be more lengthy and complicated.
+
+[**Modular approach**]{.underline}
+
+Careful consideration is needed to consider which plots should be grouped together in the same tab/page.
+
+Where plots share common user input possibilities, a common user selection or filter functionality makes sense.
+
+However, where plots do not share common user inputs and expected outputs, individual filter selections may make more sense.
+
+This is to prevent:-
+
+1.  users from misunderstanding that all user selections in the common filter section applies to all the charts/plots in the same tab/page.
+
+2.  unnecessary code complexity
+
+The more user input functionality I implemented, the more I needed to carefully check that each seperate output at the server section was referencing the correct input.
+
+For example, each user input (eg slider input, select input, radio button) in the UI section needs to be defined and named uniquely and correctly mapped to the respective outputs at the server section.
+
+A modular approach (unique UI-Server code pairing), while less visually appealing, made trouble shooting easier, as I was able isolate errors per individual plot's code chunk.
+
+While trying to implement multiple commonalities in terms of interactivity or data subsets, I found that my reactive statements grew in length and complexity. Further more, errors were hard to isolate and easily propagated to other functions and outputs.
+
+[**Computation intensity**]{.underline}
+
+In the LISA cluster map plots and the hot/cold spot plots, I had considered to implement a trellis-like output to enable users to visually examine/track the changes in the clusters and hot/cold spots over time.
+
+However this only served to make the code more complicated and computational intensive. This is because attribute data for each year needs to be independently wrangled/compiled, joined to the spatial data, calculated for neighbours and/or distance matrix, and then calculated for respective local Moran's I or GI statictics before flowing to the plotting function.
+
+Implementing a trellis-like output, or enabling users to select a range of time, did not make sense in terms of computation intensity and complexity of the server side code.
+
+[**Complexity of the Data wrangling**]{.underline}
+
+In the case of the Hot/cold spot maps, where I needed to derive the GI statistic based on fixed or adaptive distance, I had implemented the adaptive distance instead due to its ability to dynamically change with user input.
+
+On the other hand, for fixed distance weights, I needed to first determine the cut-off distance and assign a max distance as the upper threshold in order to ensure that all units will have at least one neighbour.
+
+This becomes more complex as we expose this to more user selections. In short, each time a user selects an event type and year, I will need to first derive the max distance and assign it as the upper threshold. I was unable to find a way to implement this without creating more errors or lag to the loading time of the application.
+
+For more information, please refer to my Shiny codes in my [Github repository.](https://github.com/imranmi/ISSS608-VAA/blob/master/Take-Home4-Shiny/Takehome4.R)
+
 # References
 
 Main reference: Kam, T.S. (2024). [Local Measures of Spatial Autocorrelation](https://r4gdsa.netlify.app/chap10#overview)
