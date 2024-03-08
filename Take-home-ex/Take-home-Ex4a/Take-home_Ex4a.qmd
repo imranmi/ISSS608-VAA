@@ -26,7 +26,7 @@ In this take-home exercise, we are required to select one of the module of our p
 
 # 4.2 Getting Started
 
-For this project on the visualisation of Armed conflicts in Myanmar, I will be preparing the codes and UI for the modules on **Cluster & Outlier Analysis (LISA)** and **Hot/Cold zone analysis.**
+For this project on the visualisation of **Armed conflicts in Myanmar**, I will be preparing the codes and UI for the modules on **Cluster & Outlier Analysis (LISA)** and **Hot/Cold zone analysis.**
 
 ## 4.2.1 Loading R packages
 
@@ -57,14 +57,14 @@ I have chosen this source over [GADM](https://gadm.org/data.html) and [GeoBounda
 
 ACLED captures event data from national, sub-national and other media sources, and populates event locations based on the last known information.\
 \
-Due to the dynamic nature of conflict and political events, country/administrative boundaries and borders can sometimes be fluid. Names of administrative areas were found to have changed; either disaggregated into new administrative areas or previously active but now defunct. Further, some administrative areas were aggregated into higher administrative areas.
+Some names of administrative areas were found to have changed; either disaggregated into new administrative areas or previously active but now defunct. Some administrative areas were also aggregated into higher administrative areas.
 
 As part of our data cleaning and preparation process, I had to identify discrepancies in both admin1 & 2 (administrative levels) and re-name some administrative areas to sync with the downloaded shape files from MIMU.
 :::
 
 # 4.3 Data Preparation and Cleaning
 
-For our Shiny App, since I will be loading in shape files at the admin 2 level ( district level).
+I will first loading in the shape files at the admin 1 (region/state) and admin 2 (districts) levels. Most of our plots will be utilizing admin 2 levels.
 
 ## 4.3.1 Loading Admin 1 & 2 (administrative region/area) shape files
 
@@ -172,7 +172,7 @@ if (length(mismatched_regions2) > 0) {
 }
 ```
 
-Lets do a sample plot to see how our country map looks like at admin2 (districts) level.
+Lets do a sample plot to see how our country map looks like at the admin2 (districts) level.
 
 ```{r}
 plot(mmr_shp_mimu_2)
@@ -224,19 +224,9 @@ total_fatalities_check
 
 # 4.4 Choropleth Maps
 
-For the module on **Cluster & Outlier Analysis (LISA)**, I will first be creating both Choropleth and Proportional Symbol Maps, as part of the initial Interactive Exploratory Visualisation.
+For the module on **Cluster & Outlier Analysis (LISA)**, I will first be creating both Choropleth and Proportional Symbol Maps, as part of the initial Interactive Exploratory Analysis.
 
 ## 4.4.1 Choropleth map of Incidents & Fatalities by Admin2 level (by District)
-
-For our Shiny App, the below choropleth maps can be plotted, with users being able to choose the following:-
-
--   Variable: Count of Incidents or Fatalities
-
--   specific year
-
--   event type, and
-
--   data classification type
 
 The below codes will be used to create samples of our visualisations.
 
@@ -304,19 +294,11 @@ class(Battles)
 
 ## 4.5.1 Visualising the location of conflict events
 
-In the shiny App , we can enable users to filter by
-
--   specific year, and
-
--   event_type
-
 Using the `leaflet package`, I will use the Geometry points from our data sets to plot the points of event types in the maps.
 
 In this case, I will use admin 1 level regions, to achieve a better aesthetics for users.
 
 This is because, visually dividing the country map into more smaller districts would likely make the map look "too busy".
-
-Furthermore, additional information on the specific event type, region, year, no of fatalities and actors involved can be communicated by means of the tooltip.
 
 ::: panel-tabset
 ## Battles from 2010 to present
@@ -371,21 +353,21 @@ fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>%
 ```
 :::
 
-# 4.6 Part 1 - UI design
+# 4.6 UI design - Part 1
 
 As mentioned, both plots above will be used to populate our first tab in our app's Cluster & Outlier Analysis module.
 
-The motivation here is to provide users with a Visual Introduction of the state of Armed Conflict events in the country, before they proceed to other tabs that has more emphasis on spacial autocorrelation and cluster analysis.
+The motivation here is to provide users with a Visual Introduction of the state of Armed Conflict events in the country (Myanmar), before they proceed to other tabs that has more emphasis on spacial autocorrelation and cluster analysis.
 
-The below is a visual of the prototype for this page.
+Below is a visual of the prototype for this page.
 
 ![](images/clipboard-3061140252.png)
 
 [**Functionality and interactivity**]{.underline}
 
--   The Proportional symbol map will allow users to select the specific year and event type. Users will be able to see where conflicts events are happening in the country in different years.
+-   The Proportional symbol map will allow users to select the specific year and event type. Users will be able to see where conflicts events have happened in the country across different years.
 
--   The Choropleth maps will also be able to communicate the "intensity" of the events through use of color gradient. Users will be able to select the specific year, event type, count type (incidents or fatalities) and the data classification method.
+-   The Choropleth map will be able to communicate the "intensity" of the events through use of color gradient. Users will be able to select the specific year, event type, count type (incidents or fatalities) and the data classification method.
 
 [**Additional considerations**]{.underline}
 
@@ -399,7 +381,9 @@ In terms of code implementation \>
 
 # 4.7 Data Preparation for Spatial Analysis
 
-In the next part of our UI, we will be exploring Spatial statistics, specifically I will be deriving and visualising the Local Moran's I statistics.
+In the next part of our UI, we will be exploring Spatial statistics.
+
+Specifically I will be deriving and visualising the Local Moran's I statistics.
 
 First, I will create subsets of our Events happening in admin region 1 & 2, summarized with the number(count) of incidents and fatalities.
 
@@ -440,9 +424,9 @@ st_geometry(Events_admin2)
 
 Next, I will create a subset of the event type and year.
 
-For example, for the puposes of this exercise, to test the code outputs, the codes below will be used to analyse for Event type = Battles, in the year 2023.\
+For the puposes of this exercise, which is to test the code outputs, I will create a subset to analyse for Event type = Battles, in the year 2023.\
 \
-I will name the object as `Battles_2023`, eventually this object file will be coded and named generically, so that app can output the required subset when users select for different event types and different years in the Shiny app.
+I will name the object as `Battles_2023`, eventually this object file will be coded and named generically, in our app and be used to "carry" users selection (eg event types and year).
 
 ## 4.7.1 Filtering the Event and Year (Event type = Battles, in 2023)
 
@@ -496,11 +480,11 @@ While **GLOBAL** Moran’s I score and the Geary’s C ratio can tell us whether
 
 For that, we require the use of more localized methods - Anselin’s Moran Scatterplot and the Local Indicator of Spatial Autocorrelation (LISA) method.
 
-Local Indicators of Spatial Association or LISA are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable. For example, in this analysis, we are studying if there are areas that have higher or lower incidents of a specific Event type (Battles) than is to be expected by chance alone, ie the values occurring are above or below those of a random distribution in space.
+**Local Indicators of Spatial Association or LISA** are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable. For example, in this analysis, we are studying if there are areas that have higher or lower incidents of a specific Event type (Battles) than is to be expected by chance alone, ie the values occurring are above or below those of a random distribution in space.
 
 ## 4.8.1 Computing Local Moran's I
 
-To compute local Moran’s I, the [*localmoran()*](https://r-spatial.github.io/spdep/reference/localmoran.html) function of **spdep** will be used. It computes *Ii* values, given a set of *zi* values and a list object providing neighbour weighting information for the polygon associated with the zi values.
+To compute local Moran’s I, the [`localmoran()`](https://r-spatial.github.io/spdep/reference/localmoran.html) function of **spdep** will be used. It computes *Ii* values, given a set of *zi* values and a list object providing neighbour weighting information for the polygon associated with the zi values.
 
 ```{r}
 fips <- order(Battles_2023$DT)
@@ -508,7 +492,7 @@ localMI <- localmoran(Battles_2023$Incidents, rswm_q)
 head(localMI)
 ```
 
-*localmoran()* function returns a matrix of values whose columns are:
+`localmoran()` function returns a matrix of values whose columns are:
 
 -   Ii: the local Moran’s I statistics
 
@@ -520,7 +504,7 @@ head(localMI)
 
 -   Pr(): the p-value of local moran statistic
 
-The code below lists the content of the local Moran matrix derived by using [*printCoefmat()*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/printCoefmat).
+The code below lists the content of the local Moran matrix derived by using [`printCoefmat()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/printCoefmat)`.`
 
 ```{r}
 printCoefmat(data.frame(
@@ -595,7 +579,7 @@ tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
 
 ## 4.8.6 Data table for the Moran's I values
 
-For the sake of usability and readibility, it may also be a good idea to add a data table of the values, for users to make sense of both maps.
+For the sake of readibility, it may also be a good idea to add a data table of the values, for users to make sense of both maps.
 
 The below code will be used to generate the data table.
 
@@ -603,7 +587,7 @@ The below code will be used to generate the data table.
 datatable(Battles_2023.localMI)
 ```
 
-# 4.9 Part 2 - UI design
+# 4.9 UI design - Part 2
 
 As mentioned, both plots and the data table above will be used to populate our second tab in our app's Cluster and Outlier Analysis module.
 
@@ -615,7 +599,7 @@ The below is a visual of the prototype.
 
 [**Functionality and interactivity**]{.underline}
 
--   Users will be only need to select the year and the event type once. Both maps, along with the data table will be updated upon user selection.
+-   Users will only need to select the year and the event type once. Both maps, along with the data table will be updated upon user selection.
 
 [**Additional considerations**]{.underline}
 
@@ -627,7 +611,7 @@ In terms of code implementation \>
 
 # 4.10 Creating the LISA cluster map
 
-As mentioned, for the next tab of our Cluster and Outlier Analysis module, we will be creating Moran Scatter plots and the LISA cluster map.
+As mentioned, for the next tab of our Cluster and Outlier Analysis module, I will be creating Moran Scatter plots and the LISA cluster map.
 
 The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation.
 
@@ -635,7 +619,7 @@ The LISA Cluster Map shows the significant locations color coded by type of spat
 
 The Moran scatterplot is an illustration of the relationship between the values of the chosen attribute at each location and the average value of the same attribute at neighboring locations.
 
-The code below plots the Moran scatterplot of Battles in 2023 by using [*moran.plot()*](https://r-spatial.github.io/spdep/reference/moran.plot.html) of **spdep**.
+The code below plots the Moran scatterplot of Battles in 2023 by using [`moran.plot()`](https://r-spatial.github.io/spdep/reference/moran.plot.html) of **spdep**.
 
 ```{r}
 nci <- moran.plot(Battles_2023$Incidents, rswm_q,
@@ -654,14 +638,14 @@ The Moran scatterplot is divided into four areas, with each quadrant correspondi
 
 ## 4.10.2 Plotting Moran scatterplot with standardised variable
 
-First, I will use [*scale()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale) to centre and scale the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centred) variable by their standard deviations.
+First, I will use [`scale()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale) to centre and scale the variable. Here centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centred) variable by their standard deviations.
 
 ```{r}
 Battles_2023$Z.Incidents <- scale(Battles_2023$Incidents) %>% 
   as.vector 
 ```
 
-The [*as.vector()*](https://www.rdocumentation.org/packages/pbdDMAT/versions/0.5-1/topics/as.vector) is added to the end is to make sure that the data type is a vector, that maps neatly into our dataframe.
+The [`as.vector()`](https://www.rdocumentation.org/packages/pbdDMAT/versions/0.5-1/topics/as.vector) is added to the end is to make sure that the data type is a vector, that maps neatly into our dataframe.
 
 Next, we plot the Moran scatterplot again by using the code below.
 
@@ -675,14 +659,20 @@ nci2 <- moran.plot(Battles_2023$Z.Incidents, rswm_q,
 ::: callout-note
 ## Note
 
-High-High (HH): indicates high spatial correlation where incidents of Battles are clustered closely together. 2) High-Low (HL): where areas of high frequency of incidents of Battles occurred are located next to areas where there is low frequency of incidents of Battles occurred. 3) Low-High (LH): these are areas of low frequency of incidents where Battles occurred that are located next to areas where high frequency of Battles. 4) Low-Low (LL): these are clusters of low frequency of incidents of Battles occurred.
+1\) High-High (HH): indicates high spatial correlation where incidents of Battles are clustered closely together.
+
+2\) High-Low (HL): where areas of high frequency of incidents of Battles occurred are located next to areas where there is low frequency of incidents of Battles occurred.
+
+3\) Low-High (LH): these are areas of low frequency of incidents where Battles occurred that are located next to areas where high frequency of Battles.
+
+4\) Low-Low (LL): these are clusters of low frequency of incidents of Battles occurred.
 :::
 
 ## 4.10.3 Preparing LISA map classes
 
-According to Anselin (1995), LISA can be used to locate “hot spots” or local spatial clusters where the occurrence of Event types is statistically significant.
+According to Anselin (1995), LISA can be used to locate “hot spots” or local spatial clusters where the occurrence of Event types is **statistically significant.**
 
-In addition to the four categories described in the Moran Scatterplot, the LISA analysis includes an additional category: (5) Insignificant: where there are no spatial autocorrelation or clusters where event types have occurred.
+In addition to the four categories described in the Moran Scatterplot, the LISA analysis includes an additional category: **(5) Insignificant**: where there are no spatial autocorrelation or clusters where event types have occurred.
 
 The code below shows the steps to prepare a LISA cluster map.
 
@@ -726,7 +716,7 @@ quadrant[localMI[,5]>signif] <- 0
 
 ## 4.10.4 Plotting LISA Map
 
-The below code is use to create the LISA map.
+The below code is used to create the LISA map.
 
 ```{r}
 Battles_2023.localMI$quadrant <- quadrant
@@ -743,11 +733,11 @@ tm_shape(Battles_2023.localMI) +
   tm_borders(alpha=0.5)
 ```
 
-# 4.10 Part 3 - UI design
+# 4.11 UI design - Part 3
 
 As mentioned, both plots above will be used to populate our third tab in our app’s Cluster and Outlier Analysis module.
 
-The motivation here is to provide users with a Visualisation of statiscally significant clusters of event types in order to help users understand how clusters have developed and/or changed over time.
+The motivation here is to provide users with a Visualisation of statistically significant clusters of event types in order to help users understand how clusters may have developed and/or changed over time.
 
 The below is a visual of the prototype.
 
@@ -765,6 +755,248 @@ The below is a visual of the prototype.
 
 Instead of implementing a global filter which can enable users to filter and affect both plots, I have chosen to apply seperate filter selections for each plot. This is to enable users to explore different data independently. For example, users can explore “Battles” in 2021 via the scatter plot and “Violence against civilians” in 2021 via the LISA cluster map.
 
-## 4.10.1 Shiny Code considerations
+## 4.11.1 Shiny Code considerations
 
 In terms of code implementation \>
+
+# 4.12 Hot & Cold Spot Area Analysis
+
+In my last module, I will create plots to analyse the Hot and Cold spots across the country.
+
+Beside detecting for clusters and outliers, Localised spatial statistics can be also used to detect hot spot and/or cold spot areas.
+
+According to Lepers et al 2005, Aben et al 2012 and Isobe et al 2015; the term ‘hot spot’ has been used generically across disciplines to describe a region or value that is higher relative to its surroundings. \
+\
+Unlike the previous section utilizing the Local Moran's I statistics, here we will be utilizing the Getis and Ord's G statistics (Getis and Ord, 1972; Ord and Getis, 1995).
+
+This is an alternative spatial statistics for detecting spatial anomalies. It looks at neighbours within a defined proximity to identify where either high or low values clusters spatially.
+
+Statistically significant hot-spots are recognised as areas of high values where other areas within a neighbourhood range also share high values too.
+
+The workflow consists of 3 steps:
+
+1.  Deriving spatial weight matrix
+
+2.  Computing Gi statistics
+
+3.  Mapping Gi statistics
+
+## 4.12.1 Deriving distance-based weight matrix
+
+Whist the spatial autocorrelation in the previous section considered units which shared borders, for Getis-Ord we are defining neighbours based on distance.
+
+There are two type of distance-based proximity matrix, they are:
+
+-   fixed distance weight matrix; and
+
+-   adaptive distance weight matrix.
+
+### 4.12.1.1 Deriving the centroid
+
+We will need points to associate with each polygon before we can make our connectivity graph.
+
+We need the coordinates in a separate data frame for this to work. To do this we will use a mapping function. The mapping function applies a given function to each element of a vector and returns a vector of the same length.
+
+Our input vector will be the geometry column of Battles_2023 dataset. Our function will be `st_centroid()`. We will be using `map_dbl` variation of map from the purrr package.
+
+To get our longitude values we map the `st_centroid()` function over the geometry column of our Battles_2023 dataset and access the longitude value through double bracket notation \[\[\]\] and 1.
+
+This allows us to get only the longitude, which is the first value in each centroid.
+
+```{r}
+longitude <- map_dbl(Battles_2023$geometry, ~st_centroid(.x)[[1]])
+```
+
+```{r}
+class(longitude)
+```
+
+```{r}
+longitude
+```
+
+We do the same for latitude by accessing the second value per centroid with \[\[2\]\].
+
+```{r}
+latitude <- map_dbl(Battles_2023$geometry, ~st_centroid(.x)[[2]])
+```
+
+Now that we have latitude and longitude, we use `cbind` to put longitude and latitude into the same object.
+
+```{r}
+coords <- cbind(longitude, latitude)
+```
+
+```{r}
+class(coords)
+```
+
+```{r}
+coords
+```
+
+### 4.12.1.2 Determining the cut-off distance
+
+For the **fixed distance weights**, first, we need to determine the upper limit for distance band by using the steps below:
+
+-   Return a matrix with the indices of points belonging to the set of the k nearest neighbours of each other by using [`knearneigh()`](https://r-spatial.github.io/spdep/reference/knearneigh.html) of **spdep**.
+
+-   Convert the knn object returned by *knearneigh()* into a neighbours list of class nb with a list of integer vectors containing neighbour region number ids by using [`knn2nb()`](https://r-spatial.github.io/spdep/reference/knn2nb.html)`.`
+
+-   Return the length of neighbour relationship edges by using [`nbdists()`](https://r-spatial.github.io/spdep/reference/nbdists.html) of **spdep**. The function returns in the units of the coordinates if the coordinates are projected, in km otherwise.
+
+-   Remove the list structure of the returned object by using [`unlist()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unlist)`.`
+
+```{r}
+k1 <- knn2nb(knearneigh(coords))
+k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
+```
+
+```{r}
+summary(k1dists)
+```
+
+The summary report shows that the largest first nearest neighbour distance is 196.85 km, so using this as the upper threshold gives certainty that all units will have at least one neighbour.
+
+```{r}
+wm_d197 <- dnearneigh(coords, 0, 197, longlat = TRUE)
+wm_d197
+```
+
+Next, `nb2listw()` is used to convert the nb object into spatial weights object.
+
+```{r}
+wm197_lw <- nb2listw(wm_d197, style = 'B')
+summary(wm197_lw)
+```
+
+## 4.12.2 Computing Adaptive distance weight matrix
+
+One of the characteristics of fixed distance weight matrix is that more densely settled areas (usually the urban areas) tend to have more neighbours and the less densely settled areas (usually the rural counties) tend to have lesser neighbours.
+
+Having many neighbours smoothes the neighbour relationship across more neighbours.
+
+However, it is also possible to control the numbers of neighbours directly using k-nearest neighbours, either accepting asymmetric neighbours or imposing symmetry as shown in the code below.
+
+```{r}
+knn <- knn2nb(knearneigh(coords, k=8))
+knn
+```
+
+Next, *nb2listw()* is used to convert the nb object into spatial weights object.
+
+```{r}
+knn_lw <- nb2listw(knn, style = 'B')
+summary(knn_lw)
+```
+
+## 4.12.3 Computing GI statistics - Fixed distance
+
+```{r}
+gi.fixed <- localG(Battles_2023$Incidents, wm197_lw)
+gi.fixed
+```
+
+Next, we will join the Gi values to their corresponding sf data frame by using the code below.
+
+```{r}
+Battles_2023.gi <- cbind(Battles_2023, as.matrix(gi.fixed)) %>%
+  rename(gstat_fixed = as.matrix.gi.fixed.)
+```
+
+```{r}
+Battles_2023.gi
+```
+
+::: callout-note
+## Note
+
+The codes above performs three tasks.
+
+-   First, it converts the output vector (i.e. *gi.fixed*) into r matrix object by using *as.matrix()*.
+
+-   Next, *cbind()* is used to join Battles_2023 and *gi.fixed* matrix to produce a new SpatialPolygonDataFrame called *Battles_2023.gi*.
+
+-   Lastly, the field name of the gi values is renamed to *gstat_fixed* by using *rename()*.
+:::
+
+### 4.12.3.1 Mapping Gi values with Fixed distance weights
+
+The code below plots the Gi values derived using fixed distance weight matrix, alongside a standard choropleth map of incidents of Battles in 2023.
+
+```{r}
+Events_Years <- qtm(Battles_2023, "Incidents")
+
+Gimap <-tm_shape(Battles_2023.gi) +
+  tm_fill(col = "gstat_fixed", 
+          style = "pretty",
+          palette="-RdBu",
+          title = "Fixed Distance\nlocal Gi") +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(Events_Years, Gimap, asp=1, ncol=2)
+```
+
+## 4.12.4 Computing GI statistics - Adaptive distance
+
+The code below is used to compute the Gi values for Incidents of Battles in 2023 by using an adaptive distance weight matrix (i.e *knb_lw*).
+
+```{r}
+gi.adaptive <- localG(Battles_2023$Incidents, knn_lw)
+Battles_2023.gi <- cbind(Battles_2023, as.matrix(gi.adaptive)) %>%
+  rename(gstat_adaptive = as.matrix.gi.adaptive.)
+```
+
+```{r}
+datatable(Battles_2023.gi)
+```
+
+### 4.12.4.1 Mapping Gi values with Adaptive distance weights
+
+The code below plots the Gi values derived using adaptive distance weight matrix, alongside a standard choropleth map of incidents of Battles in 2023.
+
+```{r}
+Events_Years<- qtm(Battles_2023, "Incidents")
+
+Gimap <- tm_shape(Battles_2023.gi) + 
+  tm_fill(col = "gstat_adaptive", 
+          style = "pretty", 
+          palette="-RdBu", 
+          title = "Adaptive Distance\nlocal Gi") + 
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(Events_Years, 
+             Gimap, 
+             asp=1, 
+             ncol=2)
+```
+
+# 4.13 UI design - Part 4
+
+Both the choropleth map and data table will be used to populate our app's Hot & Cold Spot Analysis module.
+
+The motivation here is to provide users with a Visualisation of statiscally significant areas of event types in order to help users understand how hot and cold zones may have developed and/or changed over time.
+
+The below is a visual of the prototype.
+
+![](images/clipboard-3293581756.png)
+
+[**Functionality and interactivity**]{.underline}
+
+-   Users will only need to select the year and the event type once. Both the map and the data table will be updated upon user selection.
+
+-   For the choropleth map, users will be able to select the specific year, event type, the data classification method and the number of clusters for the adaptive weight matrix.
+
+[**Additional considerations**]{.underline}
+
+Here, I have chosen to implement a single point for users to filter and select, enabling users to see the map and refer to data table with the corresponding Gi statistics.
+
+Additionally, I will first implement adaptive distance weights, instead of having both fixed and adaptive. This is due the the additional complexity of the shiny code required to accomodate the selection of either adaptive or distance weights within the same reactive statement.
+
+## 4.13.1 Shiny code considerations
+
+In terms of code implementation \>
+
+# References
+
+Main reference: Kam, T.S. (2024). [Local Measures of Spatial Autocorrelation](https://r4gdsa.netlify.app/chap10#overview)

@@ -68,7 +68,7 @@ Cluster1 <- fluidRow(
                  selected = "Fatalities",
                  inline = TRUE),
     radioButtons("mapStyle", "Classification Type:",
-              choices = c("quantile", "equal", "jenks", "kmeans"),
+              choices = c("quantile", "equal", "jenks", "kmeans", "pretty"),
               selected = "quantile",
               inline = TRUE))
   )
@@ -158,7 +158,7 @@ HotCold1 <- fluidRow(
       ,solidHeader = TRUE 
       ,collapsible = TRUE
       ,align = "center"
-      ,plotOutput("AdaptiveGimap", height = "500px")  
+      ,plotOutput("AdaptiveGimap", height = "700px")  
       ,sliderInput("slider7", "Years:", 2010, 2024, 2021),
       selectInput("eventType6", "Event Type:",
                   choices = c("Battles" = "Battles",
@@ -167,7 +167,13 @@ HotCold1 <- fluidRow(
                               "Riots" = "Riots",
                               "Explosions/Remote violence" = "Explosions/Remote violence",
                               "Strategic developments" = "Strategic developments"),
-                  selected = "Battles"))
+                  selected = "Battles"),
+      radioButtons("mapStyle2", "Classification Type:",
+                   choices = c("quantile", "equal", "jenks", "kmeans", "pretty"),
+                   selected = "pretty",
+                   inline = TRUE),
+      sliderInput("numClusters", "Number of Clusters, Adaptive weight matrix:", 
+                  min = 4, max = 10, value = 8))
   ,box(title = "GI Statistics (Adaptive Distance)",
        status = "danger",
        solidHeader = TRUE,
@@ -513,7 +519,7 @@ server <- function(input, output) {
     coords <- cbind(longitude, latitude)
     
     # Adaptive distance weight matrix
-    knn <- knn2nb(knearneigh(coords, k=8))
+    knn <- knn2nb(knearneigh(coords, k=input$numClusters))
     knn_lw <- nb2listw(knn, style = 'B')
     
     # Calculate Gi statistics for the filtered data
@@ -544,7 +550,7 @@ server <- function(input, output) {
     # Create the choropleth map for GI stats
     Gi_map <- tm_shape(df) +
       tm_fill(col = "gstat_adaptive", 
-              style = "pretty", 
+              style = input$mapStyle2, 
               palette = "-RdBu", 
               title = "Adaptive Distance\nlocal Gi") +
       tm_borders(alpha = 0.5)
