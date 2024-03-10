@@ -20,7 +20,6 @@ header <- dashboardHeader(title = "Decoding Chaos: Armed Conflicts in Myanmar", 
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Exploratory", tabName = "Exploratory", icon = icon("globe")),
-    menuItem("Spatial Point Pattern Analysis", tabName = "SpacialPoint", icon = icon("arrow-trend-up")),
     menuItem("Cluster and Outlier Analysis", tabName = "Cluster", icon = icon("magnifying-glass-chart")),
     menuItem("Hot & Cold Spot Analysis", tabName = "HotCold", icon = icon("fire",lib = "font-awesome")),
     menuItem("Confirmatory Analysis", tabName = "ConfirmatoryAnalysis", icon = icon("microscope")),
@@ -324,14 +323,18 @@ server <- function(input, output) {
     fillColumn <- ifelse(input$metricType == "Fatalities", "Fatalities", "Incidents")
     
     # Generate the choropleth map with dynamic data and user-selected metric
-    tm_map <- tm_shape(data_filtered) +
+    tm_map <- tm_shape(mmr_shp_mimu_2) +
+      tm_borders() +  # Draws borders for all regions
+      tm_fill(col = "white", alpha = 0.5, title = "Background") +
+      
+      tm_shape(data_filtered) +
       tm_fill(fillColumn,
               n = 5,
               style = input$mapStyle,
               palette = "Reds") +
       tm_borders(alpha = 0.5)
     
-    print(tm_map)  
+    print(tm_map)
   })
   
   # Local Morans's I Map in Cluster 2  
@@ -367,7 +370,11 @@ server <- function(input, output) {
     if(is.null(df) || nrow(df) == 0) return()  # Exit if no data
     
     # Map creation using tmap
-    localMI_map <- tm_shape(df) +
+    localMI_map <- tm_shape(mmr_shp_mimu_2) +
+      tm_borders() +  # Draws borders for all regions
+      tm_fill(col = "white", alpha = 0.5, title = "Background") +
+      
+      tm_shape(df) +
       tm_fill(col = "Ii", style = "pretty", palette = "RdBu", title = "Local Moran's I") +
       tm_borders(alpha = 0.5)
     
@@ -386,7 +393,11 @@ server <- function(input, output) {
     }
     
     # Create the choropleth map for p-values
-    pvalue_map <- tm_shape(df) +
+    pvalue_map <- tm_shape(mmr_shp_mimu_2) +
+      tm_borders() +  # Draws borders for all regions
+      tm_fill(col = "white", alpha = 0.5, title = "Background") +
+      
+      tm_shape(df) +
       tm_fill(col = "Pr.z....E.Ii..", 
               breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf), 
               palette = "-Blues", 
@@ -491,9 +502,13 @@ server <- function(input, output) {
     df <- lisaCalculation()
     if(is.null(df)) return()
     
-    colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+    colors <- c("lightyellow", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
     
     # Generate the LISA map
+    tm_shape(mmr_shp_mimu_2) +
+      tm_borders() +  # Draws borders for all regions
+      tm_fill(col = "white", alpha = 0.5, title = "Background") +
+    
     tm_shape(df) +
       tm_fill(col = "quadrant", 
               style = "cat", 
@@ -548,7 +563,11 @@ server <- function(input, output) {
     }
     
     # Create the choropleth map for GI stats
-    Gi_map <- tm_shape(df) +
+    Gi_map <- tm_shape(mmr_shp_mimu_2) +
+      tm_borders() +  # Draws borders for all regions
+      tm_fill(col = "white", alpha = 0.5, title = "Background") +
+      
+      tm_shape(df) +
       tm_fill(col = "gstat_adaptive", 
               style = input$mapStyle2, 
               palette = "-RdBu", 

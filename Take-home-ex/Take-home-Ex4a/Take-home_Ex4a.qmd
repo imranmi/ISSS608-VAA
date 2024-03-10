@@ -736,7 +736,7 @@ The below code is used to create the LISA map.
 
 ```{r}
 Battles_2023.localMI$quadrant <- quadrant
-colors <- c("grey", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+colors <- c("lightyellow", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
 clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
 
 tm_shape(mmr_shp_mimu_2) +
