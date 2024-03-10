@@ -692,6 +692,10 @@ class(Events_admin1)
 st_geometry(Events_admin2)
 ```
 
+```{r}
+str(Events_admin2)
+```
+
 Next, I will create a subset of the event type and year.
 
 For example, for the puposes of this exercise, the codes below will be used to analyse for Event type = Battles, in the year 2023\
@@ -703,6 +707,10 @@ I will name the object as `Battles_2023`, eventually this object file will be na
 ```{r}
 Battles_2023 <- Events_admin2 %>%
   filter(year == 2023, event_type == "Battles")
+```
+
+```{r}
+Battles_2023
 ```
 
 ### Computing Contiguity Spatial Weights
@@ -803,6 +811,10 @@ Battles_2023.localMI
 Using choropleth mapping functions of **tmap** package, we can plot the local Moran’s I values by using the code below.
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Ii", 
           style = "pretty",
@@ -818,6 +830,10 @@ The choropleth shows there is evidence for both positive and negative Ii values.
 The code below produces a choropleth map of Moran’s I p-values by using functions of **tmap** package.
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Pr.Ii", 
           breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
@@ -833,13 +849,20 @@ For the Shiny App, it will be better to plot both the local Moran’s I values m
 The code below will be used to create such visualisation.
 
 ```{r}
-localMI.map <- tm_shape(Battles_2023.localMI) +
+localMI.map <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+  tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Ii", 
           style = "pretty", 
           title = "local moran statistics") +
   tm_borders(alpha = 0.5)
 
-pvalue.map <- tm_shape(Battles_2023.localMI) +
+pvalue.map <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+  
+  tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Pr.Ii", 
           breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
           palette="-Blues", 
@@ -989,8 +1012,12 @@ Now, we can build the LISA map by using the code below.
 
 ```{r}
 Battles_2023.localMI$quadrant <- quadrant
-colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+colors <- c("grey", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
 clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
 
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "quadrant", 
@@ -1002,55 +1029,11 @@ tm_shape(Battles_2023.localMI) +
   tm_borders(alpha=0.5)
 ```
 
-We can also plot the choropleth map of incidents of Battles in 2023 together with the LISA map
-
-```{r}
-Incidents <- qtm(Battles_2023, "Incidents")
-
-Battles_2023.localMI$quadrant <- quadrant
-colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
-clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
-
-LISAmap <- tm_shape(Battles_2023.localMI) +
-  tm_fill(col = "quadrant", 
-          style = "cat", 
-          palette = colors[c(sort(unique(quadrant)))+1], 
-          labels = clusters[c(sort(unique(quadrant)))+1],
-          popup.vars = c("")) +
-  tm_view(set.zoom.limits = c(11,17)) +
-  tm_borders(alpha=0.5)
-
-tmap_arrange(Incidents, LISAmap,
-             asp=1, ncol=2)
-```
-
 We can also include the local Moran’s I map and p-value map as shown below for easy comparison.
 
 ```{r}
 tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
 ```
-
-To see the full effect of the LISA maps by event type, we will need to view this over time to see how it has changed over time.\
-
-#### LISA Maps for Battles in 2020-2023
-
-2020
-
-![](images/clipboard-170596739.png)
-
-**2021**
-
-![](images/clipboard-1503795972.png)
-
-**2022**
-
-![](images/clipboard-1875261868.png)
-
-**2023**
-
-![](images/clipboard-3383112591.png)
-
-For our Shiny App, I will combine these 4 plots into a single page for users.
 
 # Hot Spot and Cold Spot Area Analysis
 
@@ -1268,16 +1251,19 @@ The code above performs three tasks. First, it converts the output vector (i.e.�
 The code below shows the functions used to map the Gi values derived using fixed distance weight matrix.
 
 ```{r}
-Events_Years <- qtm(Battles_2023, "Incidents")
 
-Gimap <-tm_shape(Battles_2023.gi) +
+Gimap <-tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+  
+  tm_shape(Battles_2023.gi) +
   tm_fill(col = "gstat_fixed", 
           style = "pretty",
           palette="-RdBu",
           title = "Fixed Distance\nlocal Gi") +
   tm_borders(alpha = 0.5)
 
-tmap_arrange(Events_Years, Gimap, asp=1, ncol=2)
+Gimap
 ```
 
 ### Gi statistics using adaptive distance
@@ -1314,44 +1300,29 @@ Now we visualise the locations of hot spot and cold spot areas. The choropleth m
 The code below shows the functions used to map the Gi values derived using fixed distance weight matrix.
 
 ```{r}
-Events_Years<- qtm(Battles_2023, "Incidents")
 
-Gimap <- tm_shape(Battles_2023.gi) + 
+
+Gimap <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +  # Makes the fill semi-transparent
+  
+  tm_shape(Battles_2023.gi) + 
   tm_fill(col = "gstat_adaptive", 
           style = "pretty", 
           palette="-RdBu", 
           title = "Adaptive Distance\nlocal Gi") + 
   tm_borders(alpha = 0.5)
 
-tmap_arrange(Events_Years, 
-             Gimap, 
-             asp=1, 
-             ncol=2)
+Gimap
 ```
 
 ### Comparing Fixed distance and Adaptive Distance
 
-![](images/clipboard-2611857874.png)
+![](images/clipboard-83099466.png){width="271"}
 
-![](images/clipboard-1647384731.png)
+![](images/clipboard-4221063618.png){width="263"}
 
 There is a few subtle differences between the Fixed and Adaptive distances.
-
-Lastly, to see the full effect of the HOT & Cold spots by event type, we can also view the maps over time to see how hot and cold spots have changed.\
-
-#### Hot & Cold Spots for Battles in 2020-2023 (adaptive distance)
-
-**2020**
-
-![**2021**](images/clipboard-3169172241.png)
-
-![**2022**](images/clipboard-3172227594.png)
-
-![](images/clipboard-264827815.png)
-
-**2023**
-
-![](images/clipboard-2567179488.png)
 
 # Shiny code considerations/reflections
 

@@ -32,7 +32,7 @@ For this project on the visualisation of **Armed conflicts in Myanmar**, I will 
 
 ```{r}
 pacman::p_load(sf, tidyverse, tmap, dplyr,
-               raster, spatstat, spdep,
+               spatstat, spdep,
                lubridate, leaflet,
                plotly, DT, viridis,
                ggplot2, sfdep)
@@ -234,6 +234,10 @@ The below codes will be used to create samples of our visualisations.
 ## Fatalities in Battles in 2023, by Districts (Quantile)
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+
 ACLED_MMR_admin2 %>%
   filter(year == 2023, event_type == "Battles") %>%
   tm_shape() +
@@ -247,6 +251,10 @@ ACLED_MMR_admin2 %>%
 ## Incidents of Violence against civilians in 2021, by Districts (Equal)
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+
 ACLED_MMR_admin2 %>%
   filter(year == 2021, event_type == "Violence against civilians") %>%
   tm_shape() +
@@ -527,6 +535,10 @@ Battles_2023.localMI
 Using choropleth mapping functions of `tmap package`, we can plot the local Moran’s I values by using the code below.
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Ii", 
           style = "pretty",
@@ -542,6 +554,10 @@ The choropleth above shows there is evidence for both positive and negative Ii v
 The code below produces a choropleth map of Moran’s I p-values by using functions of `tmap package.`
 
 ```{r}
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Pr.Ii", 
           breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
@@ -557,13 +573,21 @@ For the Shiny App, it will be better to plot both the local Moran’s I values m
 The code below will be used to create such visualisation.
 
 ```{r}
-localMI.map <- tm_shape(Battles_2023.localMI) +
+localMI.map <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+  
+  tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Ii", 
           style = "pretty", 
           title = "local moran statistics") +
   tm_borders(alpha = 0.5)
 
-pvalue.map <- tm_shape(Battles_2023.localMI) +
+pvalue.map <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+  
+  tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Pr.Ii", 
           breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
           palette="-Blues", 
@@ -712,8 +736,12 @@ The below code is used to create the LISA map.
 
 ```{r}
 Battles_2023.localMI$quadrant <- quadrant
-colors <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+colors <- c("grey", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
 clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
 
 tm_shape(Battles_2023.localMI) +
   tm_fill(col = "quadrant", 
@@ -753,7 +781,7 @@ In my last module, I will create plots to analyse the Hot and Cold spots across 
 
 Beside detecting for clusters and outliers, Localised spatial statistics can be also used to detect hot spot and/or cold spot areas.
 
-According to Lepers et al 2005, Aben et al 2012 and Isobe et al 2015; the term ‘hot spot’ has been used generically across disciplines to describe a region or value that is higher relative to its surroundings. \
+According to Lepers et al 2005, Aben et al 2012 and Isobe et al 2015; the term ‘hot spot’ has been used generically across disciplines to describe a region or value that is higher relative to its surroundings.\
 \
 Unlike the previous section utilizing the Local Moran's I statistics, here we will be utilizing the Getis and Ord's G statistics (Getis and Ord, 1972; Ord and Getis, 1995).
 
@@ -910,19 +938,23 @@ The codes above performs three tasks.
 
 ### 4.12.3.1 Mapping Gi values with Fixed distance weights
 
-The code below plots the Gi values derived using fixed distance weight matrix, alongside a standard choropleth map of incidents of Battles in 2023.
+The code below plots the Gi values derived using fixed distance weight matrix, for event type==Battles in 2023.
 
 ```{r}
-Events_Years <- qtm(Battles_2023, "Incidents")
 
-Gimap <-tm_shape(Battles_2023.gi) +
+
+Gimap <-tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+  
+  tm_shape(Battles_2023.gi) +
   tm_fill(col = "gstat_fixed", 
           style = "pretty",
           palette="-RdBu",
           title = "Fixed Distance\nlocal Gi") +
   tm_borders(alpha = 0.5)
 
-tmap_arrange(Events_Years, Gimap, asp=1, ncol=2)
+Gimap
 ```
 
 ## 4.12.4 Computing GI statistics - Adaptive distance
@@ -941,22 +973,23 @@ datatable(Battles_2023.gi)
 
 ### 4.12.4.1 Mapping Gi values with Adaptive distance weights
 
-The code below plots the Gi values derived using adaptive distance weight matrix, alongside a standard choropleth map of incidents of Battles in 2023.
+The code below plots the Gi values derived using adaptive distance weight matrix for event type == Battles in 2023.
 
 ```{r}
-Events_Years<- qtm(Battles_2023, "Incidents")
 
-Gimap <- tm_shape(Battles_2023.gi) + 
+
+Gimap <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+  
+  tm_shape(Battles_2023.gi) + 
   tm_fill(col = "gstat_adaptive", 
           style = "pretty", 
           palette="-RdBu", 
           title = "Adaptive Distance\nlocal Gi") + 
   tm_borders(alpha = 0.5)
 
-tmap_arrange(Events_Years, 
-             Gimap, 
-             asp=1, 
-             ncol=2)
+Gimap
 ```
 
 # 4.13 UI design - Part 4
