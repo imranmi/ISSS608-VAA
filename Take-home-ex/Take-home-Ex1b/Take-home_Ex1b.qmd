@@ -16,9 +16,9 @@ execute:
 ## Loading R package
 
 ```{r}
-pacman::p_load(tidyverse, sf, lubridate, leaflet, tmap,
-               raster, spatstat, plotly, DT, classInt, viridis,
-               ggplot2, sfdep)
+pacman::p_load(tidyverse, kableExtra, knitr, highcharter, scales, 
+               ggthemes, RColorBrewer, lubridate, wordcloud,
+               tidytext, ggforce, ggraph, igraph, tm, plotly, tidygraph)
 ```
 
 ```{r}
@@ -31,6 +31,32 @@ mmr_shp <-  st_read(dsn = "data/geospatial",
 # Convert conflict data to an sf object
 conflict_sf <- st_as_sf(conflict_data, coords = c("longitude", "latitude"), crs = 4326)
 
+```
+
+```{r}
+data <- read.csv("data/1900-01-01-2024-02-26-Southeast_Asia-Myanmar.csv")
+```
+
+```{r}
+str(data)
+```
+
+```{r}
+mapping_rates <- readRDS("data/mapping_rates.rds")
+```
+
+```{r}
+mapping_rates <- mapping_rates %>%
+  rename(
+    "Total_Fatalities" = `Total Fatalities`,
+    "Total_Incidents" = `Total Incidents`
+   
+  )
+```
+
+```{r}
+write_rds(mapping_rates, 
+          "data/mapping_rates.rds")
 ```
 
 Use the SF file, with geometry column

@@ -86,6 +86,10 @@ The Shape file for admin2 level map, is an SF object, with geometry type: Multip
 st_geometry(mmr_shp_mimu_2)
 ```
 
+```{r}
+st_crs(mmr_shp_mimu_2)
+```
+
 Next, I will check the unique district names in this shape file (admin2)
 
 ```{r}
@@ -1017,3 +1021,11 @@ Additionally, I will first implement adaptive distance weights, instead of havin
 # 4.14 References
 
 Main reference: Kam, T.S. (2024). [Local Measures of Spatial Autocorrelation](https://r4gdsa.netlify.app/chap10#overview)
+
+```{r}
+final <- readRDS("data/final.rds")
+```
+
+```{r}
+final2 <- readRDS("data/mapping_rates.rds")
+```
