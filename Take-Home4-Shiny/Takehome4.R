@@ -13,7 +13,7 @@ mapping_rates <- readRDS("data/mapping_rates.rds")
 
 event_type <- unique(final$event_type)
 admin1 <- unique(final$admin1)
-year1 <- unique(ACLED_MMR$year)
+
 
 
 mmr_shp_mimu_1 <- sf::st_read(dsn = "data/geospatial3", layer = "mmr_polbnda2_adm1_250k_mimu_1")
@@ -543,8 +543,8 @@ Cluster1 <- fluidRow(
              helpText("Filter options for Proportional Symbol Map",
                       selectInput(inputId = "Yearpointmap",
                                   label = "Year:",
-                                  choices = year1),
-                      selected = "2021"),
+                                  choices = seq(2010,2023),
+                                  selected = 2021),
              selectInput("eventType1", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
@@ -560,7 +560,7 @@ Cluster1 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             textOutput("PointMaptext")
+             textOutput("PointMaptext"))
              
          )
          
@@ -582,7 +582,7 @@ Cluster1 <- fluidRow(
            collapsible = TRUE,
            width = NULL,
            align = "center",
-           plotOutput("choropleth", height = "700px", width = "100%"))
+           tmapOutput("choropleth", height = "700px", width = "100%"))
          
   ),   
   column(2,
@@ -593,8 +593,8 @@ Cluster1 <- fluidRow(
              helpText("Filter options for Choropleth Map",
                       selectInput(inputId = "Yearchoromap",
                                   label = "Year:",
-                                  choices = year1),
-                      selected = "2021"),
+                                  choices = seq(2010,2023),
+                      selected = 2021),
              selectInput("eventType2", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
@@ -624,6 +624,8 @@ Cluster1 <- fluidRow(
   
 )
 
+)
+
 #Cluster and Outlier Analysis, 2nd Tab
 #####################################
 
@@ -636,8 +638,8 @@ Cluster2 <- fluidRow(
              helpText("Filter options for Choropleth Map"),
              selectInput(inputId = "YearMoransI",
                          label = "Year:",
-                         choices = year1,
-                         selected = "2021"),
+                         choices = seq(2010,2023),
+                         selected = 2021),
              selectInput("eventType3", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
@@ -663,7 +665,7 @@ Cluster2 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "center",
-             plotOutput("LocalMoranMap", height = "700px", width = "100%"))
+             tmapOutput("LocalMoranMap", height = "700px", width = "100%"))
   ),
   
   column(4,
@@ -674,7 +676,7 @@ Cluster2 <- fluidRow(
            collapsible = TRUE,
            width = NULL,
            align = "center",
-           plotOutput("LocalMoranPval", height = "700px", width = "100%"))
+           tmapOutput("LocalMoranPval", height = "700px", width = "100%"))
   ),
   
   column(12,
@@ -696,37 +698,83 @@ Cluster2 <- fluidRow(
 #####################################
 
 Cluster3 <- fluidRow(
-  box(title = "Moran Scatter Plot"
+  column(2,
+         box(title = "Desired Characteristic",
+             status = "info",
+             solidHeader = FALSE,
+             width = NULL,
+             helpText("Filter options for Moran Scatterplot"),
+             selectInput(inputId = "YearMoranScat",
+                         label = "Year:",
+                         choices = seq(2010,2023),
+                         selected = 2021),
+             selectInput("eventType4", "Event Type:",
+                         choices = c("Battles" = "Battles",
+                                     "Violence against civilians" = "Violence against civilians",
+                                     "Protests" = "Protests",
+                                     "Riots" = "Riots",
+                                     "Explosions/Remote violence" = "Explosions/Remote violence",
+                                     "Strategic developments" = "Strategic developments"),
+                         selected = "Battles")
+         ),
+         box(title = "Chart Interpretation",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             textOutput("MoranScatText")
+         )
+  ),
+  
+  column(4,
+      box(title = "Moran Scatter Plot"
       ,status = "danger"
       ,solidHeader = TRUE 
       ,collapsible = TRUE
+      ,width = NULL
       ,align = "center"
-      ,plotOutput("MoranScatter", height = "600px")  
-      ,sliderInput("slider5", "Years:", 2010, 2023, 2021),
-      selectInput("eventType4", "Event Type:",
-                  choices = c("Battles" = "Battles",
-                              "Violence against civilians" = "Violence against civilians",
-                              "Protests" = "Protests",
-                              "Riots" = "Riots",
-                              "Explosions/Remote violence" = "Explosions/Remote violence",
-                              "Strategic developments" = "Strategic developments"),
-                  selected = "Battles"))
-  ,box(
-    title = "Local Indicator of Spacial Association (LISA)"
-    ,status = "danger"
-    ,solidHeader = TRUE 
-    ,collapsible = TRUE
-    ,align = "center"
-    ,plotOutput("Lisa", height = "600px")
-    ,sliderInput("slider6", "Years:", 2010, 2023, 2021),
-    selectInput("eventType5", "Event Type:",
-                choices = c("Battles" = "Battles",
-                            "Violence against civilians" = "Violence against civilians",
-                            "Protests" = "Protests",
-                            "Riots" = "Riots",
-                            "Explosions/Remote violence" = "Explosions/Remote violence",
-                            "Strategic developments" = "Strategic developments"),
-                selected = "Battles"))
+      ,plotOutput("MoranScatter", height = "700px", width = "100%")) 
+  ),
+  column(4,
+         box(
+           title = "Local Indicator of Spacial Association (LISA)",
+           status = "danger",
+           solidHeader = TRUE,
+           collapsible = TRUE,
+           width = NULL,
+           align = "center",
+           tmapOutput("Lisa", height = "700px", width = "100%"))
+         
+  ),   
+  column(2,
+         box(title = "Desired Characteristic",
+             status = "info",
+             solidHeader = FALSE,
+             width = NULL,
+             helpText("Filter options for LISA Map",
+                      selectInput(inputId = "YearLisamap",
+                                  label = "Year:",
+                                  choices = seq(2010,2023),
+                                  selected = 2021),
+             selectInput("eventType5", "Event Type:",
+                         choices = c("Battles" = "Battles",
+                                     "Violence against civilians" = "Violence against civilians",
+                                     "Protests" = "Protests",
+                                     "Riots" = "Riots",
+                                     "Explosions/Remote violence" = "Explosions/Remote violence",
+                                     "Strategic developments" = "Strategic developments"),
+                         selected = "Battles")),
+         box(title = "Chart Interpretation",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             align = "left",
+             textOutput("LisaMapText"))
+      
+         )
+  )    
+  
 )
 
 
@@ -735,36 +783,61 @@ Cluster3 <- fluidRow(
 #####################################
 
 HotCold1 <- fluidRow(
-  box(title = "Adaptive Distance - Hot & Cold spots"
-      ,status = "danger"
-      ,solidHeader = TRUE 
-      ,collapsible = TRUE
-      ,align = "center"
-      ,plotOutput("AdaptiveGimap", height = "700px")  
-      ,sliderInput("slider7", "Years:", 2010, 2023, 2021),
-      selectInput("eventType6", "Event Type:",
-                  choices = c("Battles" = "Battles",
-                              "Violence against civilians" = "Violence against civilians",
-                              "Protests" = "Protests",
-                              "Riots" = "Riots",
-                              "Explosions/Remote violence" = "Explosions/Remote violence",
-                              "Strategic developments" = "Strategic developments"),
-                  selected = "Battles"),
-      radioButtons("mapStyle2", "Classification Type:",
-                   choices = c("quantile", "equal", "jenks", "kmeans", "pretty"),
-                   selected = "pretty",
-                   inline = TRUE),
-      sliderInput("numClusters", "Number of Clusters, Adaptive weight matrix:", 
-                  min = 4, max = 10, value = 8))
-  ,box(title = "GI Statistics (Adaptive Distance)",
-       status = "danger",
-       solidHeader = TRUE,
-       collapsible = TRUE,
-       align = "center",
-       dataTableOutput("AdaptiveGiStat"))
-  
-)
+  column(2,
+         box(title = "Desired Characteristic",
+             status = "info",
+             solidHeader = FALSE,
+             width = NULL,
+             helpText("Filter options for Hot & Cold spot map"),
+             selectInput(inputId = "YearHotCold",
+                         label = "Year:",
+                         choices = seq(2010,2023),
+                         selected = 2021),
+             selectInput("eventType6", "Event Type:",
+                         choices = c("Battles" = "Battles",
+                                     "Violence against civilians" = "Violence against civilians",
+                                     "Protests" = "Protests",
+                                     "Riots" = "Riots",
+                                     "Explosions/Remote violence" = "Explosions/Remote violence",
+                                     "Strategic developments" = "Strategic developments"),
+                         selected = "Battles"),
+             radioButtons("mapStyle2", "Classification Type:",
+                          choices = c("quantile", "equal", "jenks", "kmeans", "pretty"),
+                          selected = "pretty",
+                          inline = TRUE),
+             sliderInput("numClusters", "Number of Clusters, Adaptive weight matrix:", 
+                         min = 4, max = 10, value = 8)
+         ),
+         box(title = "Chart Interpretation",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             textOutput("HotColdText")
+         )
+  ),
+  column(4,
+         box(title = "Adaptive Distance - Hot & Cold spots"
+             ,status = "danger"
+             ,solidHeader = TRUE 
+             ,collapsible = TRUE
+             ,width = NULL
+             ,align = "center"
+             ,tmapOutput("AdaptiveGimap", height = "700px", width = "100%"))
+  ),
+  column(6,
+      box(
+        title = "GI Statistics (Adaptive Distance) - Data Table",
+        status = "danger",
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        width = NULL,
+        align = "center",
+        dataTableOutput("AdaptiveGiStat")
+      )
+  )
 
+)
 
 #define the no of sub tabs needed
 
@@ -847,6 +920,10 @@ server <- function(input, output, session) {
   ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, Data2,
                                 by = c("DT" = "admin2"))
   
+  ACLED_MMR_admin2 <- ACLED_MMR_admin2 %>%
+                      select(-OBJECTID, -ST, -ST_PCODE)
+  
+  
   # Convert conflict data to an sf object
   ###################################################
   conflict_sf <- sf::st_as_sf(ACLED_MMR, coords = c("longitude", "latitude"), crs = 4326)
@@ -864,7 +941,8 @@ server <- function(input, output, session) {
   Events_admin2 <- left_join(mmr_shp_mimu_2, Events2,
                              by = c("DT" = "admin2"))
   
-  
+  Events_admin2 <- Events_admin2 %>%
+                  select(-OBJECTID, -ST, -ST_PCODE)
   
   # =============================    
   # START of EXPLORATORY Module
@@ -966,7 +1044,7 @@ server <- function(input, output, session) {
   get.var <- function(vname, df) {
     v <- df[[vname]]
     return(v)
-  }
+  } 
   
   # Function to create a box map
   boxmap <- function(vnam, df, legtitle=NA, mtitle="Box Map", mult=1.5) {
@@ -1354,8 +1432,9 @@ server <- function(input, output, session) {
   
   #creating the Plots- for Cluster & Outlier Analysis 
   
-  # Pointmap in Cluster 1 UI
-  #################################################################  
+  #==========================================================
+  # Proportional Symbol map in Cluster 1 UI
+  #==========================================================   
   
   # Reactive expression to filter data based on input from UI
   PointMapYears <- reactive({
@@ -1392,14 +1471,18 @@ server <- function(input, output, session) {
     abruptly changing phenomenon. Here, the number of fatalities are mapped to the sizes of the circles" 
   })
   
-  
+  #==========================================================
   # choropleth in Cluster 1 UI
-  #################################################################  
+  #==========================================================   
   
-  output$choropleth <- renderPlot({
+  
+  #tmap_mode("plot")
+  
+  output$choropleth <- renderTmap({
     # Dynamically filter data based on user input
     data_filtered <- ACLED_MMR_admin2 %>%
-      filter(year == input$Yearchoromap, event_type == input$eventType2)
+      filter(year == input$Yearchoromap, event_type == input$eventType2) 
+      
     
     # Check if the filtered data is empty to avoid errors
     if(nrow(data_filtered) == 0) {
@@ -1409,7 +1492,6 @@ server <- function(input, output, session) {
     # Determine the column to use for filling based on user selection
     fillColumn <- ifelse(input$metricType == "Fatalities", "Fatalities", "Incidents")
     
-    # Generate the choropleth map with dynamic data and user-selected metric
     tm_map <- tm_shape(mmr_shp_mimu_2) +
       tm_borders() +  # Draws borders for all regions
       tm_fill(col = "white", alpha = 0.5, title = "Background") +
@@ -1418,10 +1500,10 @@ server <- function(input, output, session) {
       tm_fill(fillColumn,
               n = 5,
               style = input$mapStyle,
-              palette = "Reds") +
+              palette = "Reds")+
       tm_borders(alpha = 0.5)
     
-    print(tm_map)
+    tm_map
   })
   
   output$ChoroMaptext <- renderText({ 
@@ -1431,14 +1513,17 @@ server <- function(input, output, session) {
   })
   
   
+  #==========================================================
+  # Local Morans's I Map in Cluster 2
+  #==========================================================   
   
-  # Local Morans's I Map in Cluster 2  
-  ###############################################
+  
   
   localMIResults <- reactive({
     # Filter the data based on the user's selection
     filteredData <- Events_admin2 %>%
-      filter(year == input$YearMoransI, event_type == input$eventType3)
+    filter(year == input$YearMoransI, event_type == input$eventType3) 
+    
     
     if(nrow(filteredData) == 0) return(NULL)  # Exit if no data
     
@@ -1459,7 +1544,7 @@ server <- function(input, output, session) {
   })
   
   # Render the map of Local Moran's I values
-  output$LocalMoranMap <- renderPlot({
+  output$LocalMoranMap <- renderTmap({
     df <- localMIResults()
     
     if(is.null(df) || nrow(df) == 0) return()  # Exit if no data
@@ -1476,10 +1561,11 @@ server <- function(input, output, session) {
     localMI_map
   })
   
-  # Local Morans's I P-values Map in Cluster 2  
-  ###############################################
+  #==========================================================
+  # Local Morans's I P-values Map in Cluster 2 
+  #==========================================================  
   
-  output$LocalMoranPval <- renderPlot({
+  output$LocalMoranPval <- renderTmap({
     df <- localMIResults()
     
     # Exit if there's no data to plot
@@ -1502,9 +1588,10 @@ server <- function(input, output, session) {
     pvalue_map
   })
   
-  # Local Morans's I Data Table in Cluster 2  
-  ###############################################
-  
+  #==========================================================
+  # Local Morans's I Data Table in Cluster 2 
+  #==========================================================  
+
   # Render the data table for Local Moran's I results
   output$localMoranDataTable <- renderDataTable({
     df <- localMIResults()
@@ -1521,21 +1608,21 @@ server <- function(input, output, session) {
     spatial clustering or dispersion within a given geographic area.
     Unlike global measures like Moran's I, it assesses spatial patterns at a local level, 
     determining if features form significant clusters (high-high or low-low) or outliers (high-low or low-high) 
-    compared to neighboring features.
-    By pinpointing local spatial autocorrelation, it reveals concentrations or dispersions of phenomena.
-    In our analysis, we're examining if certain areas exhibit higher or lower incident rates of a specific 
+    compared to neighboring features.In our analysis, we're examining if certain areas (admin region 2) exhibit higher or lower incident rates of a specific 
     event type than expected by chance alone, indicating deviations from a random spatial distribution.
     Here, we are mapping Ii: the local Moran's I statistics, and the p-value of the Local Moran's I statistic" 
   })
   
   
+  #==========================================================
   # Moran Scatter plot in Cluster 3
-  ####################################
+  #==========================================================  
+
   
   output$MoranScatter <- renderPlot({
     # Retrieve filtered data based on input selections for event type and year
     filteredData1 <- Events_admin2 %>%
-      filter(year == input$slider5, event_type == input$eventType4)
+      filter(year == input$YearMoranScat, event_type == input$eventType4)
     
     # Exit if no data is available for the selected criteria
     if(nrow(filteredData1) == 0) {
@@ -1553,7 +1640,7 @@ server <- function(input, output, session) {
     # Compute Moran's I values
     moranValues <- localmoran(standardizedIncidents, rswm_q, na.action = na.exclude)
     
-    plotTitle <- paste("Moran Scatterplot for", input$eventType4, "in", input$slider5)
+    plotTitle <- paste("Moran Scatterplot for", input$eventType4, "in", input$YearMoranScat)
     
     # Create the Moran scatterplot
     nci <- moran.plot(standardizedIncidents, rswm_q,
@@ -1565,13 +1652,23 @@ server <- function(input, output, session) {
     
   })
   
-  # LISA Map in Cluster 3
-  ####################################
+  output$MoranScatText <- renderText({ 
+    "The Moran scatterplot is divided into four areas, with each quadrant corresponding 
+    with one of four categories: (1) High-High (HH) in the top-right quadrant; (2) High-Low (HL) 
+    in the bottom right quadrant; (3) Low-High (LH) in the top-left quadrant; 
+    (4) Low- Low (LL) in the bottom left quadrant. The top right corner belongs to areas that have high incidents of events and are surrounded by other areas 
+    that have higher than the average level/number of battles This is the high-high locations." 
+  })
   
+  
+  #==========================================================
+  # LISA Map in Cluster 3
+  #==========================================================  
+
   
   lisaCalculation <- reactive({
     LisaData <- Events_admin2 %>%
-      filter(year == input$slider6, event_type == input$eventType5)
+      filter(year == input$YearLisamap, event_type == input$eventType5) 
     
     if(nrow(LisaData) == 0) return(NULL)
     
@@ -1605,14 +1702,14 @@ server <- function(input, output, session) {
   })
   
   # Render the LISA map plot
-  output$Lisa <- renderPlot({
+  output$Lisa <- renderTmap({
     df <- lisaCalculation()
     if(is.null(df)) return()
     
     colors <- c("lightyellow", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
     
     # Generate the LISA map
-    tm_shape(mmr_shp_mimu_2) +
+    lisamap <- tm_shape(mmr_shp_mimu_2) +
       tm_borders() +  # Draws borders for all regions
       tm_fill(col = "white", alpha = 0.5, title = "Background") +
       
@@ -1622,7 +1719,18 @@ server <- function(input, output, session) {
               palette = colors, 
               title = "LISA Clusters") +
       tm_borders(alpha=0.5)
+    
+    lisamap
   })
+  
+  output$LisaMapText <- renderText({ 
+    "In addition to the four categories described in the Moran Scatterplot, 
+    the LISA Map includes an additional category: 
+    (5) Insignificant: where there are no spatial autocorrelation or clusters where event types have occurred.
+    The Lisa Cluster map shows the specific parts of the country which are categorized 
+    as statistically significant or insignificant." 
+  })
+  
   
   
   #==========================================================
@@ -1635,12 +1743,14 @@ server <- function(input, output, session) {
   #==========================================================
   
   
+  #==========================================================
   # Adaptive GI Map and Table
-  ######################################
+  #==========================================================
+  
   
   AdaptiveGiData <- reactive({
     filtered_data2 <- Events_admin2 %>%
-      filter(year == input$slider7, event_type == input$eventType6)
+      filter(year == input$YearHotCold, event_type == input$eventType6)
     
     # Calculate centroids for filtered data
     longitude <- map_dbl(filtered_data2$geometry, ~st_centroid(.x)[[1]])
@@ -1668,7 +1778,7 @@ server <- function(input, output, session) {
     filtered_data2
   })
   
-  output$AdaptiveGimap <- renderPlot({
+  output$AdaptiveGimap <- renderTmap({
     df <- AdaptiveGiData()
     
     # Exit if there's no data to plot
@@ -1700,9 +1810,23 @@ server <- function(input, output, session) {
     return(data_with_gi)
   })
   
+  output$HotColdText <- renderText({ 
+    "Unlike the previous section utilizing the Local Moran’s I statistics, 
+    here we will be utilizing the Getis and Ord’s G statistics. Getis-Ord's G focuses 
+    on detecting hot spots (areas with high values) and cold spots (areas with low values) 
+    within a defined proximity (distance).
+    
+    Getis-Ord's G assesses the statistical significance of clustering by considering both the values of features 
+    and the values of their neighboring features. High positive G values indicate hot spots—areas where high values cluster together—
+    while low negative G values indicate cold spots—areas where low values cluster together." 
+  })
+  
+  
   #==========================================================
   # END of Hot & Cold spot Analysis Module
   #==========================================================
+  
+  
   
   #==========================================================
   # START of Confirmatory Analysis Module
