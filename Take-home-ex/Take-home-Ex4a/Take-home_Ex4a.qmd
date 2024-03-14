@@ -283,22 +283,6 @@ ACLED_MMR_admin2 %>%
 ```
 :::
 
-For the codes above, I have layered two maps: 1) the original admin2 shape file and 2) the filtered dataset. This is because, not all event types happen in all districts for all years.
-
-For example below, filtering for event type = Battles for year 2010, creates the below plot.
-
-```{r}
-
-ACLED_MMR_admin2 %>%
-  filter(year == 2010, event_type == "Battles") %>%
-  tm_shape() +
-  tm_fill("Incidents",
-          n = 5,
-          style = "equal",
-          palette = "Reds") +
-  tm_borders(alpha = 0.5)
-```
-
 Adding Interactivity by using `tmap_leaftlet()`
 
 ```{r}
@@ -648,45 +632,9 @@ tm_shape(Battles_2023.localMI) +
   tm_borders(alpha = 0.5)
 ```
 
-## 4.8.5 Mapping both local Moran’s I values and p-values with `tmap_leaflet()`
-
-The codes below will be used to create interactive plots for both the Local Moran;s I value and p-values.
-
-```{r}
-MoransImap <- tm_shape(mmr_shp_mimu_2) +
-  tm_borders() +  # Draws borders for all regions
-  tm_fill(col = "white", alpha = 0.5, title = "Background") +
-
-tm_shape(Battles_2023.localMI) +
-  tm_fill(col = "Ii", 
-          style = "pretty",
-          palette = "RdBu",
-          title = "local moran statistics") +
-  tm_borders(alpha = 0.5)
-
-tmap_leaflet(MoransImap)
-```
-
-```{r}
-Pvalmap <- tm_shape(mmr_shp_mimu_2) +
-  tm_borders() +  # Draws borders for all regions
-  tm_fill(col = "white", alpha = 0.5, title = "Background") +
-
-tm_shape(Battles_2023.localMI) +
-  tm_fill(col = "Pr.Ii", 
-          breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
-          palette="-Blues", 
-          title = "local Moran's I p-values") +
-  tm_borders(alpha = 0.5)
-
-tmap_leaflet(Pvalmap)
-```
-
 ::: callout-note
 ## Parameters and Output to be exposed to Shiny
 
-The plots above are sufficiently interactive as users can hover to any polygon to get more information on the district and statistical value (Ii or P-value).\
-\
 In terms of enabling user inputs, I will expose it to accept user input: Year and Event type.
 :::
 
