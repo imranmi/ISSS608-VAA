@@ -12,7 +12,7 @@ execute:
 
 # 4.1 The Task
 
-In this take-home exercise, we are required to select one of the module of our proposed Shiny application and complete the following tasks:
+In this take-home exercise, we are required to select one of the modules of our proposed Shiny application (Group Project) and complete the following tasks:
 
 -   To evaluate and determine the necessary R packages needed for our Shiny application are supported in R CRAN,
 
@@ -26,9 +26,13 @@ In this take-home exercise, we are required to select one of the module of our p
 
 # 4.2 Getting Started
 
-For this project on the visualisation of **Armed conflicts in Myanmar**, I will be preparing the codes and UI for the modules on **Cluster & Outlier Analysis (LISA)** and **Hot/Cold zone analysis.**
+Our project will be using open-source data from the Armed Conflict Location & Event Data Project (ACLED).
+
+Specifically, our project will be focusing on the visualisation of **Armed conflicts in Myanmar**, and I will be preparing the modules on **Cluster & Outlier Analysis (LISA)** and **Hot/Cold zone analysis.**
 
 ## 4.2.1 Loading R packages
+
+The below R packages will be used in this exercise and for the Shiny application
 
 ```{r}
 pacman::p_load(sf, tidyverse, tmap, dplyr,
@@ -42,29 +46,31 @@ pacman::p_load(sf, tidyverse, tmap, dplyr,
 
 Country specific data from the Armed Conflict Location & Event Data Project (ACLED) can be downloaded at <https://acleddata.com/data-export-tool/>
 
+Loading the ACLED data set for Myanmar.
+
 ```{r}
 ACLED_MMR <- read_csv("data/MMR.csv")
 ```
 
 ## 4.2.3 Downloading and loading the shape files for country
 
-Shape files were downloaded from the [Myanmmar Information Management Unit (MIMU)](https://themimu.info/about-us) website at <https://geonode.themimu.info/layers/?limit=100&offset=0>
+Shape files were downloaded from the [Myanmmar Information Management Unit (MIMU)](https://themimu.info/about-us) website.
 
-I have chosen this source over [GADM](https://gadm.org/data.html) and [GeoBoundaries](https://www.geoboundaries.org/) due to its updated administrative region information and map levels.
+I chose this source over [GADM](https://gadm.org/data.html) and [GeoBoundaries](https://www.geoboundaries.org/) due to its updated administrative region information and map levels.
 
 ::: callout-note
 ## Note - Data Quality Issues
 
 ACLED captures event data from national, sub-national and other media sources, and populates event locations based on the last known information.\
 \
-Some names of administrative areas were found to have changed; either disaggregated into new administrative areas or previously active but now defunct. Some administrative areas were also aggregated into higher administrative areas.
+However, some names of administrative areas were found to have changed; either disaggregated into new administrative areas or previously active but now defunct. Some administrative areas were also aggregated into higher administrative areas.
 
 As part of our data cleaning and preparation process, I had to identify discrepancies in both admin1 & 2 (administrative levels) and re-name some administrative areas to sync with the downloaded shape files from MIMU.
 :::
 
 # 4.3 Data Preparation and Cleaning
 
-I will first loading in the shape files at the admin 1 (region/state) and admin 2 (districts) levels. Most of our plots will be utilizing admin 2 levels.
+I will first load in the shape files at the admin 1 (region/state) and admin 2 (districts) levels. Most of our plots will be utilizing admin 2 levels.
 
 ## 4.3.1 Loading Admin 1 & 2 (administrative region/area) shape files
 
@@ -98,7 +104,7 @@ unique_regions_mimu2 <- unique(mmr_shp_mimu_2$DT)
 unique_regions_mimu2
 ```
 
-There are 80 admin2 levels or states/districts in mmr_shp_mimu_2
+There are 80 admin2 levels or districts in mmr_shp_mimu_2
 
 Lets compare with our admin2 levels in our main dataset ACLED_MMR
 
@@ -108,7 +114,7 @@ unique_acled_regions2 <- unique(ACLED_MMR$admin2)
 unique_acled_regions2
 ```
 
-I will write a simple function to identify the discrepancies between the shape file and our state/district names in our main dataset.
+I will write a simple function below to identify the discrepancies between the shape file and our state/district names in our main dataset.
 
 ```{r}
 # Find the unique region names that are in 'unique_acled_regions2' but not in 'unique_regions_mimu2'
@@ -123,7 +129,7 @@ if (length(mismatched_admin2) > 0) {
 }
 ```
 
-Lets harmonize the names in both data files. I will resave it to a new data set called ACLED_MMR_1
+Lets harmonize the names in both data files. I will re-save it to a new data set called ACLED_MMR_1
 
 Fixing our admin 1 names.
 
@@ -184,7 +190,7 @@ plot(mmr_shp_mimu_2)
 
 ## 4.3.2 Data Wrangling
 
-For the purposes of plotting choropleth maps, I will first create attributes subsets for each admin level (1&2) grouped by year, admin region, event type and sub event type.
+For the purposes of plotting choropleth maps, I will first create attributes subsets to summarise the number of incidents and fatalities, grouped by year, admin region, event type and sub event type.
 
 ```{r}
 Data2 <- ACLED_MMR_1 %>%
@@ -212,11 +218,18 @@ ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, Data2,
                             by = c("DT" = "admin2"))
 ```
 
+Removing the variables I don't require.
+
+```{r}
+ACLED_MMR_admin2 <- ACLED_MMR_admin2 %>%
+                      select(-OBJECTID, -ST, -ST_PCODE)
+```
+
 ```{r}
 class(ACLED_MMR_admin2)
 ```
 
-Checking that total sum of incidents and fatalities in our SF files are correct as per our original datasets.
+Next, I will just double check that total sum of incidents and fatalities in our SF files are correct as per our original datasets.
 
 ```{r}
 total_incidents_check <- sum(ACLED_MMR_admin2$Incidents)
@@ -228,11 +241,11 @@ total_fatalities_check
 
 # 4.4 Choropleth Maps
 
-For the module on **Cluster & Outlier Analysis (LISA)**, I will first be creating both Choropleth and Proportional Symbol Maps, as part of the initial Interactive Exploratory Analysis.
+For the module on **Cluster & Outlier Analysis (LISA)**, for the first tab, I will be plotting both Choropleth and Proportional Symbol Maps, as part of the initial Interactive Exploratory Analysis..
 
 ## 4.4.1 Choropleth map of Incidents & Fatalities by Admin2 level (by District)
 
-The below codes will be used to create samples of our visualisations.
+The below codes will be used to create the choropleth maps.
 
 ::: panel-tabset
 ## Fatalities in Battles in 2023, by Districts (Quantile)
@@ -270,11 +283,59 @@ ACLED_MMR_admin2 %>%
 ```
 :::
 
+For the codes above, I have layered two maps: 1) the original admin2 shape file and 2) the filtered dataset. This is because, not all event types happen in all districts for all years.
+
+For example below, filtering for event type = Battles for year 2010, creates the below plot.
+
+```{r}
+
+ACLED_MMR_admin2 %>%
+  filter(year == 2010, event_type == "Battles") %>%
+  tm_shape() +
+  tm_fill("Incidents",
+          n = 5,
+          style = "equal",
+          palette = "Reds") +
+  tm_borders(alpha = 0.5)
+```
+
+Adding Interactivity by using `tmap_leaftlet()`
+
+```{r}
+
+data_filtered <- ACLED_MMR_admin2 %>%
+  filter(year == 2022, event_type == "Battles")
+
+tm_map <- tm_shape(mmr_shp_mimu_2) +
+  tm_borders() +  # Draws borders for all regions
+  tm_fill(col = "white", alpha = 0.5, title = "Background") +
+  
+  tm_shape(data_filtered) +
+  tm_fill(col = "Incidents", n = 5, style = "equal", palette = "Reds", title = "Incidents") +
+  tm_borders(alpha = 0.5)
+
+tmap_leaflet(tm_map)
+```
+
+::: callout-note
+## Parameters and Output to be exposed to Shiny
+
+From the codes above, below are the variables we can expose as user inputs:-
+
+-   Year
+
+-   Event type (Battles, Violence against civilians, protests, riots, explosions/remote violence)
+
+-   Count type: number of Incidents or Fatalities
+
+-   Data classification type: eg quantile, equal, jenks, kmeans, pretty etc
+:::
+
 # 4.5 Proportional Symbol Maps
 
-Proportional symbol maps (also known as graduate symbol maps) are a class of maps that use the visual variable of size to represent differences in the magnitude of a discrete, abruptly changing phenomenon, e.g. counts of people.
+Proportional symbol maps (also known as graduate symbol maps) are a class of maps that use the visual variable of size to represent differences in the magnitude of a discrete, abruptly changing phenomenon, e.g. counts of incidents, fatalities.
 
-First I will convert the ACLED_MMR_1 data set to become an sf object.
+First I will convert the ACLED_MMR_1 data set to become an sf object called conflict_sf.
 
 ```{r}
 # Convert conflict data to an sf object
@@ -306,11 +367,11 @@ class(Battles)
 
 ## 4.5.1 Visualising the location of conflict events
 
-Using the `leaflet package`, I will use the Geometry points from our data sets to plot the points of event types in the maps.
+Using the `leaflet package`, I will use the Geometry points from our SF data sets to plot the points of event types in the maps.
 
 In this case, I will use admin 1 level regions, to achieve a better aesthetics for users.
 
-This is because, visually dividing the country map into more smaller districts would likely make the map look "too busy".
+This is because, visually dividing the country map into more smaller districts (admin2) would likely make the map look "too busy".
 
 ::: panel-tabset
 ## Battles from 2010 to present
@@ -365,6 +426,14 @@ fillColor = "red", fillOpacity = 0.4, color = "#FFFFFF", weight = 1) %>%
 ```
 :::
 
+::: callout-note
+## Parameters and Output to be exposed to Shiny
+
+The plots above are sufficiently interactive as users can hover to any "circle" to get more information on the event and location.\
+\
+In terms of enabling user inputs, I will expose it to accept user input: Year and Event type.
+:::
+
 # 4.6 UI design - Part 1
 
 As mentioned, both plots above will be used to populate our first tab in our app's Cluster & Outlier Analysis module.
@@ -373,13 +442,13 @@ The motivation here is to provide users with a Visual Introduction of the state 
 
 Below is a visual of the prototype for this page.
 
-![](images/clipboard-3061140252.png)
+![](images/clipboard-3382425437.png){width="893"}
 
 [**Functionality and interactivity**]{.underline}
 
 -   The Proportional symbol map will allow users to select the specific year and event type. Users will be able to see where conflicts events have happened in the country across different years.
 
--   The Choropleth map will be able to communicate the "intensity" of the events through use of color gradient. Users will be able to select the specific year, event type, count type (incidents or fatalities) and the data classification method.
+-   The Choropleth map will be able to visualise the "intensity" of the events through use of color gradient. Users will be able to select the specific year, event type, count type (incidents or fatalities) and the data classification method.
 
 [**Additional considerations**]{.underline}
 
@@ -389,7 +458,7 @@ Instead of implementing a global filter which can enable users to filter and aff
 
 # 4.7 Data Preparation for Spatial Analysis
 
-In the next part of our UI, we will be exploring Spatial statistics.
+For the next part of our UI, we will be exploring Spatial statistics.
 
 Specifically I will be deriving and visualising the Local Moran's I statistics.
 
@@ -422,8 +491,15 @@ Events_admin2 <- left_join(mmr_shp_mimu_2, Events2,
                             by = c("DT" = "admin2"))
 ```
 
+Removing the variables I don't need.
+
 ```{r}
-class(Events_admin1)
+Events_admin2 <- Events_admin2 %>%
+                      select(-OBJECTID, -ST, -ST_PCODE)
+```
+
+```{r}
+class(Events_admin2)
 ```
 
 ```{r}
@@ -471,7 +547,7 @@ There are 2 most connected area units with 10 neighbours, and there are 3 area u
 
 Next, we assign weights to each neighboring polygon. In our case, each neighboring polygon will be assigned equal weight (style=“W”). This is accomplished by assigning the fraction 1/(#ofneighbors) to each neighboring admin2 (district) and then summing the weighted income values.
 
-This has one drawback in that polygons along the edges of the study area will base their lagged values on fewer polygons and thus potentially over- or under-estimating the true nature of the spatial autocorrelation in the data.
+This has one drawback in that polygons along the edges of the study area will base their lagged values on fewer polygons and thus potentially over or under estimating the true nature of the spatial autocorrelation in the data.
 
 However, for this example, I will stick with the style=“W” option for simplicity’s sake. Other more robust options are available, notably style=“B”.
 
@@ -488,7 +564,9 @@ While **GLOBAL** Moran’s I score and the Geary’s C ratio can tell us whether
 
 For that, we require the use of more localized methods - Anselin’s Moran Scatterplot and the Local Indicator of Spatial Autocorrelation (LISA) method.
 
-**Local Indicators of Spatial Association or LISA** are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable. For example, in this analysis, we are studying if there are areas that have higher or lower incidents of a specific Event type (Battles) than is to be expected by chance alone, ie the values occurring are above or below those of a random distribution in space.
+**Local Indicators of Spatial Association or LISA** are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable.
+
+For example, in this analysis, we are studying if there are areas that have higher or lower incidents of a specific Event type (Battles) than is to be expected by chance alone, ie the values occurring are above or below those of a random distribution in space.
 
 ## 4.8.1 Computing Local Moran's I
 
@@ -570,40 +648,51 @@ tm_shape(Battles_2023.localMI) +
   tm_borders(alpha = 0.5)
 ```
 
-## 4.8.5 Mapping both local Moran’s I values and p-values
+## 4.8.5 Mapping both local Moran’s I values and p-values with `tmap_leaflet()`
 
-For the Shiny App, it will be better to plot both the local Moran’s I values map and its corresponding p-values map next to each other.
-
-The code below will be used to create such visualisation.
+The codes below will be used to create interactive plots for both the Local Moran;s I value and p-values.
 
 ```{r}
-localMI.map <- tm_shape(mmr_shp_mimu_2) +
+MoransImap <- tm_shape(mmr_shp_mimu_2) +
   tm_borders() +  # Draws borders for all regions
   tm_fill(col = "white", alpha = 0.5, title = "Background") +
-  
-  tm_shape(Battles_2023.localMI) +
+
+tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Ii", 
-          style = "pretty", 
+          style = "pretty",
+          palette = "RdBu",
           title = "local moran statistics") +
   tm_borders(alpha = 0.5)
 
-pvalue.map <- tm_shape(mmr_shp_mimu_2) +
+tmap_leaflet(MoransImap)
+```
+
+```{r}
+Pvalmap <- tm_shape(mmr_shp_mimu_2) +
   tm_borders() +  # Draws borders for all regions
   tm_fill(col = "white", alpha = 0.5, title = "Background") +
-  
-  tm_shape(Battles_2023.localMI) +
+
+tm_shape(Battles_2023.localMI) +
   tm_fill(col = "Pr.Ii", 
           breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
           palette="-Blues", 
           title = "local Moran's I p-values") +
   tm_borders(alpha = 0.5)
 
-tmap_arrange(localMI.map, pvalue.map, asp=1, ncol=2)
+tmap_leaflet(Pvalmap)
 ```
+
+::: callout-note
+## Parameters and Output to be exposed to Shiny
+
+The plots above are sufficiently interactive as users can hover to any polygon to get more information on the district and statistical value (Ii or P-value).\
+\
+In terms of enabling user inputs, I will expose it to accept user input: Year and Event type.
+:::
 
 ## 4.8.6 Data table for the Moran's I values
 
-For the sake of readibility, it may also be a good idea to add a data table of the values, for users to make sense of both maps.
+For the sake of readability, it may also be a good idea to add a data table of the values, for users to make sense of both maps.
 
 The below code will be used to generate the data table.
 
@@ -615,11 +704,11 @@ datatable(Battles_2023.localMI)
 
 As mentioned, both plots and the data table above will be used to populate our second tab in our app's Cluster and Outlier Analysis module.
 
-The motivation here is to provide users with a Visualisation of the Local Moran's I statistics before they proceed to the next tab that has the Moran's scatter plot and Lisa Cluster map.
+The motivation here is to provide users with a visualisation of the Local Moran's I statistics before they proceed to the next tab that has the Moran's scatter plot and Lisa Cluster map.
 
 The below is a visual of the prototype.
 
-![](images/clipboard-3240170765.png){width="717"}
+![](images/clipboard-1675407284.png)
 
 [**Functionality and interactivity**]{.underline}
 
@@ -631,7 +720,7 @@ Here, I have chosen to implement a single point for users to filter and select, 
 
 # 4.10 Creating the LISA cluster map
 
-As mentioned, for the next tab of our Cluster and Outlier Analysis module, I will be creating Moran Scatter plots and the LISA cluster map.
+For the next tab of our Cluster and Outlier Analysis module, I will be creating the Moran Scatter plot and the LISA cluster map.
 
 The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation.
 
@@ -757,15 +846,21 @@ tm_shape(Battles_2023.localMI) +
   tm_borders(alpha=0.5)
 ```
 
+::: callout-note
+## Parameters and Output to be exposed to Shiny
+
+In terms of enabling user inputs, I will expose it to accept user input: Year and Event type.
+:::
+
 # 4.11 UI design - Part 3
 
 As mentioned, both plots above will be used to populate our third tab in our app’s Cluster and Outlier Analysis module.
 
-The motivation here is to provide users with a Visualisation of statistically significant clusters of event types in order to help users understand how clusters may have developed and/or changed over time.
+The motivation here is to provide users with a visualisation of statistically significant clusters of event types in order to help users understand how clusters may have developed and/or changed over time.
 
 The below is a visual of the prototype.
 
-![](images/clipboard-2958084756.png)
+![](images/clipboard-1679571755.png)
 
 [**Functionality and interactivity**]{.underline}
 
@@ -789,7 +884,7 @@ According to Lepers et al 2005, Aben et al 2012 and Isobe et al 2015; the term �
 \
 Unlike the previous section utilizing the Local Moran's I statistics, here we will be utilizing the Getis and Ord's G statistics (Getis and Ord, 1972; Ord and Getis, 1995).
 
-This is an alternative spatial statistics for detecting spatial anomalies. It looks at neighbours within a defined proximity to identify where either high or low values clusters spatially.
+This is an alternative spatial statistics for detecting spatial anomalies. It looks at neighbours within a defined proximity (distance) to identify where either high or low values clusters spatially.
 
 Statistically significant hot-spots are recognised as areas of high values where other areas within a neighbourhood range also share high values too.
 
@@ -996,36 +1091,44 @@ Gimap <- tm_shape(mmr_shp_mimu_2) +
 Gimap
 ```
 
+::: callout-note
+## Parameters and Output to be exposed to Shiny
+
+In terms of enabling user inputs, I will expose it to accept user inputs:
+
+-   Year
+
+-   Event type
+
+-   Data Classification type, and
+
+-   Number of clusters for the Adaptive weight matrix
+:::
+
 # 4.13 UI design - Part 4
 
-Both the choropleth map and data table will be used to populate our app's Hot & Cold Spot Analysis module.
+Both the choropleth map and data table above will be used to populate our app's Hot & Cold Spot Analysis module.
 
-The motivation here is to provide users with a Visualisation of statiscally significant areas of event types in order to help users understand how hot and cold zones may have developed and/or changed over time.
+The motivation here is to provide users with a visualisation of statistically significant areas of event types in order to help users understand how hot and cold zones may have developed and/or changed over time.
 
 The below is a visual of the prototype.
 
-![](images/clipboard-3293581756.png)
+![](images/clipboard-1104384947.png)
 
 [**Functionality and interactivity**]{.underline}
 
--   Users will only need to select the year and the event type once. Both the map and the data table will be updated upon user selection.
-
--   For the choropleth map, users will be able to select the specific year, event type, the data classification method and the number of clusters for the adaptive weight matrix.
+-   Users will be able to select the specific year, event type, the data classification method and the number of clusters for the adaptive weight matrix to populate the map and data table.
 
 [**Additional considerations**]{.underline}
 
 Here, I have chosen to implement a single point for users to filter and select, enabling users to see the map and refer to data table with the corresponding Gi statistics.
 
-Additionally, I will first implement adaptive distance weights, instead of having both fixed and adaptive. This is due the the additional complexity of the shiny code required to accomodate the selection of either adaptive or distance weights within the same reactive statement.
+Additionally, I will first implement **adaptive distance weights**, instead of having both fixed and adaptive. This is due the the added complexity of the shiny code required to accomodate the selection of either adaptive or distance weights within the same reactive statement.
+
+For example, as shown above in the calculation for fixed distance weights, we will first need to determine the upper limit of the distance band in order to set such that all units will have at least one neighbour.\
+\
+When considering that user inputs selections will require a recalculation of the dataset to calculate the GI values reactively, this may add complexity to the code and the computation required to plot the map.
 
 # 4.14 References
 
 Main reference: Kam, T.S. (2024). [Local Measures of Spatial Autocorrelation](https://r4gdsa.netlify.app/chap10#overview)
-
-```{r}
-final <- readRDS("data/final.rds")
-```
-
-```{r}
-final2 <- readRDS("data/mapping_rates.rds")
-```
