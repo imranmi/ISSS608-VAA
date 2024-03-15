@@ -531,9 +531,15 @@ ExploreSubTabs <- tabsetPanel(
 ########### EXPLORATORY - END
 # =============================
 
+#==========================================================  
+# Cluster and Outlier - START
+#==========================================================  
 
-#Cluster and Outlier Analysis, 1st Tab
-#####################################
+
+#==========================================================  
+##Cluster and Outlier Analysis, 1st Tab
+#==========================================================  
+
 Cluster1 <- fluidRow(
   column(2,
          box(title = "Desired Characteristic",
@@ -626,8 +632,10 @@ Cluster1 <- fluidRow(
 
 )
 
-#Cluster and Outlier Analysis, 2nd Tab
-#####################################
+#==========================================================  
+##Cluster and Outlier Analysis, 2nd Tab
+#==========================================================  
+
 
 Cluster2 <- fluidRow(
   column(2,
@@ -693,9 +701,9 @@ Cluster2 <- fluidRow(
   
 )
 
-
-#Cluster and Outlier Analysis, 3rd Tab
-#####################################
+#==========================================================  
+##Cluster and Outlier Analysis, 3rd Tab
+#==========================================================  
 
 Cluster3 <- fluidRow(
   column(2,
@@ -777,10 +785,14 @@ Cluster3 <- fluidRow(
   
 )
 
+#==========================================================  
+#Cluster and Outlier Analysis tab ----END
+#==========================================================  
 
 
-#Hot and Cold Spot Analysis
-#####################################
+#==========================================================  
+##Hot and Cold Spot Analysis tab --- START
+#==========================================================  
 
 HotCold1 <- fluidRow(
   column(2,
@@ -838,6 +850,10 @@ HotCold1 <- fluidRow(
   )
 
 )
+
+#==========================================================  
+##Hot and Cold Spot Analysis tab ----END
+#==========================================================  
 
 #define the no of sub tabs needed
 
@@ -906,8 +922,13 @@ ui <- dashboardPage(title = 'Armed Conflicts in Myanmar (2010 to 2023)',
 # create the server functions for the dashboard  
 server <- function(input, output, session) { 
   
-  #Data subset for Choropleth Maps (Admin 2)
-  ######################################################
+# =============================    
+  #DATA Wrangling
+# =============================  
+  
+  
+  ##Data subset for Choropleth Maps (Admin 2)
+  #====================================================
   Data2 <- ACLED_MMR %>%
     group_by(year, admin2, event_type, sub_event_type) %>%
     summarise(Incidents = n(),
@@ -915,8 +936,8 @@ server <- function(input, output, session) {
     
     ungroup()
   
-  #Spacial join between shape file and attribute file (admin 2)
-  ######################################################
+  ##Spacial join between shape file and attribute file (admin 2)
+  #=======================================================
   ACLED_MMR_admin2 <- left_join(mmr_shp_mimu_2, Data2,
                                 by = c("DT" = "admin2"))
   
@@ -925,11 +946,11 @@ server <- function(input, output, session) {
   
   
   # Convert conflict data to an sf object
-  ###################################################
+  #===================================================
   conflict_sf <- sf::st_as_sf(ACLED_MMR, coords = c("longitude", "latitude"), crs = 4326)
   
   #Data subset for Local Morans statistics
-  ######################################################
+  #====================================================
   
   Events2 <- ACLED_MMR %>%
     group_by(year, admin2, event_type) %>%
@@ -943,6 +964,8 @@ server <- function(input, output, session) {
   
   Events_admin2 <- Events_admin2 %>%
                   select(-OBJECTID, -ST, -ST_PCODE)
+  
+  
   
   # =============================    
   # START of EXPLORATORY Module
