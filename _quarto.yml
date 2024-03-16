@@ -57,6 +57,8 @@ website:
             href: In-class-ex/In-class-Ex3/In-class_Ex3.html
           - text: In-class Exercise 7 - Isophyet Map for Rainfall Data
             href: In-class-ex/In-class-Ex4/In-class_Ex4.html
+          - text: In-class Exercise 8 - Network Graph
+            href: In-class-ex/In-class-Ex5/In-class_Ex5.html
       - text: Take-home Exercises
         menu: 
           - text: Take-home Exercise 1 - Detailed

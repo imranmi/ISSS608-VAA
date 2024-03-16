@@ -587,7 +587,7 @@ Cluster1 <- fluidRow(
            solidHeader = TRUE,
            collapsible = TRUE,
            width = NULL,
-           align = "center",
+           align = "left",
            tmapOutput("choropleth", height = "700px", width = "100%"))
          
   ),   
@@ -657,35 +657,37 @@ Cluster2 <- fluidRow(
                                      "Strategic developments" = "Strategic developments"),
                          selected = "Battles")
          ),
-         box(title = "Chart Interpretation",
-             status = "danger",
-             solidHeader = TRUE,
-             collapsible = TRUE,
-             width = NULL,
-             textOutput("MoransItext")
-         )
+         
   ),
   
-  column(4,
+  column(5,
          box(title = "Local Moran's I Statistic",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
              width = NULL,
-             align = "center",
+             align = "left",
              tmapOutput("LocalMoranMap", height = "700px", width = "100%"))
   ),
   
-  column(4,
+  column(5,
          box(
            title = "Local Moran's I P-values",
            status = "danger",
            solidHeader = TRUE,
            collapsible = TRUE,
            width = NULL,
-           align = "center",
+           align = "left",
            tmapOutput("LocalMoranPval", height = "700px", width = "100%"))
   ),
+  column(12,
+         box(title = "Chart Interpretation",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             textOutput("MoransItext")
+         ),
   
   column(12,
          box(
@@ -695,8 +697,10 @@ Cluster2 <- fluidRow(
            collapsible = TRUE,
            width = NULL,
            align = "center",
-           dataTableOutput("localMoranDataTable")
+           dataTableOutput("localMoranDataTable"),
+            style = "height:600px; overflow-y: scroll;overflow-x: scroll;")
          )
+         
   )
   
 )
@@ -734,23 +738,23 @@ Cluster3 <- fluidRow(
          )
   ),
   
-  column(4,
+  column(10,
       box(title = "Moran Scatter Plot"
       ,status = "danger"
       ,solidHeader = TRUE 
       ,collapsible = TRUE
       ,width = NULL
       ,align = "center"
-      ,plotOutput("MoranScatter", height = "700px", width = "100%")) 
+      ,plotOutput("MoranScatter", height = "500px", width = "100%")) 
   ),
-  column(4,
+  column(8,
          box(
            title = "Local Indicator of Spacial Association (LISA)",
            status = "danger",
            solidHeader = TRUE,
            collapsible = TRUE,
            width = NULL,
-           align = "center",
+           align = "left",
            tmapOutput("Lisa", height = "700px", width = "100%"))
          
   ),   
@@ -828,16 +832,16 @@ HotCold1 <- fluidRow(
              textOutput("HotColdText")
          )
   ),
-  column(4,
+  column(10,
          box(title = "Adaptive Distance - Hot & Cold spots"
              ,status = "danger"
              ,solidHeader = TRUE 
              ,collapsible = TRUE
              ,width = NULL
-             ,align = "center"
+             ,align = "left"
              ,tmapOutput("AdaptiveGimap", height = "700px", width = "100%"))
   ),
-  column(6,
+  column(10,
       box(
         title = "GI Statistics (Adaptive Distance) - Data Table",
         status = "danger",
@@ -845,7 +849,8 @@ HotCold1 <- fluidRow(
         collapsible = TRUE,
         width = NULL,
         align = "center",
-        dataTableOutput("AdaptiveGiStat")
+        dataTableOutput("AdaptiveGiStat"),
+        style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
       )
   )
 
@@ -942,7 +947,7 @@ server <- function(input, output, session) {
                                 by = c("DT" = "admin2"))
   
   ACLED_MMR_admin2 <- ACLED_MMR_admin2 %>%
-                      select(-OBJECTID, -ST, -ST_PCODE)
+                      select(-OBJECTID, -ST, -ST_PCODE, -DT_PCODE, -DT_MMR, -PCode_V)
   
   
   # Convert conflict data to an sf object
@@ -963,7 +968,7 @@ server <- function(input, output, session) {
                              by = c("DT" = "admin2"))
   
   Events_admin2 <- Events_admin2 %>%
-                  select(-OBJECTID, -ST, -ST_PCODE)
+                  select(-OBJECTID, -ST, -ST_PCODE, -DT_PCODE, -DT_MMR, -PCode_V)
   
   
   
@@ -1627,13 +1632,14 @@ server <- function(input, output, session) {
   })
   
   output$MoransItext <- renderText({ 
-    "Local Moran's I, a component of LISA, is a spatial statistic that detects and quantifies 
+    "Local Moran's I, is a spatial statistic that detects and quantifies 
     spatial clustering or dispersion within a given geographic area.
     Unlike global measures like Moran's I, it assesses spatial patterns at a local level, 
     determining if features form significant clusters (high-high or low-low) or outliers (high-low or low-high) 
-    compared to neighboring features.In our analysis, we're examining if certain areas (admin region 2) exhibit higher or lower incident rates of a specific 
-    event type than expected by chance alone, indicating deviations from a random spatial distribution.
-    Here, we are mapping Ii: the local Moran's I statistics, and the p-value of the Local Moran's I statistic" 
+    compared to neighboring features.
+    
+    In our analysis, we're examining if certain areas (admin region 2) exhibit higher or lower incident rates of a specific 
+    event type than expected by chance alone, indicating deviations from a random spatial distribution." 
   })
   
   
