@@ -1,6 +1,6 @@
 ---
 title: "Take-home Exercise 1c"
-date: January 13, 2024
+date: March 17, 2024
 date-modified: "last-modified"
 toc: true
 execute: 
@@ -35,6 +35,8 @@ pacman::p_load(tidyverse, dplyr ,
 ACLED_MMR <- read_csv("data/MMR.csv")
 ```
 
+Shapes files for Myanmar at admin1 and admin2 levels
+
 ```{r}
 mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
                   layer = "mmr_polbnda_adm2_250k_mimu")
@@ -44,6 +46,8 @@ mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",
 mmr_shp_mimu_1 <-  st_read(dsn = "data/geospatial3",  
                   layer = "mmr_polbnda2_adm1_250k_mimu_1")
 ```
+
+Renaming the region and district names so that our dataset will be the same as the shape files
 
 ```{r}
 ACLED_MMR_1 <- ACLED_MMR %>%
@@ -76,46 +80,67 @@ ACLED_MMR_1 <- ACLED_MMR_1 %>%
 In the code chunk below, [`spacetime()`](https://sfdep.josiahparry.com/reference/spacetime.html) of sfdep is used to create an spatio-temporal cube.
 
 ```{r}
-
-GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
+#| code-fold: true
+#| code-summary: "Show the code"
+#GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
 ```
 
 ```{r}
-
-hunan <- st_read(dsn = "data/geospatial4", 
-                 layer = "Hunan")
+#| code-fold: true
+#| code-summary: "Show the code"
+#hunan <- st_read(dsn = "data/geospatial4", 
+                 #layer = "Hunan")
 ```
 
 ```{r}
-class(GDPPC)
+#| code-fold: true
+#| code-summary: "Show the code"
+#class(GDPPC)
 ```
 
 ```{r}
-class(hunan)
+#| code-fold: true
+#| code-summary: "Show the code"
+#class(hunan)
 ```
 
 ```{r}
-GDPPC_st <- spacetime(GDPPC, hunan,
-                      .loc_col = "County",
-                      .time_col = "Year")
+#| code-fold: true
+#| code-summary: "Show the code"
+#GDPPC_st <- spacetime(GDPPC, hunan,
+                      #.loc_col = "County",
+                      #.time_col = "Year")
 ```
 
 ```{r}
-is_spacetime_cube(GDPPC_st)
+#| code-fold: true
+#| code-summary: "Show the code"
+#is_spacetime_cube(GDPPC_st)
 ```
 
-### Renaming the column names
+### Filtering for Battles for admin 1 & 2 and renaming the column names
 
 loc_col identifier needs to be the same name for both data and shape file
+
+Since 2024 data is not for the full year, we will remove it. We will the total up the count of Incidents for event type== Battles.
 
 ```{r}
 Battles_admin1 <- ACLED_MMR_1 %>%
     group_by(year, admin1) %>%
-    filter(event_type == "Battles") %>%
+    filter(year != 2024, event_type == "Battles") %>%
     summarise(Incidents = n()) %>%
     ungroup() %>%
     rename(ST = admin1)
 
+```
+
+```{r}
+Battles_admin2 <- ACLED_MMR_1 %>%
+    group_by(year, admin2) %>%
+    filter(year != 2024, event_type == "Battles") %>%
+    summarise(Incidents = n()) %>%
+    ungroup() %>%
+    rename(DT = admin2)
 ```
 
 ```{r}
@@ -128,107 +153,103 @@ battles_spacial1 <- spacetime(Battles_admin1, mmr_shp_mimu_1,
 is_spacetime_cube(battles_spacial1)
 ```
 
-This is due to some years having zero incident, this needs to be populated as zero, all district names have to be accounted for, for each year
-
-Trying with a smaller set, but manually inserting zero for each year, in each district
-
 ```{r}
-Battles_admin1_2124 <- read_csv("data/Battles_admin1_2124.csv")
+battles_spacial2 <- spacetime(Battles_admin2, mmr_shp_mimu_2,
+                      .loc_col = "DT",
+                      .time_col = "year")
 ```
 
 ```{r}
-battles_test2 <- spacetime(Battles_admin1_2124, mmr_shp_mimu_1,
-                   .loc_col = "ST",
-                   .time_col = "year")
+is_spacetime_cube(battles_spacial2)
+```
+
+This is due to some years having zero incidents, this needs to be populated as zero, all state/region and district names have to be accounted for, and for each year
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+#Battles_admin1_2124 <- read_csv("data/Battles_admin1_2124.csv")
 ```
 
 ```{r}
-is_spacetime_cube(battles_test2)
+#| code-fold: true
+#| code-summary: "Show the code"
+#battles_test2 <- spacetime(Battles_admin1_2124, mmr_shp_mimu_1,
+                   #.loc_col = "ST",
+                   #.time_col = "year")
 ```
-
-conversion to space time object is successful.
 
 ```{r}
-class(battles_test2)
+#| code-fold: true
+#| code-summary: "Show the code"
+#is_spacetime_cube(battles_test2)
 ```
 
-## Data preparation steps for all Battles data (2011-2023)
+## Using `complete_spacetime_cube()`
+
+As per above, we have an incomplete space time cube due to missing districts/regions, with no incidents in some years.
+
+According to [Josiah Perry](https://sfdep.josiahparry.com/articles/spacetime-s3.html), if an object is a **sparse** spatio-temporal grid, we can make it a full one using `complete_spacetime_cube()`. This works similarly to \[tidyr::complete()\].
+
+`complete_spacetime_cube()` ensures that there is a row for each combination of location and time. New rows will contain missing values
 
 ```{r}
-
-#Battles_admin2 <- ACLED_MMR_1 %>%
-    #filter(year != 2024, year != 2010, event_type == "Battles") %>%
-    #group_by(year, admin2) %>%
-    #summarise(Incidents = n(), .groups = 'drop') %>%
-    #rename(DT = admin2)
+spt1_complete <- complete_spacetime_cube(battles_spacial1)
 ```
-
-## Data preparation steps for all Battles data (2018-2023)
 
 ```{r}
-Battles_admin2 <- ACLED_MMR_1 %>%
-    filter(year >= 2021, year <= 2023, event_type == "Battles") %>%
-    group_by(year, admin2) %>%
-    summarise(Incidents = n(), .groups = 'drop') %>%
-    rename(DT = admin2)
+is_spacetime_cube(spt1_complete)
 ```
-
-creating an empty data set with all district names and years populated
 
 ```{r}
-# Get all unique years from the incidents data
-all_years <- unique(Battles_admin2$year)
-
-# Get all unique state names from the shapefile
-all_districts <- unique(mmr_shp_mimu_2$DT)
-
-# Create all combinations of years and states
-complete_combinations <- expand.grid(year = all_years, DT = all_districts)
+spt2_complete <- complete_spacetime_cube(battles_spacial2)
 ```
-
-Joining the filtered Incident data with the empty "complete" data set.
 
 ```{r}
-# Join the complete combinations with the battles data
-
-battles_complete <- left_join(complete_combinations, Battles_admin2, by = c("year", "DT"))
+is_spacetime_cube(spt2_complete)
 ```
 
-Replacing all NA values with zero
+We have successfull converted to a space time object. However using `complete_spacetime_cube()` , leaves zero values as NAs, this needs to be converted to '0' value.
 
 ```{r}
 # Replace NA with zero for the incidents where there were no incidents
-battles_complete$Incidents[is.na(battles_complete$Incidents)] <- 0
-```
+spt1_complete$Incidents[is.na(spt1_complete$Incidents)] <- 0
+spt2_complete$Incidents[is.na(spt2_complete$Incidents)] <- 0
 
-Using `spacetime ()`
-
-```{r}
-Battles_complete_st <- spacetime(battles_complete, mmr_shp_mimu_2,
-                   .loc_col = "DT",
-                   .time_col = "year")
 ```
 
 ```{r}
-is_spacetime_cube(Battles_complete_st)
+class(spt1_complete)
 ```
 
 ```{r}
-class(Battles_complete_st)
+class(spt2_complete)
 ```
 
-Conversion to spacetime object is successful.
-
-## Computing Gi\*
+# Computing Gi\*
 
 Next, we will compute the local Gi\* statistics.
 
 ### Deriving the spatial weights
 
-The code chunk below will be used to identify neighbors and to derive an inverse distance weights.
+The code below will be used to identify neighbors and to derive an inverse distance weights.
 
 ```{r}
-Incidents_nb <- Battles_complete_st %>%
+# for admin 1 regions/states
+Incidents1_nb <- spt1_complete %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+```{r}
+#for admin 2 districts
+Incidents2_nb <- spt2_complete %>%
   activate("geometry") %>%
   mutate(nb = include_self(st_contiguity(geometry)),
          wt = st_inverse_distance(nb, geometry,
@@ -251,57 +272,272 @@ Incidents_nb <- Battles_complete_st %>%
     -   row order is very important so do not rearrange the observations after using `set_nbs()` or `set_wts()`.
 :::
 
-Note that this dataset now has neighbors and weights for each time-slice.
+Note that the data sets now have neighbors and weights for each time-slice.
 
 ```{r}
-head(Incidents_nb)
+head(Incidents1_nb)
 ```
 
 ```{r}
-# Example of checking if 'nb' is correctly formatted after its computation
-#if (!inherits(Incidents_nb$nb[[1]], "nb")) {
-  #stop("nb is not a valid neighbors list. Check its computation.")
-#}
+head(Incidents2_nb)
 ```
 
 ## Computing Gi\*
 
-We can use these new columns to manually calculate the local Gi\* for each location. We can do this by grouping by *Year* and using `local_gstar_perm()` of sfdep package. After which, we `use unnest()` to unnest *gi_star* column of the newly created *gi_starts* data.frame.
+We can use these new columns to manually calculate the local Gi\* for each location. We can do this by grouping by *year* and using `local_gstar_perm()` of sfdep package. After which, we `use unnest()` to unnest *gi_star* column of the newly created *gi_starts* data.frame.
 
 ```{r}
-GDPPC_nb <- GDPPC_st %>%
-  activate("geometry") %>%
-  mutate(nb = include_self(st_contiguity(geometry)),
-         wt = st_inverse_distance(nb, geometry,
-                                  scale = 1,
-                                  alpha = 1),
-         .before = 1) %>%
-  set_nbs("nb") %>%
-  set_wts("wt")
-```
-
-```{r}
-#if (!inherits(GDPPC_nb$nb[[1]], "nb")) {
-  #stop("nb is not a valid neighbors list. Check its computation.")
-#}
-```
-
-```{r}
-head(GDPPC_nb)
-```
-
-```{r}
-gi_stars <- GDPPC_nb %>% 
-  group_by(Year) %>% 
+#for admin 1
+gi_stars1 <- Incidents1_nb %>% 
+  group_by(year) %>% 
   mutate(gi_star = local_gstar_perm(
-    GDPPC, nb, wt)) %>% 
+    Incidents, nb, wt)) %>% 
   tidyr::unnest(gi_star)
 ```
 
 ```{r}
-#gi_stars <- Incidents_nb %>% 
-  #group_by(year) %>% 
-  #mutate(gi_star = local_gstar_perm(
-    #Incidents, nb, wt)) %>% 
-  #tidyr::unnest(gi_star)
+#for admin 2
+gi_stars2 <- Incidents2_nb %>% 
+  group_by(year) %>% 
+  mutate(gi_star = local_gstar_perm(
+    Incidents, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+# Mann-Kendall Test
+
+With these Gi\* measures we can then evaluate each location for a trend using the Mann-Kendall test.
+
+The code chunk below uses Ayeyarwady region.
+
+```{r}
+cbg1 <- gi_stars1 %>% 
+  ungroup() %>% 
+  filter(ST == "Ayeyarwady") |> 
+  select(ST, year, gi_star)
+```
+
+The code chunk below uses Hinthada region.
+
+```{r}
+cbg2 <- gi_stars2 %>% 
+  ungroup() %>% 
+  filter(DT == "Hinthada") |> 
+  select(DT, year, gi_star)
+```
+
+Next, we plot the result by using ggplotly() of plotly package.
+
+**Ayeyarwady region**
+
+```{r}
+p <- ggplot(data = cbg1, 
+       aes(x = year, 
+           y = gi_star)) +
+  geom_line() +
+  theme_light()
+
+ggplotly(p)
+```
+
+**Hinthada district**
+
+```{r}
+p <- ggplot(data = cbg2, 
+       aes(x = year, 
+           y = gi_star)) +
+  geom_line() +
+  theme_light()
+
+ggplotly(p)
+```
+
+Mann Kendall test for **Ayeyarwady region**
+
+```{r}
+cbg1 %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+
+Mann Kendall test for **Hinthada district**
+
+```{r}
+cbg2 %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+
+Values of Mann Kendall test.
+
+|        |                         |
+|--------|-------------------------|
+| `tau`  | Kendall's tau statistic |
+| `sl`   | two-sided p-value       |
+| `S`    | Kendall Score           |
+| `D`    | denominator, tau=S/D    |
+| `varS` | variance of S           |
+
+We can replicate this for each location by using `group_by()` of dplyr package.
+
+**Admin 1 regions/states**
+
+```{r}
+ehsa1 <- gi_stars1 %>%
+  group_by(ST) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+```{r}
+ehsa1
+```
+
+**Admin 2 districts**
+
+```{r}
+ehsa2 <- gi_stars2 %>%
+  group_by(DT) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+```{r}
+ehsa2
+```
+
+## Arrange to show significant emerging hot/cold spots
+
+**Admin 1 regions/states**
+
+```{r}
+emerging1 <- ehsa1 %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+```
+
+```{r}
+emerging1
+```
+
+Admin 2 districts
+
+```{r}
+emerging2 <- ehsa2 %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+```
+
+```{r}
+emerging2
+```
+
+## Performing Emerging Hotspot Analysis
+
+Lastly, we will perform EHSA analysis by using [`emerging_hotspot_analysis()`](https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html) of sfdep package. It takes a spacetime object x (i.e. spt1_complete, sp2_complete), and the quoted name of the variable of interest (i.e. Incidents) for .var argument.
+
+The **k argument is used to specify the** **number of time lags** which is set to 1 by default.
+
+Lastly, **nsim map** **numbers of simulation** to be performed.
+
+```{r}
+ehsa1 <- emerging_hotspot_analysis(
+  x = spt1_complete, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 99
+)
+```
+
+```{r}
+ehsa2 <- emerging_hotspot_analysis(
+  x = spt2_complete, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 99
+)
+```
+
+### Visualising the distribution of EHSA classes
+
+In the code chunk below, ggplot2 functions is used to reveal the distribution of EHSA classes as a bar chart.
+
+**Admin 1 regions/states**
+
+```{r}
+ggplot(data = ehsa1,
+       aes(x = classification)) +
+  geom_bar()
+```
+
+**Admin2 districts**
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ggplot(data = ehsa2,
+       aes(x = classification)) +
+  geom_bar()
+```
+
+### Visualising EHSA
+
+In this section, we will learn how to visualise the geographic distribution EHSA classes. However, before we can do so, we need to join both (mmr_shp_mimu_1 & *ehsa1) and* (mmr_shp_mimu_2 & *ehsa2)* together by using the code chunk below.
+
+```{r}
+mmr1_ehsa <- mmr_shp_mimu_1 %>%
+  left_join(ehsa1,
+            by = join_by(ST == location))
+
+mmr2_ehsa <- mmr_shp_mimu_2 %>%
+  left_join(ehsa2,
+            by = join_by(DT == location))
+```
+
+Next, tmap functions will be used to plot a categorical choropleth map by using the code chunk below.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ehsa_sig1 <- mmr1_ehsa  %>%
+  filter(p_value < 0.05)
+
+tmap_mode("plot")
+
+tm_shape(mmr1_ehsa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig1) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4)
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+ehsa_sig2 <- mmr2_ehsa  %>%
+  filter(p_value < 0.05)
+
+tmap_mode("plot")
+
+tm_shape(mmr2_ehsa) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig2) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4)
 ```
