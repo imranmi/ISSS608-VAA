@@ -1,0 +1,307 @@
+---
+title: "Take-home Exercise 1c"
+date: January 13, 2024
+date-modified: "last-modified"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+---
+
+# Emerging Hot Spot Analysis: sfdep methods
+
+Emerging Hot Spot Analysis (EHSA) is a spatio-temporal analysis method for revealing and describing how hot spot and cold spot areas evolve over time. The analysis consist of four main steps:
+
+-   Building a space-time cube,
+
+-   Calculating Getis-Ord local Gi\* statistic for each bin by using an FDR correction,
+
+-   Evaluating these hot and cold spot trends by using Mann-Kendall trend test,
+
+-   Categorising each study area location by referring to the resultant trend z-score and p-value for each location with data, and with the hot spot z-score and p-value for each bin.
+
+# Data Loading and Prep
+
+```{r}
+pacman::p_load(tidyverse, dplyr , 
+               sf, lubridate,plotly,
+               tmap, spdep, sfdep)
+```
+
+```{r}
+ACLED_MMR <- read_csv("data/MMR.csv")
+```
+
+```{r}
+mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda_adm2_250k_mimu")
+```
+
+```{r}
+mmr_shp_mimu_1 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda2_adm1_250k_mimu_1")
+```
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR %>%
+  mutate(admin1 = case_when(
+    admin1 == "Bago-East" ~ "Bago (East)",
+    admin1 == "Bago-West" ~ "Bago (West)",
+    admin1 == "Shan-North" ~ "Shan (North)",
+    admin1 == "Shan-South" ~ "Shan (South)",
+    admin1 == "Shan-East" ~ "Shan (East)",
+    TRUE ~ as.character(admin1)
+  ))
+```
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR_1 %>%
+  mutate(admin2 = case_when(
+    admin2 == "Yangon-East" ~ "Yangon (East)",
+    admin2 == "Yangon-West" ~ "Yangon (West)",
+    admin2 == "Yangon-North" ~ "Yangon (North)",
+    admin2 == "Yangon-South" ~ "Yangon (South)",
+    admin2 == "Mong Pawk (Wa SAD)" ~ "Tachileik",
+    admin2 == "Nay Pyi Taw" ~ "Det Khi Na",
+    admin2 == "Yangon" ~ "Yangon (West)",
+    TRUE ~ as.character(admin2)
+  ))
+```
+
+# Creating a Time Series Cube
+
+In the code chunk below, [`spacetime()`](https://sfdep.josiahparry.com/reference/spacetime.html) of sfdep is used to create an spatio-temporal cube.
+
+```{r}
+
+GDPPC <- read_csv("data/aspatial/Hunan_GDPPC.csv")
+```
+
+```{r}
+
+hunan <- st_read(dsn = "data/geospatial4", 
+                 layer = "Hunan")
+```
+
+```{r}
+class(GDPPC)
+```
+
+```{r}
+class(hunan)
+```
+
+```{r}
+GDPPC_st <- spacetime(GDPPC, hunan,
+                      .loc_col = "County",
+                      .time_col = "Year")
+```
+
+```{r}
+is_spacetime_cube(GDPPC_st)
+```
+
+### Renaming the column names
+
+loc_col identifier needs to be the same name for both data and shape file
+
+```{r}
+Battles_admin1 <- ACLED_MMR_1 %>%
+    group_by(year, admin1) %>%
+    filter(event_type == "Battles") %>%
+    summarise(Incidents = n()) %>%
+    ungroup() %>%
+    rename(ST = admin1)
+
+```
+
+```{r}
+battles_spacial1 <- spacetime(Battles_admin1, mmr_shp_mimu_1,
+                      .loc_col = "ST",
+                      .time_col = "year")
+```
+
+```{r}
+is_spacetime_cube(battles_spacial1)
+```
+
+This is due to some years having zero incident, this needs to be populated as zero, all district names have to be accounted for, for each year
+
+Trying with a smaller set, but manually inserting zero for each year, in each district
+
+```{r}
+Battles_admin1_2124 <- read_csv("data/Battles_admin1_2124.csv")
+```
+
+```{r}
+battles_test2 <- spacetime(Battles_admin1_2124, mmr_shp_mimu_1,
+                   .loc_col = "ST",
+                   .time_col = "year")
+```
+
+```{r}
+is_spacetime_cube(battles_test2)
+```
+
+conversion to space time object is successful.
+
+```{r}
+class(battles_test2)
+```
+
+## Data preparation steps for all Battles data (2011-2023)
+
+```{r}
+
+#Battles_admin2 <- ACLED_MMR_1 %>%
+    #filter(year != 2024, year != 2010, event_type == "Battles") %>%
+    #group_by(year, admin2) %>%
+    #summarise(Incidents = n(), .groups = 'drop') %>%
+    #rename(DT = admin2)
+```
+
+## Data preparation steps for all Battles data (2018-2023)
+
+```{r}
+Battles_admin2 <- ACLED_MMR_1 %>%
+    filter(year >= 2021, year <= 2023, event_type == "Battles") %>%
+    group_by(year, admin2) %>%
+    summarise(Incidents = n(), .groups = 'drop') %>%
+    rename(DT = admin2)
+```
+
+creating an empty data set with all district names and years populated
+
+```{r}
+# Get all unique years from the incidents data
+all_years <- unique(Battles_admin2$year)
+
+# Get all unique state names from the shapefile
+all_districts <- unique(mmr_shp_mimu_2$DT)
+
+# Create all combinations of years and states
+complete_combinations <- expand.grid(year = all_years, DT = all_districts)
+```
+
+Joining the filtered Incident data with the empty "complete" data set.
+
+```{r}
+# Join the complete combinations with the battles data
+
+battles_complete <- left_join(complete_combinations, Battles_admin2, by = c("year", "DT"))
+```
+
+Replacing all NA values with zero
+
+```{r}
+# Replace NA with zero for the incidents where there were no incidents
+battles_complete$Incidents[is.na(battles_complete$Incidents)] <- 0
+```
+
+Using `spacetime ()`
+
+```{r}
+Battles_complete_st <- spacetime(battles_complete, mmr_shp_mimu_2,
+                   .loc_col = "DT",
+                   .time_col = "year")
+```
+
+```{r}
+is_spacetime_cube(Battles_complete_st)
+```
+
+```{r}
+class(Battles_complete_st)
+```
+
+Conversion to spacetime object is successful.
+
+## Computing Gi\*
+
+Next, we will compute the local Gi\* statistics.
+
+### Deriving the spatial weights
+
+The code chunk below will be used to identify neighbors and to derive an inverse distance weights.
+
+```{r}
+Incidents_nb <- Battles_complete_st %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+::: callout-note
+## Note
+
+-   `activate()` of dplyr package is used to activate the geometry context
+
+-   `mutate()` of dplyr package is used to create two new columns *nb* and *wt*.
+
+-   Then we will activate the data context again and copy over the nb and wt columns to each time-slice using `set_nbs()` and `set_wts()`
+
+    -   row order is very important so do not rearrange the observations after using `set_nbs()` or `set_wts()`.
+:::
+
+Note that this dataset now has neighbors and weights for each time-slice.
+
+```{r}
+head(Incidents_nb)
+```
+
+```{r}
+# Example of checking if 'nb' is correctly formatted after its computation
+#if (!inherits(Incidents_nb$nb[[1]], "nb")) {
+  #stop("nb is not a valid neighbors list. Check its computation.")
+#}
+```
+
+## Computing Gi\*
+
+We can use these new columns to manually calculate the local Gi\* for each location. We can do this by grouping by *Year* and using `local_gstar_perm()` of sfdep package. After which, we `use unnest()` to unnest *gi_star* column of the newly created *gi_starts* data.frame.
+
+```{r}
+GDPPC_nb <- GDPPC_st %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+```{r}
+#if (!inherits(GDPPC_nb$nb[[1]], "nb")) {
+  #stop("nb is not a valid neighbors list. Check its computation.")
+#}
+```
+
+```{r}
+head(GDPPC_nb)
+```
+
+```{r}
+gi_stars <- GDPPC_nb %>% 
+  group_by(Year) %>% 
+  mutate(gi_star = local_gstar_perm(
+    GDPPC, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+```{r}
+#gi_stars <- Incidents_nb %>% 
+  #group_by(year) %>% 
+  #mutate(gi_star = local_gstar_perm(
+    #Incidents, nb, wt)) %>% 
+  #tidyr::unnest(gi_star)
+```
