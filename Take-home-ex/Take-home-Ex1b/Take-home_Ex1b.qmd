@@ -85,11 +85,11 @@ Events_admin2 <- Events_admin2 %>%
 class(Events_admin2)
 ```
 
-## Filtering the Event and Year (Event type = Battles, in 2022)
+# Filtering the Event and Year (Event type = Battles, in 2022)
 
 ```{r}
 Battles_2022 <- Events_admin2 %>%
-  filter(year == 2022, event_type == "Battles")
+  filter(year == 2015, event_type == "Battles")
 ```
 
 # Local Measures of Spatial Autocorrelation - sfdep methods
@@ -342,7 +342,7 @@ map1 <- tm_shape(HCSA) +
   tm_fill("gi_star") + 
   tm_borders(alpha = 0.5) +
   tm_view(set.zoom.limits = c(6,8)) +
-  tm_layout(main.title = "Gi* of GDPPC",
+  tm_layout(main.title = "Gi* of Incidents",
             main.title.size = 0.8)
 
 map2 <- tm_shape(HCSA) +
