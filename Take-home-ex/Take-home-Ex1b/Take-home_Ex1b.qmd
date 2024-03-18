@@ -17,7 +17,7 @@ execute:
 ## Loading R packages and Data prep
 
 ```{r}
-pacman::p_load(tidyverse, dplyr , 
+pacman::p_load(tidyverse, dplyr, tidyr, 
                sf, lubridate,plotly,
                tmap, spdep, sfdep)
 ```
@@ -62,17 +62,73 @@ ACLED_MMR_1 <- ACLED_MMR_1 %>%
   ))
 ```
 
+### Data Wrangle for quarterly data
+
+we will set up the data set to be for 2021-2023, and in quarterly periods
+
 ```{r}
-Events2 <- ACLED_MMR_1 %>%
-    group_by(year, admin2, event_type) %>%
+ACLED_MMR_2 <- ACLED_MMR_1 %>%
+  filter(year >= 2021 & year <= 2023) %>%
+  mutate(event_date = dmy(event_date),
+         year_month = format(event_date, "%Y-%m"),
+         quarter = paste0(year, "Q", ceiling(month(event_date) / 3))) %>%
+  filter(event_type != "Strategic developments")
+
+```
+
+```{r}
+Events2 <- ACLED_MMR_2 %>%
+  group_by(year, quarter, admin2, event_type) %>%
     summarise(Incidents = n(),
               Fatalities = sum(fatalities, na.rm = TRUE)) %>%
               
     ungroup()
+  
+
 ```
 
 ```{r}
-Events_admin2 <- left_join(mmr_shp_mimu_2, Events2,
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#df_complete <- Events2 %>%
+  #complete(quarter, event_type, admin2,
+           #fill = list(Incidents = 0, Fatalities = 0))
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#write.csv(df_complete, "data/df_complete.csv", row.names = FALSE)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Events_2 <- read_csv("data/df_complete.csv")
+```
+
+```{r}
+#checking the total no of Incidents and Fatalities from 2021-2023
+
+total_incidents1 <- sum(Events2$Incidents)
+total_incidents2 <- sum(Events_2$Incidents)
+total_fatalities1 <- sum(Events2$Fatalities)
+total_fatalities2 <- sum(Events_2$Fatalities)
+
+
+total_incidents1 
+total_incidents2 
+total_fatalities1 
+total_fatalities2 
+
+```
+
+```{r}
+Events_admin2 <- left_join(mmr_shp_mimu_2, Events_2,
                             by = c("DT" = "admin2"))
 ```
 
@@ -86,18 +142,26 @@ Events_admin2 <- Events_admin2 %>%
 class(Events_admin2)
 ```
 
-# Filtering the Event and Year (Event type = Battles, in 2022)
+# Filtering the Event and Quarter (Event type = Battles, in 2023Q4)
 
 ```{r}
-Battles_2022 <- Events_admin2 %>%
-  filter(year == 2023, event_type == "Battles")
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#Battles_2022 <- Events_admin2 %>%
+  #filter(year == 2023, event_type == "Battles")
+```
+
+```{r}
+Battles_data <- Events_admin2 %>%
+  filter(quarter == "2023Q4", event_type == "Battles")
 ```
 
 # Local Measures of Spatial Autocorrelation - sfdep methods
 
 ```{r}
 tmap_mode("plot")
-tm_shape(Battles_2022) +
+tm_shape(Battles_data) +
   tm_fill("Incidents", 
           style = "quantile", 
           palette = "Blues",
@@ -112,6 +176,9 @@ tm_shape(Battles_2022) +
 ## Global Measures of Spatial Association
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 #wm_q <- poly2nb(Battles_2022, 
                 #queen=TRUE)
 #summary(wm_q)
@@ -122,11 +189,10 @@ tm_shape(Battles_2022) +
 In the code chunk below, queen method is used to derive the contiguity weights.
 
 ```{r}
-wm_q <- Battles_2022 %>%
+wm_q <- Battles_data %>%
   mutate(nb = st_contiguity(geometry),
          wt = st_weights(nb,
-                         style = "W",
-                         allow_zero = TRUE),
+                         style = "W"),
          .before = 1) 
 ```
 
@@ -294,7 +360,7 @@ HCSA uses spatial weights to identify locations of statistically significant hot
 As usual, we will need to derive a spatial weight matrix before we can compute local Gi\* statistics. Code chunk below will be used to derive a spatial weight matrix by using sfdep functions and tidyverse approach.
 
 ```{r}
-wm_idw <- Battles_2022 %>%
+wm_idw <- Battles_data %>%
   mutate(nb = st_contiguity(geometry),
          wts = st_inverse_distance(nb, geometry,
                                    scale = 1,
@@ -374,6 +440,6 @@ tm_shape(HCSA_sig) +
   tm_borders(alpha = 0.4)
 ```
 
-Figure above reveals that there is are 6 hot spot areas and these areas coincide with the High-high cluster identifies by using local Moran’s I method in the earlier sub-section.
+Figure above reveals that there is are several hot spot areas and these areas coincide with the High-high cluster identifies by using local Moran’s I method in the earlier sub-section.
 
 ## 
