@@ -65,10 +65,6 @@ website:
             href: Take-home-ex/Take-home-Ex1/Take-home_Ex1.html
           - text: Take-home Exercise 1a - 5 EDAs
             href: Take-home-ex/Take-home-Ex1a/Take-home_Ex1a.html
-          - text: Take-home Exercise 1b
-            href: Take-home-ex/Take-home-Ex1b/Take-home_Ex1b.html
-          - text: Take-home Exercise 1c
-            href: Take-home-ex/Take-home-Ex1c/Take-home_Ex1c.html
           - text: Take-home Exercise 2 - DataVis Makeover
             href: Take-home-ex/Take-home-Ex2/Take-home_Ex2.html
           - text: Take-home Exercise 3 - Be Weatherwise or Otherwise
@@ -76,7 +72,11 @@ website:
           - text: Take-home Exercise 4
             href: Take-home-ex/Take-home-Ex4/Take-home_Ex4.html
           - text: Take-home Exercise 4a - Prototyping Modules for Visual Analytics Shiny App 
-            href: Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html  
+            href: Take-home-ex/Take-home-Ex4a/Take-home_Ex4a.html
+          - text: Take-home Exercise 4b
+            href: Take-home-ex/Take-home-Ex1b/Take-home_Ex1b.html
+          - text: Take-home Exercise 4c
+            href: Take-home-ex/Take-home-Ex1c/Take-home_Ex1c.html
     right: 
       - href: index.qmd
         text: Home

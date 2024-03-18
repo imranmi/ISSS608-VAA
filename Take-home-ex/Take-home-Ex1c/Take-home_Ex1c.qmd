@@ -1,7 +1,8 @@
 ---
-title: "Take-home Exercise 1c"
+title: "Take-home Exercise 4c"
 date: March 17, 2024
 date-modified: "last-modified"
+author: "Imran Ibrahim"
 toc: true
 execute: 
   eval: true

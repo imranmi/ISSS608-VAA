@@ -1,7 +1,8 @@
 ---
-title: "Take-home Exercise 1b"
-date: January 13, 2024
+title: "Take-home Exercise 4b"
+date: March 17, 2024
 date-modified: "last-modified"
+author: "Imran Ibrahim"
 toc: true
 execute: 
   eval: true
@@ -89,7 +90,7 @@ class(Events_admin2)
 
 ```{r}
 Battles_2022 <- Events_admin2 %>%
-  filter(year == 2015, event_type == "Battles")
+  filter(year == 2023, event_type == "Battles")
 ```
 
 # Local Measures of Spatial Autocorrelation - sfdep methods
@@ -124,7 +125,8 @@ In the code chunk below, queen method is used to derive the contiguity weights.
 wm_q <- Battles_2022 %>%
   mutate(nb = st_contiguity(geometry),
          wt = st_weights(nb,
-                         style = "W"),
+                         style = "W",
+                         allow_zero = TRUE),
          .before = 1) 
 ```
 
