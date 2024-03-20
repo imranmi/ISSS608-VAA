@@ -1,12 +1,10 @@
 # load R packages
 pacman::p_load(shiny, shinydashboard, shinycssloaders, 
-               tidyverse, dplyr, leaflet, plotly, highcharter, 
-               ggthemes, fresh, sf, sfdep, tmap, tm, ggforce, 
-               ggraph, igraph, wordcloud, tidytext, DT, spatstat,
-               lubridate,viridis, ggplot2, readr, purrr)
+               tidyverse, dplyr, leaflet, plotly, 
+               ggthemes, fresh, sf, sfdep, tmap, tm, 
+              DT,lubridate, ggplot2, readr, purrr)
 
 
-ACLED_MMR <- read_csv("data/MMR.csv")
 
 Events_2 <- read_csv("data/df_complete.csv")
 Space_2 <- read_csv("data/df1_complete.csv")
