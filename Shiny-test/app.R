@@ -641,14 +641,15 @@ ExploreSubTabs <- tabsetPanel(
 #==========================================================  
 
 
+
 Cluster2 <- fluidRow(
   column(2,
          box(title = "Analysis Period: 2021-2023, Quarterly",
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for Local Moran's I"),
-             selectInput("QtrMoransI" , "Year-Quarter",
+             helpText("Filter options for Dataset"),
+             selectInput("QtrMoransI", "Year-Quarter",
                          choices = c("2021-Q1" = "2021Q1",
                                      "2021-Q2" = "2021Q2",
                                      "2021-Q3" = "2021Q3",
@@ -666,66 +667,73 @@ Cluster2 <- fluidRow(
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
                                      "Protests" = "Protests",
-                                     "Riots" = "Riots",
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
-                                     "Strategic developments" = "Strategic developments"),
-                         selected = "Battles"),
-             selectInput("weightstyle1", "Weights style",
+                                     "Riots" = "Riots"),
+                         selected = "Battles")
+         ),
+         box(title = "Options for computing Local Moran's I",
+             status = "info",
+             solidHeader = FALSE,
+             width = NULL,
+             selectInput("weightstyle1", "Spatial Weights Style",
                          choices = c("W: Row standardised" = "W",
                                      "B: Binary" = "B",
                                      "C: Globally standardised" = "C",
                                      "U: C / no of neighbours" = "U",
                                      "minmax" = "minmax",
-                                     "S: Variance" = "S",
-                                     selected = "W: Row standardised")
-              )  
-         ),
-                box(title = "Chart Interpretation",
-                status = "danger",
-                solidHeader = TRUE,
-                collapsible = TRUE,
-                width = NULL,
-                textOutput("MoransItext")
-                ),
-         
+                                     "S: Variance" = "S"),
+                         selected = "W"),
+             selectInput("numSims1", "Number of Simulations:",
+                         choices = c(99, 199, 299, 399, 499),
+                         selected = 99)
+         )
   ),
-  
-  column(5,
+  column(4,
          box(title = "Local Moran's I Statistic",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             tmapOutput("LocalMoranMap", height = "700px", width = "100%"))
-  ),
-  
-  column(5,
-         box(
-           title = "Local Indicator of Spacial Association (p-values <0.05)",
-           status = "danger",
-           solidHeader = TRUE,
-           collapsible = TRUE,
-           width = NULL,
-           align = "left",
-           tmapOutput("Lisa", height = "700px", width = "100%"))
-  ),
-  
-         
-         column(12,
-                box(
-                  title = "Local Moran's I Results - Data Table",
-                  status = "danger",
-                  solidHeader = TRUE,
-                  collapsible = TRUE,
-                  width = NULL,
-                  align = "center",
-                  dataTableOutput("localMoranDataTable"),
-                  style = "height:600px; overflow-y: scroll;overflow-x: scroll;")
+             tmapOutput("LocalMoranMap", height = "700px", width = "100%")
          )
-         
+  ),
+  column(4,
+         box(title = "Local Indicator of Spatial Association (p-values <0.05)",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             align = "left",
+             tmapOutput("Lisa", height = "700px", width = "100%")
+         )
+  ),
+  column(2,
+         box(title = "Chart Interpretation",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             textOutput("MoransItext")
+         )
   )
-  
+)
+
+# Add this outside the first fluidRow to make it full width and below everything else
+Cluster2 <- tagList(Cluster2, 
+                    fluidRow(
+                      column(12,
+                             box(title = "Local Moran's I Results - Data Table",
+                                 status = "danger",
+                                 solidHeader = TRUE,
+                                 collapsible = TRUE,
+                                 width = NULL,
+                                 align = "center",
+                                 dataTableOutput("localMoranDataTable"),
+                                 style = "height:600px; overflow-y: scroll; overflow-x: scroll;")
+                      )
+                    )
+)
 
 #==========================================================  
 ##Cluster and Outlier Analysis, 3rd Tab
@@ -737,7 +745,7 @@ HotCold1 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for GI* statistics"),
+             helpText("Filter options for Dataset"),
              selectInput("QtrGI" , "Year-Quarter",
                          choices = c("2021-Q1" = "2021Q1",
                                      "2021-Q2" = "2021Q2",
@@ -756,34 +764,27 @@ HotCold1 <- fluidRow(
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
                                      "Protests" = "Protests",
-                                     "Riots" = "Riots",
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
-                                     "Strategic developments" = "Strategic developments"),
+                                     "Riots" = "Riots"),
                          selected = "Battles"),
-             radioButtons("mapStyle2", "Classification Type:",
-                          choices = c("quantile", "equal", "jenks", "kmeans", "pretty"),
-                          selected = "pretty",
-                          inline = TRUE)
-             
-         ),
-         box(title = "Chart Interpretation",
-             status = "danger",
-             solidHeader = TRUE,
-             collapsible = TRUE,
-             width = NULL,
-             textOutput("HotColdText")
+             selectInput(inputId = "numSims2",
+                         label = "Number of Simulations for Gi*:",
+                         choices = c(99,199,299,399,499),
+                         selected = 99)
          )
+         
   ),
-  column(5,
+  column(4,
          box(title = "GI* Statistics"
              ,status = "danger"
              ,solidHeader = TRUE 
              ,collapsible = TRUE
              ,width = NULL
              ,align = "left"
-             ,tmapOutput("Gistarmap", height = "700px", width = "100%"))
+             ,tmapOutput("Gistarmap", height = "700px", width = "100%")
+        )
   ),
-  column(5,
+  column(4,
          box(
            title = "Significant Hot & Cold spot areas (p-values < 0.05)",
            status = "danger",
@@ -791,21 +792,34 @@ HotCold1 <- fluidRow(
            collapsible = TRUE,
            width = NULL,
            align = "left",
-           tmapOutput("HotColdmap", height = "700px", width = "100%"))
+           tmapOutput("HotColdmap", height = "700px", width = "100%")
+           )
   ),
+  column(2,
+          box(title = "Chart Interpretation",
+          status = "danger",
+          solidHeader = TRUE,
+          collapsible = TRUE,
+          width = NULL,
+          textOutput("HotColdText")
+  )
+)  
   
-  
-  
-  column(12,
-         box(
-           title = "GI* Statistics - Data Table",
-           status = "danger",
-           solidHeader = TRUE,
-           collapsible = TRUE,
-           width = NULL,
-           align = "center",
-           dataTableOutput("AdaptiveGiStat"),
-           style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
+
+)  
+
+HotCold1 <- tagList(HotCold1,
+                    fluidRow(
+                        column(12,
+                              box(
+                              title = "GI* Statistics - Data Table",
+                              status = "danger",
+                              solidHeader = TRUE,
+                              collapsible = TRUE,
+                              width = NULL,
+                              align = "center",
+                              dataTableOutput("AdaptiveGiStat"),
+                              style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
          )
   )
   
@@ -825,14 +839,13 @@ EHSA1 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for GI* statistics"),
+             helpText("Filter options for Dataset"),
              selectInput("eventType7", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
                                      "Protests" = "Protests",
-                                     "Riots" = "Riots",
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
-                                     "Strategic developments" = "Strategic developments"),
+                                     "Riots" = "Riots" ),
                          selected = "Battles"),
              selectizeInput(inputId = "Admin2",
                             label = "Select District",
@@ -883,9 +896,8 @@ EHSA2 <- fluidRow(
                        choices = c("Battles" = "Battles",
                                    "Violence against civilians" = "Violence against civilians",
                                    "Protests" = "Protests",
-                                   "Riots" = "Riots",
                                    "Explosions/Remote violence" = "Explosions/Remote violence",
-                                   "Strategic developments" = "Strategic developments"),
+                                   "Riots" = "Riots" ),
                        selected = "Battles"),
            selectInput(inputId = "numLags", 
                        label = "Number of Lags:", 
@@ -1632,14 +1644,14 @@ server <- function(input, output, session) {
     wm_q <- filteredData %>%
       mutate(nb = st_contiguity(geometry),
              wt = st_weights(nb,
-                             style = "W"))
+                             style = input$weightstyle1))
             
     
     
     # Computing Local Moran's I
     lisa <- wm_q %>%
       mutate(local_moran = local_moran(
-        Incidents, nb, wt, nsim = 99),
+        Incidents, nb, wt, nsim = as.numeric(input$numSims1)),
         .before = 5) %>%
       unnest(local_moran)
              
@@ -1656,16 +1668,15 @@ server <- function(input, output, session) {
     if(is.null(df) || nrow(df) == 0) return()  # Exit if no data
     
     # Map creation using tmap
-    localMI_map <- tm_shape(mmr_shp_mimu_2) +
-      tm_borders() +  # Draws borders for all regions
-      tm_fill(col = "white", alpha = 0.5, title = "Background") +
-      
-      tm_shape(df) +
+    localMI_map <- tm_shape(df) +
       tm_fill(col = "ii", style = "pretty", palette = "RdBu", title = "Local Moran's I") +
-      tm_borders(alpha = 0.5) 
+      tm_borders() 
     
-    localMI_map
+    localMI_map + 
+      tm_view(set.zoom.limits = c(5,7))
   })
+  
+ 
   
   #==========================================================
   # LISA Map in Cluster 2 
@@ -1679,13 +1690,9 @@ server <- function(input, output, session) {
       filter(p_ii < 0.05)
     
     
-    lisamap <- tm_shape(mmr_shp_mimu_2) +
-      tm_borders() +  # Draws borders for all regions
-      tm_fill(col = "white", alpha = 0.5, title = "Background") +
-      
-      tm_shape(df) +
+    lisamap <- tm_shape(df) +
       tm_polygons() +
-      tm_borders(alpha = 0.5) +
+      tm_borders() +
       
       tm_shape(lisa_sig) +
       tm_fill(col = "mean",  
@@ -1694,7 +1701,8 @@ server <- function(input, output, session) {
       tm_borders(alpha = 0.4)
     
     
-    lisamap
+    lisamap + 
+      tm_view(set.zoom.limits = c(5,7))
     
     
   })
@@ -1797,7 +1805,7 @@ server <- function(input, output, session) {
     
     HCSA <- wm_idw %>% 
       mutate(local_Gi = local_gstar_perm(
-        Incidents, nb, wt, nsim = 99),
+        Incidents, nb, wt, nsim = as.numeric(input$numSims2)),
         .before = 5) %>%
       unnest(local_Gi)
     
@@ -1813,18 +1821,14 @@ server <- function(input, output, session) {
     
     
     # Create the choropleth map for GI stats
-    Gi_map <- tm_shape(mmr_shp_mimu_2) +
-      tm_borders() +  # Draws borders for all regions
-      tm_fill(col = "white", alpha = 0.5, title = "Background") +
-      
-      tm_shape(df) +
+    Gi_map <- tm_shape(df) +
       tm_fill(col = "gi_star", 
-              style = input$mapStyle2, 
               palette = "-RdBu", 
               title = "Local Gi") +
-      tm_borders(alpha = 0.5)
+      tm_borders()
     
-    Gi_map
+    Gi_map + 
+      tm_view(set.zoom.limits = c(5,7))
   })
   
   
@@ -1838,13 +1842,9 @@ server <- function(input, output, session) {
       filter(p_value < 0.05)
     
     # Create the choropleth map for HSCA Map
-    HSCAmap <- tm_shape(mmr_shp_mimu_2) +
-      tm_borders() +  # Draws borders for all regions
-      tm_fill(col = "white", alpha = 0.5, title = "Background") +
-      
-      tm_shape(df) +
+    HSCAmap <- tm_shape(df) +
       tm_polygons() +
-      tm_borders(alpha = 0.5) +
+      tm_borders() +
       
       tm_shape(HCSA_sig) +
       tm_fill(col = "gi_star",  
@@ -1852,7 +1852,8 @@ server <- function(input, output, session) {
               title = "gi_star") +
       tm_borders(alpha = 0.4)
     
-    HSCAmap
+    HSCAmap + 
+      tm_view(set.zoom.limits = c(5,7))
   })
     
     
@@ -1873,7 +1874,7 @@ server <- function(input, output, session) {
     to one another based on a calculated distance. 
     The analysis groups features when similar high (hot) or low (cold) values are found in a cluster.
     
-    Here we will be utilizing the Getis and Ord’s G statistics. 
+    Here we are utilizing the Getis and Ord’s G statistics. 
     High positive G values indicate hot spots—areas where high values cluster together
     while low negative G values indicate cold spots—areas where low values cluster together." 
   })
@@ -2047,20 +2048,17 @@ server <- function(input, output, session) {
           filter(p_value < 0.05)
         
         
-        ehsamap <- tm_shape(mmr_shp_mimu_2) +
-          tm_borders() +  # Draws borders for all regions
-          tm_fill(col = "white", alpha = 0.5, title = "Background") +
-          
-          tm_shape(df) +
+        ehsamap <- tm_shape(df) +
           tm_polygons() +
-          tm_borders(alpha = 0.5) +
+          tm_borders() +
           
           tm_shape(ehsa_sig3) +
           tm_fill("classification") +
           tm_borders(alpha = 0.4)
         
         
-        ehsamap
+        ehsamap + 
+          tm_view(set.zoom.limits = c(5,7))
         
         
       })
