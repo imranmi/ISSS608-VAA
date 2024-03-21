@@ -882,7 +882,6 @@ server <- function(input, output, session) {
     
     
     ehsamap <- tm_shape(df) +
-      tm_polygons() +
       tm_borders() +
       
       tm_shape(ehsa_sig3) +

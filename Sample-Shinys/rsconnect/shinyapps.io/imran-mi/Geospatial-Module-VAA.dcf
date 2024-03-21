@@ -5,7 +5,7 @@ account: imran-mi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11542840
-bundleId: 8396102
+bundleId: 8399914
 url: https://imran-mi.shinyapps.io/Geospatial-Module-VAA/
 version: 1
 asMultiple: FALSE
