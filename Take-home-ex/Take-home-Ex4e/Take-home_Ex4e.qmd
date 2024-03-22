@@ -1,0 +1,505 @@
+---
+title: "Take-home Exercise 4e - plotting for project poster"
+date: March 22, 2024
+date-modified: "last-modified"
+author: "Imran Ibrahim"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+---
+
+# Emerging Hot Spot Analysis: sfdep methods
+
+# Data Loading and Prep
+
+```{r}
+pacman::p_load(tidyverse, dplyr , 
+               sf, lubridate,plotly,
+               tmap, spdep, sfdep, patchwork, knitr)
+```
+
+```{r}
+mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda_adm2_250k_mimu")
+```
+
+## Data Wrangle for quarterly data
+
+As per project requirements, we will sync the time frame for this analysis to be the same as our previous LISA analysis. Therefore, we will set up the data set to be for 2021-2023, and in quarterly periods
+
+```{r}
+Events_2 <- read_csv("data/df1_complete.csv")
+```
+
+Since this data set has been filled up for missing values, using `tidyr::complete()` , I can proceed to use the standard spacetime constructor ie [`spacetime()`](https://sfdep.josiahparry.com/reference/spacetime.html)
+
+First, loc_col identifier needs to be the same name for both data and shape file.
+
+Event_type == Battles
+
+```{r}
+Events_2 <- Events_2 %>%
+        filter(event_type == "Battles") %>%
+        rename(DT=admin2) %>%
+        select(-event_type, -year, -Fatalities) 
+```
+
+```{r}
+Quarterly_spt <- spacetime(Events_2, mmr_shp_mimu_2,
+                      .loc_col = "DT",
+                      .time_col = "quarter")
+```
+
+```{r}
+is_spacetime_cube(Quarterly_spt)
+```
+
+# Computing Gi\*
+
+Next, we will compute the local Gi\* statistics.
+
+### Deriving the spatial weights
+
+The code below will be used to identify neighbors and to derive an inverse distance weights.
+
+```{r}
+Quarterly_nb <- Quarterly_spt %>%
+  activate("geometry") %>%
+  mutate(nb = include_self(st_contiguity(geometry)),
+         wt = st_inverse_distance(nb, geometry,
+                                  scale = 1,
+                                  alpha = 1),
+         .before = 1) %>%
+  set_nbs("nb") %>%
+  set_wts("wt")
+```
+
+```{r}
+#for Quarterly admin 2
+gi_stars3 <- Quarterly_nb %>% 
+  group_by(quarter) %>% 
+  mutate(gi_star = local_gstar_perm(
+    Incidents, nb, wt)) %>% 
+  tidyr::unnest(gi_star)
+```
+
+```{r}
+gi_stars3
+```
+
+# Mann-Kendall Test
+
+With these Gi\* measures we can then evaluate each location for a trend using the Mann-Kendall test.
+
+The code chunk below uses Hinthada region.
+
+```{r}
+cbg3 <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Hinthada") |> 
+  select(DT, quarter, gi_star)
+```
+
+Next, we plot the result by using ggplotly() of plotly package.
+
+**Hinthada district quarterly**
+
+```{r}
+p3 <- ggplot(data = cbg3, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line() +
+  theme_light()
+
+ggplotly(p3)
+```
+
+Mann Kendall test for **Hinthada district-quarterly**
+
+```{r}
+cbg3 %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>% 
+  tidyr::unnest_wider(mk)
+```
+
+Values of Mann Kendall test.
+
+|        |                         |
+|--------|-------------------------|
+| `tau`  | Kendall’s tau statistic |
+| `sl`   | two-sided p-value       |
+| `S`    | Kendall Score           |
+| `D`    | denominator, tau=S/D    |
+| `varS` | variance of S           |
+
+```{r}
+ehsa3 <- gi_stars3 %>%
+  group_by(DT) %>%
+  summarise(mk = list(
+    unclass(
+      Kendall::MannKendall(gi_star)))) %>%
+  tidyr::unnest_wider(mk)
+```
+
+```{r}
+ehsa3
+```
+
+## Arrange to show significant emerging hot/cold spots
+
+**Admin 2 districts-quarterly**
+
+```{r}
+emerging3 <- ehsa3 %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+
+print(emerging3)
+```
+
+```{r}
+emerging3 <- ehsa3 %>% 
+  arrange(sl, abs(tau)) %>% 
+  slice(1:5)
+
+# Print as a more formal table
+kable(emerging3)
+```
+
+Since above identifies the top five districts of emerging hot spots, we can also do a combined plot of their GI\* trends over the 3 years
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+cbg1st <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Mandalay") |> 
+  select(DT, quarter, gi_star)
+
+cbg2nd <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Maubin") |> 
+  select(DT, quarter, gi_star)
+
+cbg3rd <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Pyapon") |> 
+  select(DT, quarter, gi_star)
+
+cbg4th <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Pyinoolwin") |> 
+  select(DT, quarter, gi_star)
+
+cbg5th <- gi_stars3 %>% 
+  ungroup() %>% 
+  filter(DT == "Yangon (West)") |> 
+  select(DT, quarter, gi_star)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p1 <- ggplot(data = cbg1st, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line(colour = "red", size = 1.5) +
+  theme_minimal() +
+  ggtitle("Gi* Trends for Mandalay district")
+
+p2 <- ggplot(data = cbg2nd, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line(colour = "red", size = 1.5) +
+  theme_minimal() +
+  ggtitle("Gi* Trends for Maubin district")
+
+p3 <- ggplot(data = cbg3rd, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line(colour = "red", size = 1.5) +
+  theme_minimal() +
+  ggtitle("Gi* Trends for Pyapon district")
+
+p4 <- ggplot(data = cbg4th, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line(colour = "red", size = 1.5) +
+  theme_minimal() +
+  ggtitle("Gi* Trends for Pyinoolwin district")
+
+p5 <- ggplot(data = cbg5th, 
+       aes(x = quarter, 
+           y = gi_star)) +
+  geom_line(colour = "red", size = 1.5) +
+  theme_minimal() +
+  ggtitle("Gi* Trends for Yangon(West) district")
+
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| column: body-outset-right
+
+patchwork <- (p1+p2+p3+p4+p5)
+
+patchwork
+```
+
+## Performing Emerging Hotspot Analysis
+
+We will perform EHSA analysis by using [`emerging_hotspot_analysis()`](https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html) of sfdep package. It takes a spacetime object x (i.e. spt1_complete, sp2_complete, quarterly_spt), and the quoted name of the variable of interest (i.e. Incidents) for .var argument.
+
+The **k argument is used to specify the** **number of time lags** which is set to 1 by default.
+
+Lastly, **nsim map** **numbers of simulation** to be performed.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ehsa3_99 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 99
+)
+
+ehsa3_199 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 199
+)
+
+ehsa3_299 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 299
+)
+
+ehsa3_399 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 399
+)
+
+ehsa3_499 <- emerging_hotspot_analysis(
+  x = Quarterly_spt, 
+  .var = "Incidents", 
+  k = 1, 
+  nsim = 499
+)
+```
+
+### Visualising the distribution of EHSA classes
+
+**Admin2 districts - quarterly**
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+p6 <- ggplot(data = ehsa3_99,
+       aes(x = classification)) +
+  geom_bar() +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
+  labs(title = "Distribution of ESHA classes - 99 simulations") +
+  theme(plot.title = element_text(size = 20)) +
+  theme_minimal()
+
+
+p7 <- ggplot(data = ehsa3_199,
+       aes(x = classification)) +
+  geom_bar() +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
+  labs(title = "Distribution of ESHA classes - 199 simulations") +
+  theme(plot.title = element_text(size = 20)) +
+  theme_minimal()
+
+p8 <- ggplot(data = ehsa3_299,
+       aes(x = classification)) +
+  geom_bar() +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
+  labs(title = "Distribution of ESHA classes - 299 simulations") +
+  theme(plot.title = element_text(size = 20)) +
+  theme_minimal()
+
+p9 <- ggplot(data = ehsa3_399,
+       aes(x = classification)) +
+  geom_bar() +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
+ labs(title = "Distribution of ESHA classes - 399 simulations") +
+  theme(plot.title = element_text(size = 20)) +
+  theme_minimal()
+
+#p10 <- ggplot(data = ehsa3_499,
+ #      aes(x = classification)) +
+#  geom_bar() +
+#  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack#(vjust = 1)) +
+#  labs(title = "Distribution of ESHA classes - 499 simulations") +
+#  theme(plot.title = element_text(size = 20)) +
+#  theme_minimal()
+
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+
+patchwork2 <- p6/p7
+
+patchwork2
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+
+patchwork3 <- p8/p9
+
+patchwork3
+```
+
+### Visualising EHSA
+
+In this section, we will learn how to visualise the geographic distribution EHSA classes. However, before we can do so, we need to join *mmr_shp_mimu2 & ehsa3)* together by using the code chunk below.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+mmr_ehsa99 <- mmr_shp_mimu_2 %>%
+  left_join(ehsa3_99,
+            by = join_by(DT == location))
+
+mmr_ehsa199 <- mmr_shp_mimu_2 %>%
+  left_join(ehsa3_199,
+            by = join_by(DT == location))
+
+mmr_ehsa299 <- mmr_shp_mimu_2 %>%
+  left_join(ehsa3_299,
+            by = join_by(DT == location))
+
+mmr_ehsa399 <- mmr_shp_mimu_2 %>%
+  left_join(ehsa3_399,
+            by = join_by(DT == location))
+```
+
+filtering the significant p-values
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ehsa_sig99 <- mmr_ehsa99  %>%
+  filter(p_value < 0.05)
+
+ehsa_sig199 <- mmr_ehsa199  %>%
+  filter(p_value < 0.05)
+
+ehsa_sig299 <- mmr_ehsa299  %>%
+  filter(p_value < 0.05)
+
+ehsa_sig399 <- mmr_ehsa399  %>%
+  filter(p_value < 0.05)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ehsa1 <- tm_shape(mmr_ehsa99) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig99) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "Emerging Hot Spot Map, 2021-2023",
+            title = "99 simulations",
+            main.title.size = 1.2,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+ehsa2 <- tm_shape(mmr_ehsa199) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig199) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "Emerging Hot Spot Map, 2021-2023",
+            title = "199 simulations",
+            main.title.size = 1.2,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+ehsa3 <- tm_shape(mmr_ehsa299) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig299) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "Emerging Hot Spot Map, 2021-2023",
+            title = "299 simulations",
+            main.title.size = 1.2,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+ehsa4 <- tm_shape(mmr_ehsa399) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(ehsa_sig399) +
+  tm_fill("classification") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "Emerging Hot Spot Map, 2021-2023",
+            title = "399 simulations",
+            main.title.size = 1.2,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 7
+#| column: body-outset-right
+
+
+tmap_arrange(ehsa1, ehsa2, 
+             asp = 1,
+             ncol=2, nrow=1)
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 7
+#| column: body-outset-right
+
+
+tmap_arrange(ehsa3, ehsa4, 
+             asp = 1,
+             ncol=2, nrow=1)
+```
