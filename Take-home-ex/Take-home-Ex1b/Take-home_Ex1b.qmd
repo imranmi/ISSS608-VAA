@@ -351,6 +351,10 @@ tm_shape(lisa_sig) +
   tm_borders(alpha = 0.4)
 ```
 
+```{r}
+
+```
+
 ## Hot Spot and Cold Spot Area Analysis (HCSA)
 
 HCSA uses spatial weights to identify locations of statistically significant hot spots and cold spots in an spatially weighted attribute that are in proximity to one another based on a calculated distance. The analysis groups features when similar high (hot) or low (cold) values are found in a cluster. The polygon features usually represent administration boundaries or a custom grid structure.

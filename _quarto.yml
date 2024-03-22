@@ -77,6 +77,8 @@ website:
             href: Take-home-ex/Take-home-Ex1b/Take-home_Ex1b.html
           - text: Take-home Exercise 4c
             href: Take-home-ex/Take-home-Ex1c/Take-home_Ex1c.html
+          - text: Take-home Exercise 4d
+            href: Take-home-ex/Take-home-Ex4d/Take-home_Ex4d.html
     right: 
       - href: index.qmd
         text: Home

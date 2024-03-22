@@ -1,0 +1,918 @@
+---
+title: "Take-home Exercise 4d - plotting for project poster"
+date: March 22, 2024
+date-modified: "last-modified"
+author: "Imran Ibrahim"
+toc: true
+execute: 
+  eval: true
+  echo: true
+  freeze: true
+  warning: false
+  message: false
+---
+
+# Getting Started
+
+## Loading R packages and Data prep
+
+```{r}
+pacman::p_load(tidyverse, dplyr, tidyr, 
+               sf, lubridate,plotly,
+               tmap, spdep, sfdep)
+```
+
+```{r}
+ACLED_MMR <- read_csv("data/MMR.csv")
+```
+
+```{r}
+mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",  
+                  layer = "mmr_polbnda_adm2_250k_mimu")
+```
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR %>%
+  mutate(admin1 = case_when(
+    admin1 == "Bago-East" ~ "Bago (East)",
+    admin1 == "Bago-West" ~ "Bago (West)",
+    admin1 == "Shan-North" ~ "Shan (North)",
+    admin1 == "Shan-South" ~ "Shan (South)",
+    admin1 == "Shan-East" ~ "Shan (East)",
+    TRUE ~ as.character(admin1)
+  ))
+```
+
+```{r}
+ACLED_MMR_1 <- ACLED_MMR_1 %>%
+  mutate(admin2 = case_when(
+    admin2 == "Yangon-East" ~ "Yangon (East)",
+    admin2 == "Yangon-West" ~ "Yangon (West)",
+    admin2 == "Yangon-North" ~ "Yangon (North)",
+    admin2 == "Yangon-South" ~ "Yangon (South)",
+    admin2 == "Mong Pawk (Wa SAD)" ~ "Tachileik",
+    admin2 == "Nay Pyi Taw" ~ "Det Khi Na",
+    admin2 == "Yangon" ~ "Yangon (West)",
+    TRUE ~ as.character(admin2)
+  ))
+```
+
+### Loading in previously wrangled data for quarterly data
+
+```{r}
+Events_2 <- read_csv("data/df_complete.csv")
+```
+
+```{r}
+Events_admin2 <- left_join(mmr_shp_mimu_2, Events_2,
+                            by = c("DT" = "admin2"))
+```
+
+```{r}
+Events_admin2 <- Events_admin2 %>%
+                      select(-OBJECTID, -ST, -ST_PCODE, 
+                             -DT_PCODE, -DT_MMR, -PCode_V)
+```
+
+```{r}
+class(Events_admin2)
+```
+
+## Filtering for Event type == Battles, for all quarters from 2021-2023 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+Battles2021Q1 <- Events_admin2 %>%
+  filter(quarter == "2021Q1", event_type == "Battles")
+
+Battles2021Q2 <- Events_admin2 %>%
+  filter(quarter == "2021Q2", event_type == "Battles")
+
+Battles2021Q3 <- Events_admin2 %>%
+  filter(quarter == "2021Q3", event_type == "Battles")
+
+Battles2021Q4 <- Events_admin2 %>%
+  filter(quarter == "2021Q4", event_type == "Battles")
+
+Battles2022Q1 <- Events_admin2 %>%
+  filter(quarter == "2022Q1", event_type == "Battles")
+
+Battles2022Q2 <- Events_admin2 %>%
+  filter(quarter == "2022Q2", event_type == "Battles")
+
+Battles2022Q3 <- Events_admin2 %>%
+  filter(quarter == "2022Q3", event_type == "Battles")
+
+Battles2022Q4 <- Events_admin2 %>%
+  filter(quarter == "2022Q4", event_type == "Battles")
+
+Battles2023Q1 <- Events_admin2 %>%
+  filter(quarter == "2023Q1", event_type == "Battles")
+
+Battles2023Q2 <- Events_admin2 %>%
+  filter(quarter == "2023Q2", event_type == "Battles")
+
+Battles2023Q3 <- Events_admin2 %>%
+  filter(quarter == "2023Q3", event_type == "Battles")
+
+Battles2023Q4 <- Events_admin2 %>%
+  filter(quarter == "2023Q4", event_type == "Battles")
+```
+
+### Deriving contiguity weights: Queen’s method
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+wm_q1 <- Battles2021Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q2 <- Battles2021Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q3 <- Battles2021Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q4 <- Battles2021Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q5 <- Battles2022Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q6 <- Battles2022Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q7 <- Battles2022Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q8 <- Battles2022Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q9 <- Battles2023Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q10 <- Battles2023Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q11 <- Battles2023Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+
+wm_q12 <- Battles2023Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wt = st_weights(nb,
+                         style = "W"),
+         .before = 1) 
+```
+
+### No of sims = 99
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+lisa1 <- wm_q1 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa2 <- wm_q2 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa3 <- wm_q3 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa4 <- wm_q4 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa5 <- wm_q5 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa6 <- wm_q6 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa7 <- wm_q7 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa8 <- wm_q8 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa9 <- wm_q9 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa10 <- wm_q10 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa11 <- wm_q11 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+
+lisa12 <- wm_q12 %>% 
+  mutate(local_moran = local_moran(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_moran)
+```
+
+Visualising LISA Map
+
+Getting the Significant P-values
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+lisa_sig1 <- lisa1  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig2 <- lisa2  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig3 <- lisa3  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig4 <- lisa4  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig5 <- lisa5  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig6 <- lisa6  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig7 <- lisa7  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig8 <- lisa8  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig9 <- lisa9  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig10 <- lisa10  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig11 <- lisa11  %>%
+  filter(p_ii < 0.05)
+
+lisa_sig12 <- lisa12  %>%
+  filter(p_ii < 0.05)
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+lisamap1 <- tm_shape(lisa1) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig1) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2021",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap2 <- tm_shape(lisa2) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig2) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2021",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap3 <- tm_shape(lisa3) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig3) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2021",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap4 <- tm_shape(lisa4) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig4) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2021",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap5 <- tm_shape(lisa5) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig5) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2022",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap6 <- tm_shape(lisa6) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig6) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2022",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap7 <- tm_shape(lisa7) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig7) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2022",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap8 <- tm_shape(lisa8) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig8) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2022",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap9 <- tm_shape(lisa9) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig9) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2023",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap10 <- tm_shape(lisa10) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig10) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2023",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap11 <- tm_shape(lisa11) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig11) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2023",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+lisamap12 <- tm_shape(lisa12) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(lisa_sig12) +
+  tm_fill("mean") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "LISA Map for Battles in 2022",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+tmap_arrange(lisamap1, lisamap2, lisamap3, lisamap4, 
+             lisamap5, lisamap6, lisamap7, lisamap8, 
+             lisamap9, lisamap10, lisamap11, lisamap12, 
+             asp = 1,
+             ncol=4, nrow=3)
+```
+
+# Hot and Cold Spot Analysis (HCSA)
+
+## Computing local Gi\* statistics
+
+We will need to derive a spatial weight matrix before we can compute local Gi\* statistics. Code chunk below will be used to derive a spatial weight matrix by using sfdep functions and tidyverse approach.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+wm_idw1 <- Battles2021Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw2 <- Battles2021Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw3 <- Battles2021Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw4 <- Battles2021Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw5 <- Battles2022Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw6 <- Battles2022Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw7 <- Battles2022Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw8 <- Battles2022Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw9 <- Battles2023Q1 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw10 <- Battles2023Q2 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw11 <- Battles2023Q3 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+
+wm_idw12 <- Battles2023Q4 %>%
+  mutate(nb = st_contiguity(geometry),
+         wts = st_inverse_distance(nb, geometry,
+                                   scale = 1,
+                                   alpha = 1),
+         .before = 1)
+```
+
+### No of sim = 99
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+HCSA1 <- wm_idw1 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA2 <- wm_idw2 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA3 <- wm_idw3 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA4 <- wm_idw4 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA5 <- wm_idw5 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA6 <- wm_idw6 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA7 <- wm_idw7 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA8 <- wm_idw8 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA9 <- wm_idw9 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA10 <- wm_idw10 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA11 <- wm_idw11 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+
+HCSA12 <- wm_idw12 %>% 
+  mutate(local_Gi = local_gstar_perm(
+    Incidents, nb, wt, nsim = 99),
+         .before = 1) %>%
+  unnest(local_Gi)
+```
+
+Calculating the significant p-vals \< 0.05
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+HCSA_sig1 <- HCSA1  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig2 <- HCSA2  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig3 <- HCSA3  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig4 <- HCSA4  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig5 <- HCSA5  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig6 <- HCSA6  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig7 <- HCSA7  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig8 <- HCSA8  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig9 <- HCSA9  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig10 <- HCSA10  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig11 <- HCSA11  %>%
+  filter(p_value < 0.05)
+
+HCSA_sig12 <- HCSA12  %>%
+  filter(p_value < 0.05)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+HCSAmap1 <- tm_shape(HCSA1) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig1) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = " HCSA Map for Battles in 2021",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap2 <- tm_shape(HCSA2) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig2) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2021",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap3 <- tm_shape(HCSA3) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig3) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2021",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap4 <- tm_shape(HCSA4) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig4) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2021",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap5 <- tm_shape(HCSA5) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig5) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2022",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap6 <- tm_shape(HCSA6) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig6) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2022",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap7 <- tm_shape(HCSA7) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig7) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2022",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap8 <- tm_shape(HCSA8) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig8) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2022",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap9 <- tm_shape(HCSA9) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig9) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2023",
+            title = "Quarter 1",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap10 <- tm_shape(HCSA10) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig10) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2023",
+            title = "Quarter 2",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap11 <- tm_shape(HCSA11) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig11) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2023",
+            title = "Quarter 3",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+
+HCSAmap12 <- tm_shape(HCSA12) +
+  tm_polygons() +
+  tm_borders(alpha = 0.5) +
+tm_shape(HCSA_sig12) +
+  tm_fill("gi_star") + 
+  tm_borders(alpha = 0.4) +
+  tm_layout(main.title = "HCSA Map for Battles in 2022",
+            title = "Quarter 4",
+            main.title.size = 0.90,
+            legend.height = 0.60, 
+            legend.width = 5.0,
+            legend.outside = FALSE,
+            legend.position = c("left", "bottom"))
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+tmap_arrange(HCSAmap1, HCSAmap2, HCSAmap3, HCSAmap4, 
+             HCSAmap5, HCSAmap6, HCSAmap7, HCSAmap8, 
+             HCSAmap9, HCSAmap10, HCSAmap11, HCSAmap12, 
+             asp = 1,
+             ncol=4, nrow=3)
+```
