@@ -1,5 +1,5 @@
 ---
-title: "Geospatial Analysis - Local Measures of Spatial Autocorrelation"
+title: "Geospatial Analysis1 - Local Measures of Spatial Autocorrelation"
 date: March 17, 2024
 date-modified: "last-modified"
 author: "Imran Ibrahim"
@@ -37,7 +37,7 @@ mmr_shp_mimu_2 <-  st_read(dsn = "data/geospatial3",
                   layer = "mmr_polbnda_adm2_250k_mimu")
 ```
 
-## Renaming admin1 and admin2 names 
+## Renaming admin1 and admin2 names
 
 This is to enable our admin1 region names and admin2 district names in our data set to be in sync with our shape files.
 
@@ -132,7 +132,7 @@ Events_admin2 <- Events_admin2 %>%
 class(Events_admin2)
 ```
 
-# Filtering the Event and Quarter 
+# Filtering the Event and Quarter
 
 To test the output of the codes, I shall further filter the dataset to be event_type = Battles, and time period == 2023Q4.
 
