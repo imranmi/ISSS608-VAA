@@ -78,7 +78,7 @@ Events_admin2 <- Events_admin2 %>%
 class(Events_admin2)
 ```
 
-## Filtering for Event type == Battles, for all quarters from 2021-2023 
+## Filtering for Event type == Battles, for all quarters from 2021-2023
 
 ```{r}
 #| code-fold: true
