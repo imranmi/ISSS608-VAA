@@ -964,9 +964,27 @@ Confirm1 <- fluidRow(
                          label = "Year:",
                          choices = seq(2020,2023),
                          selected = 2021),
+             #hr(),
+             #selectizeInput(inputId = "Admin1_ggstat",
+            #                label = "Select Administrative Region(s)",
+            #                choices = unique(ACLED_MMR$admin1),
+            #                multiple = TRUE,
+            #                selected = c("Mon", "Yangon"), 
+            #                options = list(maxItems = 18, placeholder = 'Enter Region/State')
+            # ),
+             
+             hr(),
+             selectizeInput(inputId = "event_ggstat",
+                            label = "Select event type",
+                            choices = unique(ACLED_MMR$event_type),
+                            multiple = TRUE,
+                            selected = c("Battles", "Violence against civilians"), 
+                            options = list(maxItems = 6, placeholder = 'Enter Event Type')
+             ),
+             actionButton(inputId = "resetButton1", label = "Reset Selections"),
              hr(),
              selectInput(inputId = "Testtype",
-                         label = "Statistical Approach:",
+                         label = "Test Type:",
                          choices = c("parametric" = "p",
                                      "non-parametric" = "np",
                                      "robust" = "r",
@@ -990,7 +1008,20 @@ Confirm1 <- fluidRow(
                                      "BY" = "BY",
                                      "fdr" = "fdr",
                                      "none" = "none"),
-                         selected = "holm")
+                         selected = "holm"),
+            # hr(),
+            #radioButtons(inputId = "PlotType",
+             #             label = "Plot Type",
+              #           choices = c("box" = "box", 
+               #                      "violin" = "violin",
+                #                     "boxviolin" = "boxviolin"),
+                 #        selected = "box"),
+            hr(),
+            radioButtons(inputId = "Conlevel",
+                         label = "Confidence level",
+                         choices = c("0.95" = 0.95, 
+                                     "0.99" = 0.99),
+                         selected = 0.95),
          ),
          box(title = "Chart Interpretation",
              status = "danger",
@@ -2256,18 +2287,25 @@ server <- function(input, output, session) {
   
   # Anova test
   
+  observeEvent(input$resetButton1, {
+    #updateSelectizeInput(session, "Admin1_ggstat", selected = character(0))  
+    updateSelectizeInput(session, "event_ggstat", selected = character(0))  
+  })
+  
   AnovaResults <- reactive({
     # Filter the data based on the user's selection
     filteredData <- Summary_Data %>%
-      filter(year == input$YearAnova) 
+      filter(year == input$YearAnova,
+             #admin1 == input$Admin1_ggstat,
+             event_type == input$event_ggstat) 
     
     
     if(nrow(filteredData) == 0) return(NULL)  # Exit if no data    
     
     return(filteredData)  
     
-  })        
-  
+  }) 
+
   
   output$Anovaplot <- renderPlot({
     
@@ -2278,6 +2316,8 @@ server <- function(input, output, session) {
     Anova <- ggbetweenstats(data = dataForAnova,
                             x = event_type, 
                             y = Total_Fatalities,
+                            #plot.type = input$PlotType,
+                            conf.level = input$Conlevel,
                             type = input$Testtype,
                             mean.ci = TRUE, 
                             pairwise.comparisons = TRUE, 
@@ -2356,23 +2396,25 @@ server <- function(input, output, session) {
     
   })        
   
-  #still has error here
+  
   
   output$Mosaicplot2 <- renderPlot({
     
-    dataForMosaic2 <- MosaicResults2()  
+      dataForMosaic2 <- MosaicResults2()  
     
-    if(is.null(dataForMosaic2)) return()  # Check if the data is NULL and exit if it is
+      if(is.null(dataForMosaic2)) return()  # Check if the data is NULL and exit if it is
     
-    observed_table <- table(dataForMosaic2$admin1, dataForMosaic2$event_type)
+     Mosaic2 <- vcd::mosaic(~ admin1 + event_type,  data = dataForMosaic2, gp = shading_max, 
+                            labeling = labeling_border(rot_labels = c(90,0,0,0), 
+                                                       just_labels = c("left", 
+                                                                       "center", 
+                                                                       "center", 
+                                                                       "center")))
     
-    # Create the mosaic plot using the shading_max function directly in the shading argument
-    mosaic_plot <- mosaic(~ admin1 + event_type, data = observed_table, 
-                          shading = shading_max, 
-                          legend = TRUE)  # Add a legend if needed
+      Mosaic2
     
-    print(mosaic_plot)  # Ensure the plot is printed in the Shiny app
-  })
+     })
+  
   
   
   
