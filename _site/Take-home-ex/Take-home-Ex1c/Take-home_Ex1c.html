@@ -326,7 +326,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#mann-kendall-test" id="toc-mann-kendall-test" class="nav-link" data-scroll-target="#mann-kendall-test">Mann-Kendall Test</a>
   <ul class="collapse">
-  <li><a href="#arrange-to-show-significant-emerging-hotcold-spots" id="toc-arrange-to-show-significant-emerging-hotcold-spots" class="nav-link" data-scroll-target="#arrange-to-show-significant-emerging-hotcold-spots">Arrange to show significant emerging hot/cold spots</a></li>
   <li><a href="#performing-emerging-hotspot-analysis" id="toc-performing-emerging-hotspot-analysis" class="nav-link" data-scroll-target="#performing-emerging-hotspot-analysis">Performing Emerging Hotspot Analysis</a>
   <ul class="collapse">
   <li><a href="#visualising-the-distribution-of-ehsa-classes" id="toc-visualising-the-distribution-of-ehsa-classes" class="nav-link" data-scroll-target="#visualising-the-distribution-of-ehsa-classes">Visualising the distribution of EHSA classes</a></li>
@@ -366,7 +365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 23, 2024</p>
+      <p class="date-modified">March 25, 2024</p>
     </div>
   </div>
     
@@ -515,16 +514,16 @@ Note
 # Groups:   quarter [12]
    quarter DT      Incidents nb    wt    gi_star cluster    e_gi  var_gi std_dev
      &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
- 1   20211 Hintha…         0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00980 1.60e-4 -0.776 
- 2   20211 Labutta         0 &lt;int&gt; &lt;dbl&gt;  -0.645 Low     0.00621 1.94e-4 -0.446 
- 3   20211 Maubin          0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00899 1.28e-4 -0.795 
- 4   20211 Myaung…         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00862 1.82e-4 -0.640 
- 5   20211 Pathein         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00791 1.52e-4 -0.642 
- 6   20211 Pyapon          0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00876 1.81e-4 -0.651 
- 7   20211 Bago            1 &lt;int&gt; &lt;dbl&gt;   0.321 Low     0.0122  1.84e-4  0.334 
- 8   20211 Taungoo         8 &lt;int&gt; &lt;dbl&gt;   0.432 High    0.0204  1.15e-4 -0.232 
- 9   20211 Pyay            0 &lt;int&gt; &lt;dbl&gt;  -0.337 Low     0.00900 1.79e-4 -0.0991
-10   20211 Thayar…         0 &lt;int&gt; &lt;dbl&gt;  -0.270 Low     0.00889 1.30e-4 -0.0233
+ 1   20211 Hintha…         0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00946 1.52e-4 -0.768 
+ 2   20211 Labutta         0 &lt;int&gt; &lt;dbl&gt;  -0.645 Low     0.00649 1.99e-4 -0.461 
+ 3   20211 Maubin          0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00893 1.27e-4 -0.793 
+ 4   20211 Myaung…         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00871 2.03e-4 -0.612 
+ 5   20211 Pathein         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00767 1.40e-4 -0.648 
+ 6   20211 Pyapon          0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00881 1.91e-4 -0.638 
+ 7   20211 Bago            1 &lt;int&gt; &lt;dbl&gt;   0.321 Low     0.0108  1.65e-4  0.463 
+ 8   20211 Taungoo         8 &lt;int&gt; &lt;dbl&gt;   0.432 High    0.0216  1.53e-4 -0.298 
+ 9   20211 Pyay            0 &lt;int&gt; &lt;dbl&gt;  -0.337 Low     0.00831 1.29e-4 -0.0567
+10   20211 Thayar…         0 &lt;int&gt; &lt;dbl&gt;  -0.270 Low     0.00840 1.36e-4  0.0192
 # ℹ 950 more rows
 # ℹ 5 more variables: p_value &lt;dbl&gt;, p_sim &lt;dbl&gt;, p_folded_sim &lt;dbl&gt;,
 #   skewness &lt;dbl&gt;, kurtosis &lt;dbl&gt;</code></pre>
@@ -553,8 +552,8 @@ Note
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-ec8e602d2ec489df524e" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-ec8e602d2ec489df524e">{"x":{"data":[{"x":[20211,20212,20213,20214,20221,20222,20223,20224,20231,20232,20233,20234],"y":[-0.93751257944361199,-1.27667486743152,-1.685214447206653,-1.4719409717472254,-1.6682469649078393,-1.6589364706864278,-1.9726482068457223,-1.8280863415982889,-1.5849030767048147,-1.6875167576840768,-1.6749279580579677,-1.4351478905503112],"text":["quarter: 20211<br />gi_star: -0.9375126","quarter: 20212<br />gi_star: -1.2766749","quarter: 20213<br />gi_star: -1.6852144","quarter: 20214<br />gi_star: -1.4719410","quarter: 20221<br />gi_star: -1.6682470","quarter: 20222<br />gi_star: -1.6589365","quarter: 20223<br />gi_star: -1.9726482","quarter: 20224<br />gi_star: -1.8280863","quarter: 20231<br />gi_star: -1.5849031","quarter: 20232<br />gi_star: -1.6875168","quarter: 20233<br />gi_star: -1.6749280","quarter: 20234<br />gi_star: -1.4351479"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283104,"r":7.3059360730593621,"b":40.182648401826491,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[20209.849999999999,20235.150000000001],"tickmode":"array","ticktext":["20210","20215","20220","20225","20230","20235"],"tickvals":[20210,20215,20220,20225,20230,20235],"categoryorder":"array","categoryarray":["20210","20215","20220","20225","20230","20235"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"y","title":{"text":"quarter","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0244049882158279,-0.88575579807350646],"tickmode":"array","ticktext":["-1.8","-1.5","-1.2","-0.9"],"tickvals":[-1.8000000000000005,-1.5000000000000004,-1.2000000000000004,-0.90000000000000036],"categoryorder":"array","categoryarray":["-1.8","-1.5","-1.2","-0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"x","title":{"text":"gi_star","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"75a012bd47a9":{"x":{},"y":{},"type":"scatter"}},"cur_data":"75a012bd47a9","visdat":{"75a012bd47a9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-e15cf9b89c461803aec4" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e15cf9b89c461803aec4">{"x":{"data":[{"x":[20211,20212,20213,20214,20221,20222,20223,20224,20231,20232,20233,20234],"y":[-0.93751257944361199,-1.27667486743152,-1.685214447206653,-1.4719409717472254,-1.6682469649078393,-1.6589364706864278,-1.9726482068457223,-1.8280863415982889,-1.5849030767048147,-1.6875167576840768,-1.6749279580579677,-1.4351478905503112],"text":["quarter: 20211<br />gi_star: -0.9375126","quarter: 20212<br />gi_star: -1.2766749","quarter: 20213<br />gi_star: -1.6852144","quarter: 20214<br />gi_star: -1.4719410","quarter: 20221<br />gi_star: -1.6682470","quarter: 20222<br />gi_star: -1.6589365","quarter: 20223<br />gi_star: -1.9726482","quarter: 20224<br />gi_star: -1.8280863","quarter: 20231<br />gi_star: -1.5849031","quarter: 20232<br />gi_star: -1.6875168","quarter: 20233<br />gi_star: -1.6749280","quarter: 20234<br />gi_star: -1.4351479"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283104,"r":7.3059360730593621,"b":40.182648401826491,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[20209.849999999999,20235.150000000001],"tickmode":"array","ticktext":["20210","20215","20220","20225","20230","20235"],"tickvals":[20210,20215,20220,20225,20230,20235],"categoryorder":"array","categoryarray":["20210","20215","20220","20225","20230","20235"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"y","title":{"text":"quarter","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0244049882158279,-0.88575579807350646],"tickmode":"array","ticktext":["-1.8","-1.5","-1.2","-0.9"],"tickvals":[-1.8000000000000005,-1.5000000000000004,-1.2000000000000004,-0.90000000000000036],"categoryorder":"array","categoryarray":["-1.8","-1.5","-1.2","-0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"x","title":{"text":"gi_star","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"bc8704c59a9":{"x":{},"y":{},"type":"scatter"}},"cur_data":"bc8704c59a9","visdat":{"bc8704c59a9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Mann Kendall test for <strong>Hinthada district-quarterly</strong></p>
@@ -625,8 +624,8 @@ Note
 # ℹ 70 more rows</code></pre>
 </div>
 </div>
-<section id="arrange-to-show-significant-emerging-hotcold-spots" class="level2">
-<h2 class="anchored" data-anchor-id="arrange-to-show-significant-emerging-hotcold-spots">Arrange to show significant emerging hot/cold spots</h2>
+<p><br>
+Arrange to show significant emerging hot/cold spots</p>
 <p>Admin 2 districts-quarterly</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>emerging3 <span class="ot">&lt;-</span> ehsa3 <span class="sc">%&gt;%</span> </span>
@@ -645,7 +644,6 @@ Note
 5 Yangon (West) -0.636 0.00493   -42  66.0  213.</code></pre>
 </div>
 </div>
-</section>
 <section id="performing-emerging-hotspot-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="performing-emerging-hotspot-analysis">Performing Emerging Hotspot Analysis</h2>
 <p>Lastly, we will perform EHSA analysis by using&nbsp;<a href="https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html"><code>emerging_hotspot_analysis()</code></a>&nbsp;of sfdep package. It takes a spacetime object x (i.e quarterly_spt), and the quoted name of the variable of interest (i.e.&nbsp;Incidents) for .var argument.</p>
@@ -655,24 +653,43 @@ Note
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ehsa3 <span class="ot">&lt;-</span> <span class="fu">emerging_hotspot_analysis</span>(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> Quarterly_spt, </span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">.var =</span> <span class="st">"Incidents"</span>, </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span>, </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">1</span>,</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">nsim =</span> <span class="dv">99</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ehsa3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 80 × 4
+   location       tau p_value classification     
+   &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;              
+ 1 Hinthada    0.152   0.537  no pattern detected
+ 2 Labutta    -0.242   0.304  no pattern detected
+ 3 Maubin     -0.364   0.115  sporadic hotspot   
+ 4 Myaungmya  -0.364   0.115  no pattern detected
+ 5 Pathein     0.545   0.0164 no pattern detected
+ 6 Pyapon      0       1      sporadic coldspot  
+ 7 Bago        0       1      no pattern detected
+ 8 Taungoo     0.212   0.373  sporadic hotspot   
+ 9 Pyay        0.0303  0.945  sporadic hotspot   
+10 Thayarwady -0.152   0.537  sporadic coldspot  
+# ℹ 70 more rows</code></pre>
+</div>
 </div>
 <section id="visualising-the-distribution-of-ehsa-classes" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-the-distribution-of-ehsa-classes">Visualising the distribution of EHSA classes</h3>
 <p>In the code chunk below, ggplot2 functions is used to reveal the distribution of EHSA classes as a bar chart.</p>
 <p><strong>Admin2 districts - quarterly</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| column: body-outset-right</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| column: body-outset-right</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex1c_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex1c_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -680,29 +697,62 @@ Note
 <h3 class="anchored" data-anchor-id="visualising-ehsa">Visualising EHSA</h3>
 <p>In this section, we will visualise the geographic distribution EHSA classes. However, before we can do so, we need to join <em>(mmr_shp_mimu2 &amp; ehsa3)</em>&nbsp;together by using the code chunk below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mmr3_ehsa <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3,</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mmr3_ehsa <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mmr3_ehsa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 80 features and 10 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.1721 ymin: 9.696844 xmax: 101.17 ymax: 28.54554
+Geodetic CRS:  WGS 84
+First 10 features:
+   OBJECTID          ST ST_PCODE         DT   DT_PCODE      DT_MMR PCode_V
+1         1  Ayeyarwady   MMR017   Hinthada MMR017D002    ဟင်္သာတခရိုင်     9.4
+2         2  Ayeyarwady   MMR017    Labutta MMR017D004    လပွတ္တာခရိုင်     9.4
+3         3  Ayeyarwady   MMR017     Maubin MMR017D005     မအူပင်ခရိုင်     9.4
+4         4  Ayeyarwady   MMR017  Myaungmya MMR017D003 မြောင်းမြခရိုင်     9.4
+5         5  Ayeyarwady   MMR017    Pathein MMR017D001      ပုသိမ်ခရိုင်     9.4
+6         6  Ayeyarwady   MMR017     Pyapon MMR017D006     ဖျာပုံခရိုင်     9.4
+7         7 Bago (East)   MMR007       Bago MMR007D001      ပဲခူးခရိုင်     9.4
+8         8 Bago (East)   MMR007    Taungoo MMR007D002    တောင်ငူခရိုင်     9.4
+9         9 Bago (West)   MMR008       Pyay MMR008D001      ပြည်ခရိုင်     9.4
+10       10 Bago (West)   MMR008 Thayarwady MMR008D002   သာယာဝတီခရိုင်     9.4
+           tau   p_value      classification                       geometry
+1   0.15151514 0.5371338 no pattern detected MULTIPOLYGON (((95.12637 18...
+2  -0.24242422 0.3036732 no pattern detected MULTIPOLYGON (((95.04462 15...
+3  -0.36363631 0.1147567    sporadic hotspot MULTIPOLYGON (((95.38231 17...
+4  -0.36363631 0.1147567 no pattern detected MULTIPOLYGON (((94.6942 16....
+5   0.54545450 0.0163933 no pattern detected MULTIPOLYGON (((94.27572 15...
+6   0.00000000 1.0000000   sporadic coldspot MULTIPOLYGON (((95.20798 15...
+7   0.00000000 1.0000000 no pattern detected MULTIPOLYGON (((95.90674 18...
+8   0.21212119 0.3726914    sporadic hotspot MULTIPOLYGON (((96.17964 19...
+9   0.03030303 0.9453299    sporadic hotspot MULTIPOLYGON (((95.70458 19...
+10 -0.15151514 0.5371338   sporadic coldspot MULTIPOLYGON (((95.85173 18...</code></pre>
+</div>
 </div>
 <p>Next, tmap functions will be used to plot a categorical choropleth map by using the code chunk below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| column: body-outset-right</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>ehsa_sig3 <span class="ot">&lt;-</span> mmr3_ehsa  <span class="sc">%&gt;%</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mmr3_ehsa) <span class="sc">+</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig3) <span class="sc">+</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 10</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| column: body-outset-right</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>ehsa_sig3 <span class="ot">&lt;-</span> mmr3_ehsa  <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"plot"</span>)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mmr3_ehsa) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig3) <span class="sc">+</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex1c_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex1c_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>

@@ -3,7 +3,8 @@ pacman::p_load(shiny, shinydashboard, shinycssloaders,
                tidyverse, dplyr, leaflet, plotly, highcharter, 
                ggthemes, fresh, sf, sfdep, tmap, tm, ggforce, 
                ggraph, igraph, wordcloud, tidytext, DT, spatstat,
-               lubridate,viridis, ggplot2, readr, purrr, ggstatsplot, vcd, ggmosaic)
+               lubridate,viridis, ggplot2, readr, purrr, ggstatsplot, 
+               vcd, ggmosaic, forcats)
 
 
 ACLED_MMR <- read_csv("data/MMR.csv")
@@ -577,7 +578,7 @@ Cluster2 <- fluidRow(
                                      "Riots" = "Riots"),
                          selected = "Battles")
          ),
-         box(title = "Options for computing Local Moran's I",
+         box(title = "Options for Local Moran's I",
              status = "info",
              solidHeader = FALSE,
              width = NULL,
@@ -591,11 +592,23 @@ Cluster2 <- fluidRow(
                          selected = "W"),
              selectInput("numSims1", "Number of Simulations:",
                          choices = c(99, 199, 299, 399, 499),
-                         selected = 99)
+                         selected = 99),
+             selectInput("localmoranstats", "Show Local Moran Stat:",
+                         choices = c("local moran(ii)" = "local moran(ii)",
+                                     "expectation(eii)" = "expectation(eii)",
+                                     "variance(var_ii)" = "variance(var_ii)",
+                                     "std deviation(z_ii)" = "std deviation(z_ii)",
+                                     "P-value" = "p_value"),
+                         selected = "local moran(ii)"),
+             selectInput("LisaClass", "Show Lisa Classification",
+                         choices = c("mean" = "mean",
+                                     "median" = "median",
+                                     "pysal" = "pysal"),
+                         selected = "mean")
          )
   ),
   column(4,
-         box(title = "Local Moran's I Statistic",
+         box(title = "Local Moran's I - All Districts",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
@@ -605,7 +618,7 @@ Cluster2 <- fluidRow(
          )
   ),
   column(4,
-         box(title = "Local Indicator of Spatial Association (p-values <0.05)",
+         box(title = "Local Indicator of Spatial Association (LISA) map",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
@@ -628,18 +641,30 @@ Cluster2 <- fluidRow(
 # Add this outside the first fluidRow to make it full width and below everything else
 Cluster2 <- tagList(Cluster2, 
                     fluidRow(
-                      column(12,
-                             box(title = "Local Moran's I Results - Data Table",
+                      column(6,
+                             box(title = "Local Moran's I - All Districts",
                                  status = "danger",
                                  solidHeader = TRUE,
                                  collapsible = TRUE,
                                  width = NULL,
                                  align = "center",
-                                 dataTableOutput("localMoranDataTable"),
-                                 style = "height:600px; overflow-y: scroll; overflow-x: scroll;")
+                                 dataTableOutput("localMoransTable1"),
+                                 style = "height:600px; overflow-y: scroll; overflow-x: scroll;")),
+                      column(6,       
+                             box(
+                               title = "LISA results (P-values < 0.05)",
+                               status = "danger",
+                               solidHeader = TRUE,
+                               collapsible = TRUE,
+                               width = NULL,
+                               align = "center",
+                               dataTableOutput("localMoransTable2"),
+                               style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
                       )
                     )
+                    
 )
+                     
 
 #==========================================================  
 ##Geospatial Analysis, 2nd Tab
@@ -680,12 +705,19 @@ HotCold1 <- fluidRow(
              selectInput(inputId = "numSims2",
                          label = "Number of Simulations for Gi*:",
                          choices = c(99,199,299,399,499),
-                         selected = 99)
+                         selected = 99),
+             selectInput("localgistats", "Show Local GI Stat:",
+                         choices = c("local gi*" = "local gi*",
+                                     "expectation(e_gi)" = "expectation(e_gi)",
+                                     "variance(var_gi)" = "variance(var_gi)",
+                                     "std deviation" = "std deviation",
+                                     "P-value" = "p_value"),
+                         selected = "local gi*")
          )
          
   ),
   column(4,
-         box(title = "GI* Statistics"
+         box(title = "GI* Statistics- All Districts"
              ,status = "danger"
              ,solidHeader = TRUE 
              ,collapsible = TRUE
@@ -696,7 +728,7 @@ HotCold1 <- fluidRow(
   ),
   column(4,
          box(
-           title = "Significant Hot & Cold spot areas (p-values < 0.05)",
+           title = "Significant Hot & Cold spot areas",
            status = "danger",
            solidHeader = TRUE,
            collapsible = TRUE,
@@ -720,16 +752,26 @@ HotCold1 <- fluidRow(
 
 HotCold1 <- tagList(HotCold1,
                     fluidRow(
-                      column(12,
+                      column(6,
                              box(
-                               title = "GI* Statistics - Data Table",
+                               title = "GI* Statistics - All Districts",
                                status = "danger",
                                solidHeader = TRUE,
                                collapsible = TRUE,
                                width = NULL,
                                align = "center",
-                               dataTableOutput("AdaptiveGiStat"),
-                               style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
+                               dataTableOutput("GiStat"),
+                               style = "height:500px; overflow-y: scroll;overflow-x: scroll;")),
+                      column(6,       
+                              box(
+                                  title = "GI* Statistics - Significant Hot & Cold spots (P-values < 0.05)",
+                                  status = "danger",
+                                  solidHeader = TRUE,
+                                  collapsible = TRUE,
+                                  width = NULL,
+                                  align = "center",
+                                  dataTableOutput("GiStat2"),
+                                  style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
                       )
                     )
                     
@@ -803,10 +845,13 @@ EHSA2 <- fluidRow(
              width = NULL,
              helpText("Options for ESHA map"),
              selectInput("eventType8", "Event Type:",
-                         choices = unique(ACLED_MMR$event_type),
-                         selected = "Battles"),
+                          choices = c("Battles" = "Battles",
+                                    "Violence against civilians" = "Violence against civilians",
+                                    "Protests" = "Protests",
+                                    "Explosions/Remote violence" = "Explosions/Remote violence"),
+                          selected = "Battles"),
              selectInput(inputId = "numLags", 
-                         label = "Number of Lags:", 
+                         label = "Time Lag of spatial neighbours:", 
                          choices = c(1, 2, 3, 4, 5),
                          selected = 1),
              selectInput(inputId = "numSims", 
@@ -849,8 +894,11 @@ EHSA2 <- fluidRow(
              width = NULL,
              helpText("Filter options for Dataset"),
              selectInput("eventType9", "Event Type:",
-                         choices = unique(ACLED_MMR$event_type),
-                         selected = "Battles"),
+                        choices = c("Battles" = "Battles",
+                                "Violence against civilians" = "Violence against civilians",
+                                "Protests" = "Protests",
+                                "Explosions/Remote violence" = "Explosions/Remote violence"),
+                        selected = "Battles"),
              selectizeInput(inputId = "Admin2_2",
                             label = "Select District",
                             choices = unique(Space_2$DT),
@@ -875,7 +923,7 @@ EHSA2 <- fluidRow(
          )
   ),
   column(10,
-         box(title = "Mann Kendall Test results",
+         box(title = "Emerging Hot Spot Analysis results",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
@@ -1729,6 +1777,11 @@ server <- function(input, output, session) {
         .before = 5) %>%
       unnest(local_moran)
     
+    lisa <- lisa %>%
+      rename("local moran(ii)" = "ii", "expectation(eii)" = "eii",
+             "variance(var_ii)" = "var_ii", "std deviation(z_ii)" = "z_ii",
+             "p_value" = "p_ii")
+    
     return(lisa)       
     
     
@@ -1743,7 +1796,7 @@ server <- function(input, output, session) {
     
     # Map creation using tmap
     localMI_map <- tm_shape(df) +
-      tm_fill(col = "ii", style = "pretty", palette = "RdBu", title = "Local Moran's I") +
+      tm_fill(col = input$localmoranstats, style = "pretty", palette = "RdBu", title = input$localmoranstats) +
       tm_borders() 
     
     localMI_map 
@@ -1760,7 +1813,7 @@ server <- function(input, output, session) {
     if(is.null(df)) return()
     
     lisa_sig <- df  %>%
-      filter(p_ii < 0.05)
+      filter(p_value < 0.05)
     
     
     lisamap <- tm_shape(df) +
@@ -1768,9 +1821,9 @@ server <- function(input, output, session) {
       tm_borders() +
       
       tm_shape(lisa_sig) +
-      tm_fill(col = "mean",  
+      tm_fill(col = input$LisaClass,  
               palette = "-RdBu",  
-              title = "Significance") +
+              title = (paste("Significance:", input$LisaClass))) +
       tm_borders(alpha = 0.4)
     
     
@@ -1781,19 +1834,34 @@ server <- function(input, output, session) {
   })
   
   
+  
   #==========================================================
   # Local Morans's I Data Table in Cluster 2 
   #==========================================================  
   
   # Render the data table for Local Moran's I results
-  output$localMoranDataTable <- renderDataTable({
+  output$localMoransTable1 <- renderDataTable({
     df <- localMIResults()
     
     # Check if data is available
-    if (!is.null(df)) {
+    if (is.null(df)) return()
+    
+    df
       
-      df
-    }
+
+  })
+  
+  output$localMoransTable2 <- renderDataTable({
+    df2 <- localMIResults()
+    
+    # Check if data is available
+    if (is.null(df2)) return()
+    
+    lisa_sig2 <- df2  %>%
+      filter(p_value < 0.05)
+      
+    lisa_sig2
+    
   })
   
   output$MoransItext <- renderText({ 
@@ -1882,6 +1950,10 @@ server <- function(input, output, session) {
         .before = 5) %>%
       unnest(local_Gi)
     
+    HCSA <- HCSA %>%
+      rename("local gi*" = "gi_star", "expectation(e_gi)" = "e_gi",
+             "variance(var_gi)" = "var_gi", "std deviation" = "std_dev")
+    
     return(HCSA)
     
   })
@@ -1895,9 +1967,9 @@ server <- function(input, output, session) {
     
     # Create the choropleth map for GI stats
     Gi_map <- tm_shape(df) +
-      tm_fill(col = "gi_star", 
+      tm_fill(col = input$localgistats, 
               palette = "-RdBu", 
-              title = "Local Gi") +
+              title = input$localgistats) +
       tm_borders()
     
     Gi_map #+ 
@@ -1920,9 +1992,9 @@ server <- function(input, output, session) {
       tm_borders() +
       
       tm_shape(HCSA_sig) +
-      tm_fill(col = "gi_star",  
+      tm_fill(col = "local gi*",  
               palette = "-RdBu",  
-              title = "gi_star") +
+              title = "local gi*") +
       tm_borders(alpha = 0.4)
     
     HSCAmap 
@@ -1932,13 +2004,23 @@ server <- function(input, output, session) {
   
   
   
-  output$AdaptiveGiStat <- renderDataTable({
-    data_with_gi <- GiData()  # Reactive function for data preparation
-    if(is.null(data_with_gi)) {
-      return(data.frame())  # Return an empty data frame if data is null
-    }
-    return(data_with_gi)
+  output$GiStat <- renderDataTable({
+    data_with_gi <- GiData()  
+    if(is.null(data_with_gi)) return ()
+    
+    data_with_gi
   })
+  
+  output$GiStat2 <- renderDataTable({
+    data_with_gi2 <- GiData()  
+    if(is.null(data_with_gi2)) return ()
+      
+    HCSA_sig2 <- data_with_gi2  %>%
+      filter(p_value < 0.05)  
+      
+    HCSA_sig2
+  })
+  
   
   output$HotColdText <- renderText({ 
     "HCSA uses spatial weights to identify locations of statistically significant 
@@ -1970,7 +2052,7 @@ server <- function(input, output, session) {
   # Distribution of EHSA classes and EHSA Map
   #==========================================================
   
-  EHSAData1 <- reactive({
+  EHSAData <- reactive({
     space_data <- Space_2 %>%
       filter(event_type == input$eventType8)
     
@@ -1985,7 +2067,8 @@ server <- function(input, output, session) {
     ehsa3 <- emerging_hotspot_analysis(
       x = Quarterly_spt, 
       .var = "Incidents", 
-      k = as.numeric(input$numLags), 
+      k = as.numeric(input$numLags),
+      include_gi = TRUE, 
       nsim = as.numeric(input$numSims)
       
     )
@@ -1995,20 +2078,29 @@ server <- function(input, output, session) {
   }) 
   
   output$EHSAbar <- renderPlotly({
-    df <- EHSAData1() 
+    df <- EHSAData()
     
-    EHSAbar1 <- ggplot(data = df, aes(x = classification)) +
-      geom_bar() + 
-      coord_flip()+
-      theme_minimal()
+    df <- df %>%
+      filter(p_value < 0.05) %>%
+      group_by(classification) %>%
+      summarise(count = n()) %>%
+      ungroup() 
     
-    ggplotly(EHSAbar1) 
+    # Reorder classification based on count in ascending order
+    df <- df %>%
+      mutate(classification = fct_reorder(classification, count))
     
+    EHSAbar <- ggplot(data = df, aes(x = classification, y = count)) +
+      geom_bar(stat = "identity") + 
+      coord_flip() +
+      theme_minimal() +
+      theme(axis.title.y = element_blank())
     
+    ggplotly(EHSAbar)
   })
   
   EHSAMapdata <- reactive({
-    df <- EHSAData1() 
+    df <- EHSAData() 
     
     mmr3_ehsa <- mmr_shp_mimu_2 %>%
       left_join(df,
@@ -2041,12 +2133,30 @@ server <- function(input, output, session) {
     
   })
   
+  output$MKtest2 <- renderDataTable({
+    # Get the Mann-Kendall test results
+    EHSATable <- EHSAMapdata()
+    if(is.null(df)) return()
+    
+    
+    ehsa_sig3 <- EHSATable  %>%
+      filter(p_value < 0.05) %>%
+      select(-DT_PCODE, -DT_MMR, -PCode_V) %>%
+      rename("District" = "DT")
+    
+    
+    # Return the results to render them as a table
+  ehsa_sig3
+  })
+  
   
   output$EHSAText <- renderText({ 
     "Emerging Hot Spot Analysis identifies trends in spatial clustering 
       over a period of time. It combines the Getis-Ord Gi* statistic 
       with the Mann-Kendall trend test to determine if there 
-    is a temporal trend associated with local clustering of hot and cold spots."
+    is a temporal trend associated with local clustering of hot and cold spots.
+    
+    This map shows results for P-values < 0.05."
   })
   
   
@@ -2103,6 +2213,7 @@ output$Giplot2 <- renderPlotly({
                    y = gi_star)) +
     geom_line() +
     theme_light() +
+    theme(axis.text.x = element_blank()) +
     ggtitle(paste("GI* Trends for District:", input$Admin2_2))
   
   ggplotly(p2)
@@ -2112,38 +2223,42 @@ output$Giplot2 <- renderPlotly({
   
 
 output$GITrend2Text <- renderText({ 
-  "GI* trend plot shows changes in the Local Gi* per district, for each event type."
+  "GI* trend plot shows changes in the Local Gi* per district, for each event type from Q1 2021 to Q4 2023"
 
 })  
 
-EHSADataMKTest2 <- reactive({
-  df2 <- EHSAData2() 
+#EHSADataMKTest2 <- reactive({
+#  df2 <- EHSAData2() 
   
-  ehsa32 <- df2 %>%
-    group_by(DT) %>%
-    summarise(mk = list(
-      unclass(
-        Kendall::MannKendall(gi_star)))) %>%
-    tidyr::unnest_wider(mk)
+#  ehsa32 <- df2 %>%
+#    group_by(DT) %>%
+#    summarise(mk = list(
+#      unclass(
+#        Kendall::MannKendall(gi_star)))) %>%
+#    tidyr::unnest_wider(mk)
   
-  return(ehsa32)
-})
+#  return(ehsa32)
+#})
 
 
-output$MKtest2 <- renderDataTable({
+#output$MKtest2 <- renderDataTable({
   # Get the Mann-Kendall test results
-  mkResults2 <- EHSADataMKTest2()
+#  mkResults2 <- EHSADataMKTest2()
   
   # Return the results to render them as a table
-  mkResults2
-})
+#  mkResults2
+#})
 
 output$MKText <- renderText({ 
-  "The Mann-Kendall test is a non-parametric statistical test used to identify trends 
-      in a series of data. Its primary purpose is to determine whether there is a 
-      monotonic trend over time in the observed data. 
-      To view significant emerging hot/cold spots, users can sort 
-      the tau & sl variables in descending order."
+  "The Mann-Kendall test determines whether there is a 
+    monotonic trend over time in the observed data.
+  
+  First the Gi* statistic for each location in each time period (time-slice) is calculated. 
+  Next, the Mann-Kendall trend test is done to identify any temporal trend in Gi* values 
+  over all time periods. Each location is then classified into one of 17 categories based on 
+  ESRI's emerging hot spot classification criteria. This tables shows results for P-values < 0.05.
+  
+  Tau ranges between -1 and 1 where -1 is a perfectly decreasing series and 1 is a perfectly increasing series."
   
 })  
   
@@ -2268,7 +2383,7 @@ output$MKText <- renderText({
                                                        just_labels = c("left", 
                                                                        "center", 
                                                                        "center", 
-                                                                       "center")))
+                                                                       "right")))
     
       Mosaic2
     

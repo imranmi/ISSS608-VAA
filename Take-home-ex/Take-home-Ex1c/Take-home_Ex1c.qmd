@@ -200,7 +200,8 @@ ehsa3 <- gi_stars3 %>%
 ehsa3
 ```
 
-## Arrange to show significant emerging hot/cold spots
+\
+Arrange to show significant emerging hot/cold spots
 
 Admin 2 districts-quarterly
 
@@ -224,9 +225,13 @@ Lastly, **nsim map** **numbers of simulation** to be performed.
 ehsa3 <- emerging_hotspot_analysis(
   x = Quarterly_spt, 
   .var = "Incidents", 
-  k = 1, 
+  k = 1,
   nsim = 99
 )
+```
+
+```{r}
+print(ehsa3)
 ```
 
 ### Visualising the distribution of EHSA classes
@@ -254,6 +259,10 @@ In this section, we will visualise the geographic distribution EHSA classes. How
 mmr3_ehsa <- mmr_shp_mimu_2 %>%
   left_join(ehsa3,
             by = join_by(DT == location))
+```
+
+```{r}
+print(mmr3_ehsa)
 ```
 
 Next, tmap functions will be used to plot a categorical choropleth map by using the code chunk below.
