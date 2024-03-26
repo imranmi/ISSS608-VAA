@@ -81,6 +81,8 @@ website:
             href: Take-home-ex/Take-home-Ex4d/Take-home_Ex4d.html
           - text: Take-home Exercise 4e
             href: Take-home-ex/Take-home-Ex4e/Take-home_Ex4e.html
+          - text: Take-home Exercise 4f
+            href: Take-home-ex/Take-home-Ex4f/Take-home_Ex4f.html
             
     right: 
       - href: index.qmd
