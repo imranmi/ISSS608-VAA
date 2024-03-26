@@ -5,7 +5,7 @@ account: imran-mi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11570480
-bundleId: 8411503
+bundleId: 8415829
 url: https://imran-mi.shinyapps.io/ShinyPrototype/
 version: 1
 asMultiple: FALSE
