@@ -318,7 +318,7 @@ p6 <- ggplot(data = ehsa3_99,
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
   labs(title = "Distribution of ESHA classes - 99 simulations") +
   theme(plot.title = element_text(size = 20)) +
-  theme_minimal()
+  theme_minimal() 
 
 
 p7 <- ggplot(data = ehsa3_199,
@@ -327,7 +327,7 @@ p7 <- ggplot(data = ehsa3_199,
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
   labs(title = "Distribution of ESHA classes - 199 simulations") +
   theme(plot.title = element_text(size = 20)) +
-  theme_minimal()
+  theme_minimal() 
 
 p8 <- ggplot(data = ehsa3_299,
        aes(x = classification)) +
