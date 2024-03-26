@@ -224,3 +224,7 @@ Code chunk below is used to reveal the distribution of a clustering variable (i.
 #       aes(x = CLUSTER, y = Battles_2022_Incidents)) +
 #  geom_boxplot()
 ```
+
+## References
+
+Main reference: Kam, T.S. (2024). [Geographical Segmentation with Spatially Constrained Clustering Techniques](https://is415-gaa-tskam.netlify.app/in-class_ex/in-class_ex07/in-class_ex07-scca)
