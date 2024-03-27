@@ -19,7 +19,7 @@ execute:
 ```{r}
 pacman::p_load(tidyverse, dplyr, tidyr, 
                sf, lubridate,plotly,
-               tmap, spdep, sfdep)
+               tmap, spdep, sfdep, knitr, forcats)
 ```
 
 ```{r}
@@ -202,7 +202,7 @@ wm_q12 <- Battles2023Q4 %>%
          .before = 1) 
 ```
 
-### No of sims = 99
+### No of sims = 199
 
 ```{r}
 #| code-fold: true
@@ -211,73 +211,73 @@ wm_q12 <- Battles2023Q4 %>%
 
 lisa1 <- wm_q1 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa2 <- wm_q2 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa3 <- wm_q3 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa4 <- wm_q4 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa5 <- wm_q5 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa6 <- wm_q6 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa7 <- wm_q7 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa8 <- wm_q8 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa9 <- wm_q9 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa10 <- wm_q10 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa11 <- wm_q11 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 
 lisa12 <- wm_q12 %>% 
   mutate(local_moran = local_moran(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_moran)
 ```
@@ -326,6 +326,150 @@ lisa_sig11 <- lisa11  %>%
 
 lisa_sig12 <- lisa12  %>%
   filter(p_ii < 0.05)
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+lisa_sig1_1 <-  lisa_sig1 %>%
+  select(mean, DT, quarter)
+
+lisa_sig2_1 <-  lisa_sig2 %>%
+  select(mean, DT, quarter)
+
+lisa_sig3_1 <-  lisa_sig3 %>%
+  select(mean, DT, quarter)
+
+lisa_sig4_1 <-  lisa_sig4 %>%
+  select(mean, DT, quarter)
+
+lisa_sig5_1 <-  lisa_sig5 %>%
+  select(mean, DT, quarter)
+
+lisa_sig6_1 <-  lisa_sig6 %>%
+  select(mean, DT, quarter)
+
+lisa_sig7_1 <-  lisa_sig7 %>%
+  select(mean, DT, quarter)
+
+lisa_sig8_1 <-  lisa_sig8 %>%
+  select(mean, DT, quarter)
+
+lisa_sig9_1 <-  lisa_sig9 %>%
+  select(mean, DT, quarter)
+
+lisa_sig10_1 <-  lisa_sig10 %>%
+  select(mean, DT, quarter)
+
+lisa_sig11_1 <-  lisa_sig11 %>%
+  select(mean, DT, quarter)
+
+lisa_sig12_1 <-  lisa_sig12 %>%
+  select(mean, DT, quarter)
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Bind the two data frames together
+combined_df <- bind_rows(lisa_sig1_1, lisa_sig2_1,
+                         lisa_sig3_1, lisa_sig4_1,
+                         lisa_sig5_1, lisa_sig6_1,
+                         lisa_sig7_1, lisa_sig8_1,
+                         lisa_sig9_1, lisa_sig10_1,
+                         lisa_sig11_1, lisa_sig12_1,)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+quarter_summary_df <- combined_df %>%
+  group_by(DT, mean) %>%
+  summarize(
+    Quarters = paste(unique(quarter), collapse = ", "),
+    .groups = 'drop'
+  )
+
+
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+wide_quarter_summary_df <- quarter_summary_df %>%
+  pivot_wider(
+    names_from = mean,
+    values_from = Quarters,
+    values_fill = list(Quarters = NA)  # Fill with NA where there are no quarters
+  )
+
+```
+
+```{r}
+print(wide_quarter_summary_df)
+```
+
+```{r}
+# Remove the geometry column to make it a regular data frame
+regular_df <- st_drop_geometry(wide_quarter_summary_df)
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+regular_df <- regular_df %>%
+  rename("District" = "DT")
+
+kable(regular_df)
+```
+
+```{r}
+summary_df1 <- combined_df %>%
+  group_by(DT) %>%
+  summarize(
+    High_High_Clusters = sum(mean == "High-High"),
+    Low_High_Clusters = sum(mean == "Low-High"),
+    Low_Low_Clusters = sum(mean == "Low-Low"),   
+    .groups = 'drop'
+  )
+
+# Remove the geometry column to make it a regular data frame
+regular_df1 <- st_drop_geometry(summary_df1)
+```
+
+```{r}
+top10_high_high_df <- regular_df1 %>%
+  arrange(desc(High_High_Clusters)) %>%
+  slice_head(n = 10) %>%
+  rename("District" = "DT")
+
+
+kable(top10_high_high_df)
+```
+
+```{r}
+
+LISAbar <- ggplot(data = top10_high_high_df, aes(x = fct_reorder(District, High_High_Clusters), y = High_High_Clusters)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Top 10 Districts with the most High-High Clusters (2021-2023)") + 
+  geom_text(aes(label = High_High_Clusters), hjust = -0.1) 
+
+LISAbar
+
+
 
 ```
 
@@ -610,7 +754,7 @@ wm_idw12 <- Battles2023Q4 %>%
          .before = 1)
 ```
 
-### No of sim = 99
+### No of sim = 199
 
 ```{r}
 #| code-fold: true
@@ -618,73 +762,73 @@ wm_idw12 <- Battles2023Q4 %>%
 
 HCSA1 <- wm_idw1 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA2 <- wm_idw2 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA3 <- wm_idw3 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA4 <- wm_idw4 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA5 <- wm_idw5 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA6 <- wm_idw6 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA7 <- wm_idw7 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA8 <- wm_idw8 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA9 <- wm_idw9 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA10 <- wm_idw10 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA11 <- wm_idw11 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 
 HCSA12 <- wm_idw12 %>% 
   mutate(local_Gi = local_gstar_perm(
-    Incidents, nb, wt, nsim = 99),
+    Incidents, nb, wt, nsim = 199),
          .before = 1) %>%
   unnest(local_Gi)
 ```
@@ -730,6 +874,140 @@ HCSA_sig11 <- HCSA11  %>%
 
 HCSA_sig12 <- HCSA12  %>%
   filter(p_value < 0.05)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+HCSA_sig1_1 <-  HCSA_sig1 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig2_1 <-  HCSA_sig2 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig3_1 <-  HCSA_sig3 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig4_1 <-  HCSA_sig4 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig5_1 <-  HCSA_sig5 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig6_1 <-  HCSA_sig6 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig7_1 <-  HCSA_sig7 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig8_1 <-  HCSA_sig8 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig9_1 <-  HCSA_sig9 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig10_1 <-  HCSA_sig10 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig11_1 <-  HCSA_sig11 %>%
+  select(cluster, DT, quarter)
+
+HCSA_sig12_1 <-  HCSA_sig12 %>%
+  select(cluster, DT, quarter)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Bind the data frames together
+combined_df2 <- bind_rows(HCSA_sig1_1, HCSA_sig2_1,
+                         HCSA_sig3_1, HCSA_sig4_1,
+                         HCSA_sig5_1, HCSA_sig6_1,
+                         HCSA_sig7_1, HCSA_sig8_1,
+                         HCSA_sig9_1, HCSA_sig10_1,
+                         HCSA_sig11_1, HCSA_sig12_1,)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+quarter_summary_df2 <- combined_df2 %>%
+  group_by(DT, cluster) %>%
+  summarize(
+    Quarters = paste(unique(quarter), collapse = ", "),
+    .groups = 'drop'
+  )
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+wide_quarter_summary_df2 <- quarter_summary_df2 %>%
+  pivot_wider(
+    names_from = cluster,
+    values_from = Quarters,
+    values_fill = list(Quarters = NA)  # Fill with NA where there are no quarters
+  )
+```
+
+```{r}
+print(wide_quarter_summary_df2)
+```
+
+```{r}
+# Remove the geometry column to make it a regular data frame
+regular_df2 <- st_drop_geometry(wide_quarter_summary_df2)
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+regular_df2 <- regular_df2 %>%
+  rename("District" = "DT")
+
+kable(regular_df2)
+```
+
+```{r}
+summary_df2 <- combined_df2 %>%
+  group_by(DT) %>%
+  summarize(
+    High_Clusters = sum(cluster == "High"),
+    Low_Clusters = sum(cluster == "Low"),
+    .groups = 'drop'
+  )
+
+# Remove the geometry column to make it a regular data frame
+regular_df3 <- st_drop_geometry(summary_df2)
+```
+
+```{r}
+top10_high_df <- regular_df3 %>%
+  arrange(desc(High_Clusters)) %>%
+  slice_head(n = 10) %>%
+  rename("District" = "DT")
+
+
+kable(top10_high_df)
+```
+
+```{r}
+HCSAbar <- ggplot(data = top10_high_df, aes(x = fct_reorder(District, High_Clusters), y = High_Clusters)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Top 10 Districts with the most High Clusters (2021-2023)") + 
+  geom_text(aes(label = High_Clusters), hjust = -0.1) 
+
+HCSAbar
 ```
 
 ```{r}
