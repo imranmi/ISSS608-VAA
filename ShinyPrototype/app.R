@@ -339,7 +339,8 @@ Cluster2 <- fluidRow(
                          choices = c("mean" = "mean",
                                      "median" = "median",
                                      "pysal" = "pysal"),
-                         selected = "mean")
+                         selected = "mean"),
+             actionButton("UpdateButton", "Update Plot")
          )
   ),
   column(4,
@@ -1224,7 +1225,7 @@ server <- function(input, output, session) {
   # Local Measures of Spatial Correlation
   #==========================================================   
   
-  localMIResults <- reactive({
+  localMIResults <- eventReactive(input$UpdateButton,{
     # Filter the data based on the user's selection
     filteredData <- Events_admin2 %>%
       filter(quarter == input$QtrMoransI, event_type == input$eventType3) 
@@ -1260,6 +1261,7 @@ server <- function(input, output, session) {
   
   # Render the map of Local Moran's I values
   output$LocalMoranMap <- renderPlot({
+    
     df <- localMIResults()
     
     if(is.null(df) || nrow(df) == 0) return()  # Exit if no data
@@ -1279,6 +1281,7 @@ server <- function(input, output, session) {
   #==========================================================  
   
   output$Lisa <- renderPlot({
+    
     df <- localMIResults()
     if(is.null(df)) return()
     
@@ -1311,6 +1314,7 @@ server <- function(input, output, session) {
   
   # Render the data table for Local Moran's I results
   output$localMoransTable1 <- renderDataTable({
+    
     df <- localMIResults()
     
     # Check if data is available

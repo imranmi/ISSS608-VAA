@@ -290,7 +290,7 @@ Cluster2 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for Dataset"),
+             helpText("Options for LISA Analysis"),
              selectInput("QtrMoransI", "Year-Quarter",
                          choices = c("2021-Q1" = "2021Q1",
                                      "2021-Q2" = "2021Q2",
@@ -311,12 +311,12 @@ Cluster2 <- fluidRow(
                                      "Protests" = "Protests",
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
                                      "Riots" = "Riots"),
-                         selected = "Battles")
-         ),
-         box(title = "Options for Local Moran's I",
-             status = "info",
-             solidHeader = FALSE,
-             width = NULL,
+                         selected = "Battles"),
+#         ),
+#         box(title = "Options for Local Moran's I",    # a seperate filter box (KIV)
+#             status = "info",
+#             solidHeader = FALSE,
+#             width = NULL,
              selectInput("MoranWeights", "Spatial Weights Style",
                          choices = c("W: Row standardised" = "W",
                                      "B: Binary" = "B",
@@ -328,7 +328,15 @@ Cluster2 <- fluidRow(
              selectInput("MoranSims", "Number of Simulations:",
                          choices = c(99, 199, 299, 399, 499),
                          selected = 99),
-             selectInput("localmoranstats", "Show Local Moran Stat:",
+            actionButton("MoranUpdate", "Update Plot"),
+            hr(),
+             radioButtons(inputId = "MoranConf",
+                          label = "Show Confidence level",
+                          choices = c("0.95" = 0.05, 
+                                      "0.99" = 0.01),
+                          selected = 0.05,
+                          inline = TRUE),
+            selectInput("localmoranstats", "Show Local Moran Stat:",
                          choices = c("local moran(ii)" = "local moran(ii)",
                                      "expectation(eii)" = "expectation(eii)",
                                      "variance(var_ii)" = "variance(var_ii)",
@@ -349,7 +357,7 @@ Cluster2 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotOutput("LocalMoranMap", height = "700px", width = "100%")
+             withSpinner(plotOutput("LocalMoranMap", height = "700px", width = "100%"))
          )
   ),
   column(4,
@@ -359,7 +367,7 @@ Cluster2 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotOutput("Lisa", height = "700px", width = "100%")
+             withSpinner(plotOutput("Lisa", height = "700px", width = "100%"))
          )
   ),
   column(2,
@@ -383,14 +391,14 @@ Cluster2 <- tagList(Cluster2,
                                  collapsible = TRUE,
                                  width = NULL,
                                  align = "center",
-                                 dataTableOutput("localMoransTable1"),
+                                 withSpinner(dataTableOutput("localMoransTable1")),
                                  style = "height:600px; overflow-y: scroll; overflow-x: scroll;"))
                       #column(12,       
                       #       box(
                       #         title = "LISA results (P-values < 0.05)",
                       #         status = "danger",
                       #         solidHeader = TRUE,
-                      #         collapsible = TRUE,
+                      #         collapsible = TRUE,     # table with just isolated significant vals (KIV)
                       #         width = NULL,
                       #         align = "center",
                       #         dataTableOutput("localMoransTable2"),
@@ -415,7 +423,7 @@ HotCold1 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for Dataset"),
+             helpText("Options for Hot Spot Analysis"),
              selectInput("GIQtr" , "Year-Quarter",
                          choices = c("2021-Q1" = "2021Q1",
                                      "2021-Q2" = "2021Q2",
@@ -441,6 +449,14 @@ HotCold1 <- fluidRow(
                          label = "Number of Simulations for Gi*:",
                          choices = c(99,199,299,399,499),
                          selected = 99),
+             actionButton("GIUpdate", "Update Plot"),
+             hr(),
+             radioButtons(inputId = "GIConf",
+                          label = "Show Confidence level",
+                          choices = c("0.95" = 0.05, 
+                                      "0.99" = 0.01),
+                          selected = 0.05,
+                          inline = TRUE),
              selectInput("localgistats", "Show Local GI Stat:",
                          choices = c("local gi*" = "local gi*",
                                      "expectation(e_gi)" = "expectation(e_gi)",
@@ -458,7 +474,7 @@ HotCold1 <- fluidRow(
              ,collapsible = TRUE
              ,width = NULL
              ,align = "left"
-             ,plotOutput("Gistarmap", height = "700px", width = "100%")
+             ,withSpinner(plotOutput("Gistarmap", height = "700px", width = "100%"))
          )
   ),
   column(4,
@@ -469,7 +485,7 @@ HotCold1 <- fluidRow(
            collapsible = TRUE,
            width = NULL,
            align = "left",
-           plotOutput("HotColdmap", height = "700px", width = "100%")
+           withSpinner(plotOutput("HotColdmap", height = "700px", width = "100%"))
          )
   ),
   column(2,
@@ -495,14 +511,14 @@ HotCold1 <- tagList(HotCold1,
                                collapsible = TRUE,
                                width = NULL,
                                align = "center",
-                               dataTableOutput("GiStat"),
+                               withSpinner(dataTableOutput("GiStat")),
                                style = "height:500px; overflow-y: scroll;overflow-x: scroll;"))
                       #column(12,       
                       #        box(
                       #            title = "GI* Statistics - Significant Hot & Cold spots (P-values < 0.05)",
                       #            status = "danger",
                       #            solidHeader = TRUE,
-                      #            collapsible = TRUE,
+                      #            collapsible = TRUE,      # table with just isolated significant vals (KIV)
                       #            width = NULL,
                       #            align = "center",
                       #            dataTableOutput("GiStat2"),
@@ -527,7 +543,7 @@ EHSA2 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Options for ESHA map"),
+             helpText("Options for Emerging Hot Spot Analysis"),
              selectInput("EHSAEventType", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
@@ -541,8 +557,16 @@ EHSA2 <- fluidRow(
              selectInput(inputId = "EHSANumSims", 
                          label = "Number of Simulations:", 
                          choices = c(99, 199, 299, 399, 499),
-                         selected = 99)
-         ),
+                         selected = 99),
+             actionButton("EHSAUpdate", "Update Plot"),
+             hr(),
+             radioButtons(inputId = "EHSAConf",
+                          label = "Show Confidence level",
+                          choices = c("0.95" = 0.05, 
+                                      "0.99" = 0.01),
+                          selected = 0.05,
+                          inline = TRUE),
+        ),
          box(title = "Chart Interpretation",
              status = "danger",
              solidHeader = TRUE,
@@ -558,9 +582,19 @@ EHSA2 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotOutput("EHSAmap", height = "700px")
+             withSpinner(plotOutput("EHSAmap", height = "700px"))
          )
   ), 
+  column(6,
+         box(title = "Distribution of EHSA classes",
+             status = "danger",
+             solidHeader = TRUE,
+             collapsible = TRUE,
+             width = NULL,
+             align = "left",
+             withSpinner(plotlyOutput("EHSAbar", height = "200px"))
+         )  
+  ),
   column(4,
          box(title = "GI* Trends per district",
              status = "danger",
@@ -568,7 +602,7 @@ EHSA2 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotlyOutput("Giplot2", height = "400px")
+             withSpinner(plotlyOutput("Giplot2", height = "400px"))
          )
   ),
   column(2,
@@ -576,7 +610,7 @@ EHSA2 <- fluidRow(
              status = "info",
              solidHeader = FALSE,
              width = NULL,
-             helpText("Filter options for Dataset"),
+             helpText("Options for Trend Plot"),
              selectInput("EHSAEventType2", "Event Type:",
                          choices = c("Battles" = "Battles",
                                      "Violence against civilians" = "Violence against civilians",
@@ -586,7 +620,8 @@ EHSA2 <- fluidRow(
              selectizeInput(inputId = "EHSAAdmin2",
                             label = "Select District",
                             choices = unique(Space_2$DT),
-                            multiple = FALSE)
+                            multiple = FALSE),
+             actionButton("EHSAUpdate2", "Update Plot")
          ),
          box(title = "Chart Interpretation",
              status = "danger",
@@ -596,21 +631,21 @@ EHSA2 <- fluidRow(
              textOutput("GITrend2Text")
          )
   ),
-  column(6,
-         box(title = "Distribution of EHSA classes",
-             status = "danger",
-             solidHeader = TRUE,
-             collapsible = TRUE,
-             width = NULL,
-             align = "left",
-             plotlyOutput("EHSAbar", height = "200px")
-         )
-  ),
+#  column(6,
+#         box(title = "Distribution of EHSA classes",
+#             status = "danger",
+#             solidHeader = TRUE,
+#             collapsible = TRUE,       # different layout, EHSA bar is below GI trend plot (KIV)
+#             width = NULL,
+#             align = "left",
+#             withSpinner(plotlyOutput("EHSAbar", height = "200px"))
+#         )
+#  ),
 #  column(10,
 #         box(title = "Emerging Hot Spot Analysis results",
 #             status = "danger",
 #             solidHeader = TRUE,
-#             collapsible = TRUE,
+#             collapsible = TRUE,       # data table with isolated significant vals (KIV)
 #             width = NULL,
 #             align = "left",
 #             dataTableOutput("MKtest2")
@@ -620,18 +655,18 @@ EHSA2 <- fluidRow(
 #         box(title = "Table Interpretation",
 #             status = "danger",
 #             solidHeader = TRUE,
-#             collapsible = TRUE,
+#             collapsible = TRUE,      # note for above table table (KIV)
 #             width = NULL,
 #             textOutput("MKText")
   
-  column(10,
+  column(8,
          box(title = "Mann Kendall Test results",
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
              width = NULL,
              align = "left",
-            dataTableOutput("MKtest2")
+             withSpinner(dataTableOutput("MKtest2"))
          )
   ),
   column(2,
@@ -676,7 +711,7 @@ Confirm1 <- fluidRow(
              #selectizeInput(inputId = "Admin1_ggstat",
              #                label = "Select Administrative Region(s)",
              #                choices = unique(ACLED_MMR$admin1),
-             #                multiple = TRUE,
+             #                multiple = TRUE,                # insert input admin 1 (KIV)
              #                selected = c("Mon", "Yangon"), 
              #                options = list(maxItems = 18, placeholder = 'Enter Region/State')
              # ),
@@ -690,6 +725,7 @@ Confirm1 <- fluidRow(
                             options = list(maxItems = 6, placeholder = 'Enter Event Type')
              ),
              actionButton(inputId = "resetButton1", label = "Reset Selections"),
+             actionButton("AnovaUpdate", "Update Plot"),
              hr(),
              selectInput(inputId = "Testtype",
                          label = "Test Type:",
@@ -719,7 +755,7 @@ Confirm1 <- fluidRow(
                          selected = "holm"),
              # hr(),
              #radioButtons(inputId = "PlotType",
-             #             label = "Plot Type",
+             #             label = "Plot Type",        #change plot type (KIV)
              #           choices = c("box" = "box", 
              #                      "violin" = "violin",
              #                     "boxviolin" = "boxviolin"),
@@ -729,7 +765,8 @@ Confirm1 <- fluidRow(
                           label = "Confidence level",
                           choices = c("0.95" = 0.95, 
                                       "0.99" = 0.99),
-                          selected = 0.95),
+                          selected = 0.95)
+            # actionButton("AnovaUpdate", "Update Plot")   #change position of Update plot
          ),
          box(title = "Chart Interpretation",
              status = "danger",
@@ -746,12 +783,12 @@ Confirm1 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotOutput("Anovaplot", height = "700px")
+             withSpinner(plotOutput("Anovaplot", height = "700px"))
          )
   )
 )
 
-## for GG mosaic version
+## for GG mosaic version (KIV)
 
 #Confirm2 <- fluidRow(
 #  column(2,
@@ -798,7 +835,8 @@ Confirm3 <- fluidRow(
              selectInput(inputId = "YearMosaic2",
                          label = "Year:",
                          choices = seq(2020,2023),
-                         selected = 2023)
+                         selected = 2023),
+             actionButton("Mosaic2Update", "Update Plot")
              
          ),
          box(title = "Chart Interpretation",
@@ -816,7 +854,7 @@ Confirm3 <- fluidRow(
              collapsible = TRUE,
              width = NULL,
              align = "left",
-             plotOutput("Mosaicplot2", height = "700px")
+             withSpinner(plotOutput("Mosaicplot2", height = "700px"))
          )
   )
 )
@@ -842,7 +880,7 @@ ClusterSubTabs <- tabsetPanel(
            EHSA2)
 )
 
-# KIV
+# seperate sidebar tab for emerging hot spot analytis (KIV)
 #ESHASubTabs <- tabsetPanel(
 #tabPanel("Gi* trend and Mann Kendall test", 
 #EHSA1),
@@ -888,7 +926,7 @@ body <- dashboardBody(
             ClusterSubTabs 
     ),
     #3rd tab content
-    #tabItem(tabName = "EHSA",
+    #tabItem(tabName = "EHSA",  #seperate tab set for EHSA (KIV)
     
     #      ESHASubTabs
     # ),
@@ -1176,7 +1214,7 @@ server <- function(input, output, session) {
   # Local Measures of Spatial AutoCorrelation
   #==========================================================   
   
-  localMIResults <- reactive({
+  localMIResults <- eventReactive(input$MoranUpdate,{
     # Filter the data based on the user's selection
     filteredData <- Events_admin2 %>%
       filter(quarter == input$QtrMoransI, event_type == input$MoranEventType) 
@@ -1236,7 +1274,7 @@ server <- function(input, output, session) {
     
     
     lisa_sig <- df  %>%
-      filter(p_value < 0.05)  
+      filter(p_value < input$MoranConf)  
     
     lisamap <- tm_shape(df) +
       tm_polygons() +
@@ -1250,7 +1288,7 @@ server <- function(input, output, session) {
     
     
     lisamap #+ 
-    #tm_view(set.zoom.limits = c(5,7))
+    #tm_view(set.zoom.limits = c(5,7))  # for tmap lock zoom (KIV)
     
     
   })
@@ -1276,7 +1314,7 @@ server <- function(input, output, session) {
   #    df2 <- localMIResults()
   
   # Check if data is available
-  #    if (is.null(df2)) return()
+  #    if (is.null(df2)) return()   # For table with significant vals only(KIV)
   
   #    lisa_sig2 <- df2  %>%
   #      filter(p_value < 0.05)
@@ -1286,14 +1324,16 @@ server <- function(input, output, session) {
   #  })
   
   output$MoransItext <- renderText({ 
-    "Local Moran's I is a spatial statistic used to detect and quantify spatial clustering 
-    or dispersion within a geographic area. It assesses spatial patterns at a local level, 
+    "Local Moran's I assesses spatial patterns at a local level, 
     determining if features form significant clusters (high-high or low-low) or outliers 
-    (high-low or low-high) in relation to neighboring features. High and positive Local Moran's 
-    I values indicate clustering of similar values, reflecting a concentration of similar incidents. 
-    In contrast, low or negative values point to outliers, where an area's incident rate significantly 
-    differs from that of its neighbors. The Lisa map plots significant areas 
-    (p-value < 0.05) where incident rates are notably higher or lower than expected, thus deviating from 
+    (high-low or low-high) in relation to neighboring features. 
+    
+    High and positive Local Moran's I values indicate clustering of similar values, reflecting a concentration of similar incidents. 
+    Low or negative values point to outliers, where an area's incident rate significantly 
+    differs from that of its neighbors. 
+    
+    The Lisa map plots significant areas (p-value < 0.05 or 0.01) where incident rates are 
+    notably higher or lower than expected, thus deviating from 
     a random spatial distribution." 
   })
   
@@ -1301,7 +1341,7 @@ server <- function(input, output, session) {
   
   
   #==========================================================
-  # Moran Scatter plot in Cluster 3 - KIV
+  # Moran Scatter plot in Cluster 3 using spdep package - (KIV)
   #==========================================================  
   
   
@@ -1353,7 +1393,7 @@ server <- function(input, output, session) {
   #==========================================================
   
   
-  GiData <- reactive({
+  GiData <- eventReactive(input$GIUpdate,{
     filtered_data2 <- Events_admin2 %>%
       filter(quarter == input$GIQtr, event_type == input$GIEventType)
     
@@ -1407,7 +1447,7 @@ server <- function(input, output, session) {
     
     
     HCSA_sig <- df  %>%
-      filter(p_value < 0.05)
+      filter(p_value < input$GIConf)
     
     # Create the choropleth map for HSCA Map
     HSCAmap <- tm_shape(df) +
@@ -1430,7 +1470,7 @@ server <- function(input, output, session) {
     data_with_gi
   })
   
-  #isolating for just values in HSCA map, KIV
+  #isolating for just values in HSCA map (KIV)
   
   #  output$GiStat2 <- renderDataTable({
   #    data_with_gi2 <- GiData()  
@@ -1453,7 +1493,7 @@ server <- function(input, output, session) {
     High positive Gi values indicate hot spots areas where high values cluster together,
     while low negative Gi values indicate cold spots—areas where low values cluster together.
     
-    The Hot & Cold spot map plots significant areas where p-value < 0.05." 
+    The Hot & Cold spot map plots significant areas where p-value < 0.05 or 0.01." 
   })
   
   
@@ -1464,7 +1504,7 @@ server <- function(input, output, session) {
     # Distribution of EHSA classes and EHSA Map
   
   
-  EHSAData <- reactive({
+  EHSAData <- eventReactive(input$EHSAUpdate,{
     space_data <- Space_2 %>%
       filter(event_type == input$EHSAEventType)
     
@@ -1493,7 +1533,7 @@ server <- function(input, output, session) {
     df <- EHSAData()
     
     df <- df %>%
-      filter(p_value < 0.05) %>%
+      filter(p_value < input$EHSAConf) %>%
       group_by(classification) %>%
       summarise(count = n()) %>%
       ungroup() 
@@ -1532,7 +1572,7 @@ server <- function(input, output, session) {
     if(is.null(df)) return()
     
     ehsa_sig3 <- df  %>%
-      filter(p_value < 0.05)
+      filter(p_value < input$EHSAConf)
     
     
     ehsamap <- tm_shape(df) +
@@ -1554,13 +1594,14 @@ server <- function(input, output, session) {
       with the Mann-Kendall trend test to determine if there 
     is a temporal trend associated with local clustering of hot and cold spots.
     
-    The Emerging Hot Spot map plots significant areas where p-values < 0.05.
+    The Emerging Hot Spot map plots significant areas where p-values < 0.05 or 0.01.
     Each location is classified into one of 17 categories based on 
     ESRI's emerging hot spot classification criteria."
   })
   
   
-  
+
+  # For table with significant vals only(KIV)    
   
 #    output$MKtest2 <- renderDataTable({
       
@@ -1574,6 +1615,8 @@ server <- function(input, output, session) {
 #    ehsa_sig3
 #    })
   
+  # For explanation of table with significant vals only(KIV)  
+  
 #    output$MKText <- renderText({ 
 #      "The Mann-Kendall test determines whether there is a 
 #      monotonic trend over time in the observed data. The Gi* values for each location in each time period (time-slice) 
@@ -1586,7 +1629,7 @@ server <- function(input, output, session) {
     
   
   
-  EHSAData2 <- reactive({
+  EHSAData2 <- eventReactive(input$EHSAUpdate2,{
     space_data2 <- Space_2 %>%
       filter(event_type == input$EHSAEventType2)
     
@@ -1646,7 +1689,7 @@ server <- function(input, output, session) {
   
   
   output$GITrend2Text <- renderText({ 
-    "GI* trend plot shows changes in the Local Gi* per district, for each event type from Q1 2021 to Q4 2023"
+    "GI* trend plot shows changes in the Local Gi* per district, for each event type."
     
   })  
   
@@ -1705,15 +1748,15 @@ server <- function(input, output, session) {
   # Anova test
   
   observeEvent(input$resetButton1, {
-    #updateSelectizeInput(session, "Admin1_ggstat", selected = character(0))  
+    #updateSelectizeInput(session, "Admin1_ggstat", selected = character(0))  #KIV for admin1 selection
     updateSelectizeInput(session, "event_ggstat", selected = character(0))  
   })
   
-  AnovaResults <- reactive({
+  AnovaResults <- eventReactive(input$AnovaUpdate,{
     # Filter the data based on the user's selection
     filteredData <- Summary_Data %>%
       filter(year == input$YearAnova,
-             #admin1 == input$Admin1_ggstat,
+             #admin1 == input$Admin1_ggstat,  #KIV for admin1 selection
              event_type == input$event_ggstat) 
     
     
@@ -1733,7 +1776,7 @@ server <- function(input, output, session) {
     Anova <- ggbetweenstats(data = dataForAnova,
                             x = event_type, 
                             y = Total_Fatalities,
-                            #plot.type = input$PlotType,
+                            #plot.type = input$PlotType,  #KIV for plot type change
                             conf.level = input$Conlevel,
                             type = input$Testtype,
                             mean.ci = TRUE, 
@@ -1748,6 +1791,9 @@ server <- function(input, output, session) {
     
   })
   
+  
+  
+  #GGMosaic (KIV)
   
   #Mosaic Plot
   
@@ -1787,7 +1833,7 @@ server <- function(input, output, session) {
   
   
   # VCD mosaic
-  MosaicResults2 <- reactive({
+  MosaicResults2 <- eventReactive(input$Mosaic2Update,{
     # Filter the data based on the user's selection
     filteredData <- ACLED_MMR %>%
       filter(year == input$YearMosaic2) 
