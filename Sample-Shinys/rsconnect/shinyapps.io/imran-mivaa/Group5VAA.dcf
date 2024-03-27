@@ -5,7 +5,7 @@ account: imran-mivaa
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11599049
-bundleId: 8423199
+bundleId: 8423821
 url: https://group5vaa.shinyapps.io/Group5VAA/
 version: 1
 asMultiple: FALSE

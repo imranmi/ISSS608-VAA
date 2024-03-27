@@ -331,19 +331,19 @@ Cluster2 <- fluidRow(
             actionButton("MoranUpdate", "Update Plot"),
             hr(),
              radioButtons(inputId = "MoranConf",
-                          label = "Show Confidence level",
+                          label = "Select Confidence level",
                           choices = c("0.95" = 0.05, 
                                       "0.99" = 0.01),
                           selected = 0.05,
                           inline = TRUE),
-            selectInput("localmoranstats", "Show Local Moran Stat:",
+            selectInput("localmoranstats", "Select Local Moran's Stat:",
                          choices = c("local moran(ii)" = "local moran(ii)",
                                      "expectation(eii)" = "expectation(eii)",
                                      "variance(var_ii)" = "variance(var_ii)",
                                      "std deviation(z_ii)" = "std deviation(z_ii)",
                                      "P-value" = "p_value"),
                          selected = "local moran(ii)"),
-             selectInput("LisaClass", "Show Lisa Classification",
+             selectInput("LisaClass", "Select Lisa Classification",
                          choices = c("mean" = "mean",
                                      "median" = "median",
                                      "pysal" = "pysal"),
@@ -452,12 +452,12 @@ HotCold1 <- fluidRow(
              actionButton("GIUpdate", "Update Plot"),
              hr(),
              radioButtons(inputId = "GIConf",
-                          label = "Show Confidence level",
+                          label = "Select Confidence level",
                           choices = c("0.95" = 0.05, 
                                       "0.99" = 0.01),
                           selected = 0.05,
                           inline = TRUE),
-             selectInput("localgistats", "Show Local GI Stat:",
+             selectInput("localgistats", "Select Local GI Stat:",
                          choices = c("local gi*" = "local gi*",
                                      "expectation(e_gi)" = "expectation(e_gi)",
                                      "variance(var_gi)" = "variance(var_gi)",
@@ -561,7 +561,7 @@ EHSA2 <- fluidRow(
              actionButton("EHSAUpdate", "Update Plot"),
              hr(),
              radioButtons(inputId = "EHSAConf",
-                          label = "Show Confidence level",
+                          label = "Select Confidence level",
                           choices = c("0.95" = 0.05, 
                                       "0.99" = 0.01),
                           selected = 0.05,
@@ -631,36 +631,8 @@ EHSA2 <- fluidRow(
              textOutput("GITrend2Text")
          )
   ),
-#  column(6,
-#         box(title = "Distribution of EHSA classes",
-#             status = "danger",
-#             solidHeader = TRUE,
-#             collapsible = TRUE,       # different layout, EHSA bar is below GI trend plot (KIV)
-#             width = NULL,
-#             align = "left",
-#             withSpinner(plotlyOutput("EHSAbar", height = "200px"))
-#         )
-#  ),
-#  column(10,
-#         box(title = "Emerging Hot Spot Analysis results",
-#             status = "danger",
-#             solidHeader = TRUE,
-#             collapsible = TRUE,       # data table with isolated significant vals (KIV)
-#             width = NULL,
-#             align = "left",
-#             dataTableOutput("MKtest2")
-#         )
-#  ),
-#  column(2,
-#         box(title = "Table Interpretation",
-#             status = "danger",
-#             solidHeader = TRUE,
-#             collapsible = TRUE,      # note for above table table (KIV)
-#             width = NULL,
-#             textOutput("MKText")
-  
   column(8,
-         box(title = "Mann Kendall Test results",
+         box(title = "Emerging Hot Spot Analysis results",  # or "Mann Kendall Test results"
              status = "danger",
              solidHeader = TRUE,
              collapsible = TRUE,
@@ -1562,7 +1534,9 @@ server <- function(input, output, session) {
                 by = join_by(DT == location))
     
     mmr3_ehsa <- mmr3_ehsa %>%
-      select(-OBJECTID, -ST, -ST_PCODE)
+      select(-OBJECTID, -ST, -ST_PCODE,
+             -DT_PCODE, -DT_MMR, -PCode_V) %>%
+      rename("District" = "DT")
     
     return(mmr3_ehsa)
   })
@@ -1601,31 +1575,30 @@ server <- function(input, output, session) {
   
   
 
-  # For table with significant vals only(KIV)    
+  # For table with significant vals only   
   
-#    output$MKtest2 <- renderDataTable({
+    output$MKtest2 <- renderDataTable({
       
-#      EHSATable <- EHSAData()
-#      if(is.null(df)) return()
+      EHSATable <- EHSAMapdata()
+      if(is.null(df)) return()
   
   
-#      ehsa_sig3 <- EHSATable  %>%
-#        filter(p_value < 0.05) 
+      ehsa_sig3 <- EHSATable  %>%
+        filter(p_value < input$EHSAConf) 
   
-#    ehsa_sig3
-#    })
+    ehsa_sig3
+    })
   
-  # For explanation of table with significant vals only(KIV)  
+  # For explanation of table with significant vals only  
   
-#    output$MKText <- renderText({ 
-#      "The Mann-Kendall test determines whether there is a 
-#      monotonic trend over time in the observed data. The Gi* values for each location in each time period (time-slice) 
-#      is calculated. Next, the Mann-Kendall trend test is done to identify any temporal trend in these Gi* values. 
-#      Each location is classified into one of 17 categories based on 
-#    ESRI's emerging hot spot classification criteria. 
-#    This tables shows results for P-values < 0.05. Tau ranges between -1 and 1 where -1 is a perfectly decreasing series and 1 is a perfectly increasing series."
+    output$MKText <- renderText({ 
+      "The Mann-Kendall test determines whether there is a 
+      monotonic trend over time in the observed data. The Gi* values for each location in each time period (time-slice) 
+      is calculated. Next, the Mann-Kendall trend test is done to identify any temporal trend in these Gi* values. 
       
-#    })    
+    This tables shows results for P-values < 0.05 or 0.01. Tau ranges between -1 and 1 where -1 is a perfectly decreasing series and 1 is a perfectly increasing series."
+      
+    })    
     
   
   
@@ -1707,31 +1680,33 @@ server <- function(input, output, session) {
     
     return(ehsa32)
   })
-  
-  
-  output$MKtest2 <- renderDataTable({
-    # Get the Mann-Kendall test results
-    mkResults2 <- EHSADataMKTest2()
+
     
-    mkResults2 <- mkResults2 %>%
-      rename("District" = "DT")
+#For Mann Kendall Table only       
+  
+#  output$MKtest2 <- renderDataTable({
+    # Get the Mann-Kendall test results
+#    mkResults2 <- EHSADataMKTest2()
+    
+#    mkResults2 <- mkResults2 %>%
+#      rename("District" = "DT")
     
     # Return the results to render them as a table
-    mkResults2
-  })
+#    mkResults2
+#  })
   
   
 
-#For Mann Kendall Table  
+#For Mann Kendall Table only 
     
-  output$MKText <- renderText({ 
-    "The Mann-Kendall test is a non-parametric statistical test used to identify trends 
-      in a series of data. Its primary purpose is to determine whether there is a 
-      monotonic trend over time in the observed data. 
-      To view significant emerging hot/cold spots, users can sort 
-      the tau & sl variables in descending order."
+#  output$MKText <- renderText({ 
+#    "The Mann-Kendall test is a non-parametric statistical test used to identify trends 
+#      in a series of data. Its primary purpose is to determine whether there is a 
+#      monotonic trend over time in the observed data. 
+#      To view significant emerging hot/cold spots, users can sort 
+#      the tau & sl variables in descending order."
     
-  })  
+#  })  
   
   
   
