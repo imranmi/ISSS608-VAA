@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 27, 2024</p>
+      <p class="date-modified">March 28, 2024</p>
     </div>
   </div>
     
@@ -383,7 +383,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, dplyr , </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               sf, lubridate,plotly,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tmap, spdep, sfdep, patchwork, knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               tmap, spdep, sfdep, patchwork, knitr, forcats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mmr_shp_mimu_2 <span class="ot">&lt;-</span>  <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial3"</span>,  </span>
@@ -459,16 +459,16 @@ Geodetic CRS:  WGS 84</code></pre>
 # Groups:   quarter [12]
    quarter DT      Incidents nb    wt    gi_star cluster    e_gi  var_gi std_dev
      &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;lis&gt; &lt;lis&gt;   &lt;dbl&gt; &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
- 1   20211 Hintha…         0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.0101  1.70e-4 -0.776 
- 2   20211 Labutta         0 &lt;int&gt; &lt;dbl&gt;  -0.645 Low     0.00613 1.91e-4 -0.444 
- 3   20211 Maubin          0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00945 1.42e-4 -0.795 
- 4   20211 Myaung…         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00825 1.83e-4 -0.610 
- 5   20211 Pathein         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00861 1.74e-4 -0.652 
- 6   20211 Pyapon          0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00766 1.56e-4 -0.613 
- 7   20211 Bago            1 &lt;int&gt; &lt;dbl&gt;   0.321 Low     0.0109  1.39e-4  0.501 
- 8   20211 Taungoo         8 &lt;int&gt; &lt;dbl&gt;   0.432 High    0.0210  1.23e-4 -0.280 
- 9   20211 Pyay            0 &lt;int&gt; &lt;dbl&gt;  -0.337 Low     0.00906 1.74e-4 -0.105 
-10   20211 Thayar…         0 &lt;int&gt; &lt;dbl&gt;  -0.270 Low     0.00926 1.78e-4 -0.0474
+ 1   20211 Hintha…         0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00928 1.50e-4 -0.757 
+ 2   20211 Labutta         0 &lt;int&gt; &lt;dbl&gt;  -0.645 Low     0.00562 1.40e-4 -0.474 
+ 3   20211 Maubin          0 &lt;int&gt; &lt;dbl&gt;  -0.938 Low     0.00930 1.46e-4 -0.771 
+ 4   20211 Myaung…         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00742 1.42e-4 -0.622 
+ 5   20211 Pathein         0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00867 1.78e-4 -0.649 
+ 6   20211 Pyapon          0 &lt;int&gt; &lt;dbl&gt;  -0.801 Low     0.00822 1.75e-4 -0.621 
+ 7   20211 Bago            1 &lt;int&gt; &lt;dbl&gt;   0.321 Low     0.0108  1.49e-4  0.490 
+ 8   20211 Taungoo         8 &lt;int&gt; &lt;dbl&gt;   0.432 High    0.0214  1.46e-4 -0.292 
+ 9   20211 Pyay            0 &lt;int&gt; &lt;dbl&gt;  -0.337 Low     0.00993 1.82e-4 -0.167 
+10   20211 Thayar…         0 &lt;int&gt; &lt;dbl&gt;  -0.270 Low     0.00907 1.62e-4 -0.0342
 # ℹ 950 more rows
 # ℹ 5 more variables: p_value &lt;dbl&gt;, p_sim &lt;dbl&gt;, p_folded_sim &lt;dbl&gt;,
 #   skewness &lt;dbl&gt;, kurtosis &lt;dbl&gt;</code></pre>
@@ -497,8 +497,8 @@ Geodetic CRS:  WGS 84</code></pre>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(p3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-c838290f7ed0217e36e5" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-c838290f7ed0217e36e5">{"x":{"data":[{"x":[20211,20212,20213,20214,20221,20222,20223,20224,20231,20232,20233,20234],"y":[-0.93751257944361199,-1.27667486743152,-1.685214447206653,-1.4719409717472254,-1.6682469649078393,-1.6589364706864278,-1.9726482068457223,-1.8280863415982889,-1.5849030767048147,-1.6875167576840768,-1.6749279580579677,-1.4351478905503112],"text":["quarter: 20211<br />gi_star: -0.9375126","quarter: 20212<br />gi_star: -1.2766749","quarter: 20213<br />gi_star: -1.6852144","quarter: 20214<br />gi_star: -1.4719410","quarter: 20221<br />gi_star: -1.6682470","quarter: 20222<br />gi_star: -1.6589365","quarter: 20223<br />gi_star: -1.9726482","quarter: 20224<br />gi_star: -1.8280863","quarter: 20231<br />gi_star: -1.5849031","quarter: 20232<br />gi_star: -1.6875168","quarter: 20233<br />gi_star: -1.6749280","quarter: 20234<br />gi_star: -1.4351479"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283104,"r":7.3059360730593621,"b":40.182648401826491,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[20209.849999999999,20235.150000000001],"tickmode":"array","ticktext":["20210","20215","20220","20225","20230","20235"],"tickvals":[20210,20215,20220,20225,20230,20235],"categoryorder":"array","categoryarray":["20210","20215","20220","20225","20230","20235"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"y","title":{"text":"quarter","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0244049882158279,-0.88575579807350646],"tickmode":"array","ticktext":["-1.8","-1.5","-1.2","-0.9"],"tickvals":[-1.8000000000000005,-1.5000000000000004,-1.2000000000000004,-0.90000000000000036],"categoryorder":"array","categoryarray":["-1.8","-1.5","-1.2","-0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"x","title":{"text":"gi_star","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"76682c057437":{"x":{},"y":{},"type":"scatter"}},"cur_data":"76682c057437","visdat":{"76682c057437":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-40ff0115b83062f337fd" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-40ff0115b83062f337fd">{"x":{"data":[{"x":[20211,20212,20213,20214,20221,20222,20223,20224,20231,20232,20233,20234],"y":[-0.93751257944361199,-1.27667486743152,-1.685214447206653,-1.4719409717472254,-1.6682469649078393,-1.6589364706864278,-1.9726482068457223,-1.8280863415982889,-1.5849030767048147,-1.6875167576840768,-1.6749279580579677,-1.4351478905503112],"text":["quarter: 20211<br />gi_star: -0.9375126","quarter: 20212<br />gi_star: -1.2766749","quarter: 20213<br />gi_star: -1.6852144","quarter: 20214<br />gi_star: -1.4719410","quarter: 20221<br />gi_star: -1.6682470","quarter: 20222<br />gi_star: -1.6589365","quarter: 20223<br />gi_star: -1.9726482","quarter: 20224<br />gi_star: -1.8280863","quarter: 20231<br />gi_star: -1.5849031","quarter: 20232<br />gi_star: -1.6875168","quarter: 20233<br />gi_star: -1.6749280","quarter: 20234<br />gi_star: -1.4351479"],"type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283104,"r":7.3059360730593621,"b":40.182648401826491,"l":48.949771689497723},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[20209.849999999999,20235.150000000001],"tickmode":"array","ticktext":["20210","20215","20220","20225","20230","20235"],"tickvals":[20210,20215,20220,20225,20230,20235],"categoryorder":"array","categoryarray":["20210","20215","20220","20225","20230","20235"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"y","title":{"text":"quarter","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0244049882158279,-0.88575579807350646],"tickmode":"array","ticktext":["-1.8","-1.5","-1.2","-0.9"],"tickvals":[-1.8000000000000005,-1.5000000000000004,-1.2000000000000004,-0.90000000000000036],"categoryorder":"array","categoryarray":["-1.8","-1.5","-1.2","-0.9"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.6529680365296811,"tickwidth":0.33208800332088001,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088001,"zeroline":false,"anchor":"x","title":{"text":"gi_star","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"2984f1872b6":{"x":{},"y":{},"type":"scatter"}},"cur_data":"2984f1872b6","visdat":{"2984f1872b6":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Mann Kendall test for&nbsp;<strong>Hinthada district-quarterly</strong></p>
@@ -731,9 +731,9 @@ Geodetic CRS:  WGS 84</code></pre>
 </section>
 <section id="performing-emerging-hotspot-analysis" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="performing-emerging-hotspot-analysis">Performing Emerging Hotspot Analysis</h2>
-<p>We will perform EHSA analysis by using&nbsp;<a href="https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html"><code>emerging_hotspot_analysis()</code></a>&nbsp;of sfdep package. It takes a spacetime object x (i.e.&nbsp;spt1_complete, sp2_complete, quarterly_spt), and the quoted name of the variable of interest (i.e.&nbsp;Incidents) for .var argument.</p>
+<p>We will perform EHSA analysis by using&nbsp;<a href="https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html"><code>emerging_hotspot_analysis()</code></a>&nbsp;of sfdep package. It takes a spacetime object x (i.e.&nbsp;quarterly_spt), and the quoted name of the variable of interest (i.e.&nbsp;Incidents) for .var argument.</p>
 <p>The <strong>k argument is used to specify the</strong> <strong>number of time lags</strong> which is set to 1 by default.</p>
-<p>Lastly, <strong>nsim map</strong> <strong>numbers of simulation</strong> to be performed.</p>
+<p>Lastly, <strong>nsim map</strong> <strong>numbers of simulation</strong> to be performed. (number of simulations of p-values)</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -773,70 +773,9 @@ Geodetic CRS:  WGS 84</code></pre>
 <span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="visualising-the-distribution-of-ehsa-classes" class="level3 page-columns page-full">
+<section id="visualising-the-distribution-of-ehsa-classes" class="level3">
 <h3 class="anchored" data-anchor-id="visualising-the-distribution-of-ehsa-classes">Visualising the distribution of EHSA classes</h3>
 <p><strong>Admin2 districts - quarterly</strong></p>
-<div class="cell">
-<details>
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_99,</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of ESHA classes - 99 simulations"</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_199,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of ESHA classes - 199 simulations"</span>) <span class="sc">+</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>p8 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_299,</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of ESHA classes - 299 simulations"</span>) <span class="sc">+</span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>p9 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_399,</span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> classification)) <span class="sc">+</span></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">'count'</span>, <span class="fu">aes</span>(<span class="at">label =</span> ..count..), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of ESHA classes - 399 simulations"</span>) <span class="sc">+</span></span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="co">#p10 &lt;- ggplot(data = ehsa3_499,</span></span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a> <span class="co">#      aes(x = classification)) +</span></span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_bar() +</span></span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="co">#  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack#(vjust = 1)) +</span></span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a><span class="co">#  labs(title = "Distribution of ESHA classes - 499 simulations") +</span></span>
-<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a><span class="co">#  theme(plot.title = element_text(size = 20)) +</span></span>
-<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a><span class="co">#  theme_minimal()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell page-columns page-full">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>patchwork2 <span class="ot">&lt;-</span> p6<span class="sc">/</span>p7</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>patchwork2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display column-body-outset-right">
-<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="1152"></p>
-</div>
-</div>
-<div class="cell page-columns page-full">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>patchwork3 <span class="ot">&lt;-</span> p8<span class="sc">/</span>p9</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>patchwork3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display column-body-outset-right">
-<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="1152"></p>
-</div>
-</div>
 </section>
 <section id="visualising-ehsa" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="visualising-ehsa">Visualising EHSA</h3>
@@ -844,114 +783,408 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mmr_ehsa99 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_99,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>mmr_ehsa199 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_199,</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>mmr_ehsa299 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_299,</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>mmr_ehsa399 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_399,</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mmr_ehsa99 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_99,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>mmr_ehsa199 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_199,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>mmr_ehsa299 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_299,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>mmr_ehsa399 <span class="ot">&lt;-</span> mmr_shp_mimu_2 <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ehsa3_399,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(DT <span class="sc">==</span> location))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>filtering the significant p-values</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ehsa_sig99 <span class="ot">&lt;-</span> mmr_ehsa99  <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>ehsa_sig199 <span class="ot">&lt;-</span> mmr_ehsa199  <span class="sc">%&gt;%</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>ehsa_sig299 <span class="ot">&lt;-</span> mmr_ehsa299  <span class="sc">%&gt;%</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>ehsa_sig399 <span class="ot">&lt;-</span> mmr_ehsa399  <span class="sc">%&gt;%</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ehsa_sig99 <span class="ot">&lt;-</span> mmr_ehsa99  <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>ehsa_sig199 <span class="ot">&lt;-</span> mmr_ehsa199  <span class="sc">%&gt;%</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>ehsa_sig299 <span class="ot">&lt;-</span> mmr_ehsa299  <span class="sc">%&gt;%</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>ehsa_sig399 <span class="ot">&lt;-</span> mmr_ehsa399  <span class="sc">%&gt;%</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p_value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ehsa1 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa99) <span class="sc">+</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig99) <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"99 simulations"</span>,</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>ehsa2 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa199) <span class="sc">+</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig199) <span class="sc">+</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"199 simulations"</span>,</span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
-<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
-<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>ehsa3 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa299) <span class="sc">+</span></span>
-<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig299) <span class="sc">+</span></span>
-<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
-<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
-<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"299 simulations"</span>,</span>
-<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
-<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
-<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
-<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
-<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>ehsa4 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa399) <span class="sc">+</span></span>
-<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig399) <span class="sc">+</span></span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
-<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
-<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"399 simulations"</span>,</span>
-<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
-<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
-<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
-<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ehsa3_99count <span class="ot">&lt;-</span> ehsa_sig99 <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">count =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">sum</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">fct_reorder</span>(classification, count))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>ehsa3_199count <span class="ot">&lt;-</span> ehsa_sig199 <span class="sc">%&gt;%</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">count =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">sum</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">fct_reorder</span>(classification, count))</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>ehsa3_299count <span class="ot">&lt;-</span> ehsa_sig299 <span class="sc">%&gt;%</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">count =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">sum</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">fct_reorder</span>(classification, count))</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>ehsa3_399count <span class="ot">&lt;-</span> ehsa_sig399 <span class="sc">%&gt;%</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">count =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(classification) <span class="sc">%&gt;%</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">sum</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">classification =</span> <span class="fu">fct_reorder</span>(classification, count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_99count, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(classification,count), <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),  </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span> </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of EHSA classes - 99 simulations"</span>) <span class="sc">+</span> </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_199count, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(classification,count), <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),  </span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span> </span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of EHSA classes - 199 simulations"</span>) <span class="sc">+</span> </span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) </span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>p8 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_299count, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(classification,count), <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),  </span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span> </span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of EHSA classes - 299 simulations"</span>) <span class="sc">+</span> </span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) </span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>p9 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> ehsa3_399count, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(classification,count), <span class="at">y =</span> count)) <span class="sc">+</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),  </span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span> </span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution of EHSA classes - 399 simulations"</span>) <span class="sc">+</span> </span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> count), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell page-columns page-full">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(ehsa1, ehsa2, </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">1</span>,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">nrow=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>patchwork2 <span class="ot">&lt;-</span> p6<span class="sc">/</span>p7</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>patchwork2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display column-body-outset-right">
-<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="1152"></p>
+<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="1152"></p>
 </div>
 </div>
 <div class="cell page-columns page-full">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(ehsa3, ehsa4, </span>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>patchwork3 <span class="ot">&lt;-</span> p8<span class="sc">/</span>p9</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>patchwork3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-body-outset-right">
+<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ehsa1 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa99) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig99) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"99 simulations"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>ehsa2 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa199) <span class="sc">+</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig199) <span class="sc">+</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"199 simulations"</span>,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>ehsa3 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa299) <span class="sc">+</span></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig299) <span class="sc">+</span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"299 simulations"</span>,</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>ehsa4 <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(mmr_ehsa399) <span class="sc">+</span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ehsa_sig399) <span class="sc">+</span></span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"classification"</span>) <span class="sc">+</span> </span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"Emerging Hot Spot Map, 2021-2023"</span>,</span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"399 simulations"</span>,</span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.2</span>,</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.height =</span> <span class="fl">0.60</span>, </span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.width =</span> <span class="fl">5.0</span>,</span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(ehsa1, ehsa2, </span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">1</span>,</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">nrow=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display column-body-outset-right">
 <p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(ehsa3, ehsa4, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">1</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">nrow=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-body-outset-right">
+<p><img src="Take-home_Ex4e_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<p>99 simulations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>Districts_classtype99 <span class="ot">&lt;-</span> ehsa_sig99 <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DT, classification) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"District"</span> <span class="ot">=</span> <span class="st">"DT"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classification <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"oscilating hotspot"</span>, <span class="st">"sporadic hotspot"</span>, <span class="st">"new hotspot"</span>, <span class="st">"consecutive hotspot"</span>))</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>Districts_classtype99 <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(Districts_classtype99)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(Districts_classtype99)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">District</th>
+<th style="text-align: left;">classification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tamu</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pa Laung Self-Administered Zone</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Danu Self-Administered Zone</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dawei</td>
+<td style="text-align: left;">new hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kawthoung</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mandalay</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>199 simulations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Districts_classtype199 <span class="ot">&lt;-</span> ehsa_sig199 <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DT, classification) <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"District"</span> <span class="ot">=</span> <span class="st">"DT"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classification <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"oscilating hotspot"</span>, <span class="st">"sporadic hotspot"</span>, <span class="st">"new hotspot"</span>, <span class="st">"consecutive hotspot"</span>))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>Districts_classtype199 <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(Districts_classtype199)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(Districts_classtype199)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">District</th>
+<th style="text-align: left;">classification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Tamu</td>
+<td style="text-align: left;">consecutive hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pa Laung Self-Administered Zone</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Danu Self-Administered Zone</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dawei</td>
+<td style="text-align: left;">new hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Kawthoung</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mandalay</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>299 simulations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Districts_classtype299 <span class="ot">&lt;-</span> ehsa_sig299 <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DT, classification) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"District"</span> <span class="ot">=</span> <span class="st">"DT"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classification <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"oscilating hotspot"</span>, <span class="st">"sporadic hotspot"</span>, <span class="st">"new hotspot"</span>, <span class="st">"consecutive hotspot"</span>))</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>Districts_classtype299 <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(Districts_classtype299)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(Districts_classtype299)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">District</th>
+<th style="text-align: left;">classification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Katha</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tamu</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pa Laung Self-Administered Zone</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Danu Self-Administered Zone</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dawei</td>
+<td style="text-align: left;">new hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kawthoung</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mandalay</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>399 simulations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Districts_classtype399 <span class="ot">&lt;-</span> ehsa_sig399 <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DT, classification) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"District"</span> <span class="ot">=</span> <span class="st">"DT"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classification <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"oscilating hotspot"</span>, <span class="st">"sporadic hotspot"</span>, <span class="st">"new hotspot"</span>, <span class="st">"consecutive hotspot"</span>))</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>Districts_classtype399 <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(Districts_classtype399)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(Districts_classtype399)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">District</th>
+<th style="text-align: left;">classification</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pathein</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tamu</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pa Laung Self-Administered Zone</td>
+<td style="text-align: left;">sporadic hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Danu Self-Administered Zone</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dawei</td>
+<td style="text-align: left;">new hotspot</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kawthoung</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mandalay</td>
+<td style="text-align: left;">oscilating hotspot</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 

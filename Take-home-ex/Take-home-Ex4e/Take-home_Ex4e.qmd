@@ -19,7 +19,7 @@ execute:
 ```{r}
 pacman::p_load(tidyverse, dplyr , 
                sf, lubridate,plotly,
-               tmap, spdep, sfdep, patchwork, knitr)
+               tmap, spdep, sfdep, patchwork, knitr, forcats)
 ```
 
 ```{r}
@@ -257,11 +257,11 @@ patchwork
 
 ## Performing Emerging Hotspot Analysis
 
-We will perform EHSA analysis by using [`emerging_hotspot_analysis()`](https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html) of sfdep package. It takes a spacetime object x (i.e. spt1_complete, sp2_complete, quarterly_spt), and the quoted name of the variable of interest (i.e. Incidents) for .var argument.
+We will perform EHSA analysis by using [`emerging_hotspot_analysis()`](https://sfdep.josiahparry.com/reference/emerging_hotspot_analysis.html) of sfdep package. It takes a spacetime object x (i.e. quarterly_spt), and the quoted name of the variable of interest (i.e. Incidents) for .var argument.
 
 The **k argument is used to specify the** **number of time lags** which is set to 1 by default.
 
-Lastly, **nsim map** **numbers of simulation** to be performed.
+Lastly, **nsim map** **numbers of simulation** to be performed. (number of simulations of p-values)
 
 ```{r}
 #| code-fold: true
@@ -307,76 +307,6 @@ ehsa3_499 <- emerging_hotspot_analysis(
 
 **Admin2 districts - quarterly**
 
-```{r}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-
-p6 <- ggplot(data = ehsa3_99,
-       aes(x = classification)) +
-  geom_bar() +
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
-  labs(title = "Distribution of ESHA classes - 99 simulations") +
-  theme(plot.title = element_text(size = 20)) +
-  theme_minimal() 
-
-
-p7 <- ggplot(data = ehsa3_199,
-       aes(x = classification)) +
-  geom_bar() +
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
-  labs(title = "Distribution of ESHA classes - 199 simulations") +
-  theme(plot.title = element_text(size = 20)) +
-  theme_minimal() 
-
-p8 <- ggplot(data = ehsa3_299,
-       aes(x = classification)) +
-  geom_bar() +
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
-  labs(title = "Distribution of ESHA classes - 299 simulations") +
-  theme(plot.title = element_text(size = 20)) +
-  theme_minimal()
-
-p9 <- ggplot(data = ehsa3_399,
-       aes(x = classification)) +
-  geom_bar() +
-  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack(vjust = 1)) +
- labs(title = "Distribution of ESHA classes - 399 simulations") +
-  theme(plot.title = element_text(size = 20)) +
-  theme_minimal()
-
-#p10 <- ggplot(data = ehsa3_499,
- #      aes(x = classification)) +
-#  geom_bar() +
-#  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5, size = 4, position = position_stack#(vjust = 1)) +
-#  labs(title = "Distribution of ESHA classes - 499 simulations") +
-#  theme(plot.title = element_text(size = 20)) +
-#  theme_minimal()
-
-```
-
-```{r}
-#| fig-width: 12
-#| fig-height: 12
-#| column: body-outset-right
-
-
-patchwork2 <- p6/p7
-
-patchwork2
-```
-
-```{r}
-#| fig-width: 12
-#| fig-height: 12
-#| column: body-outset-right
-
-
-patchwork3 <- p8/p9
-
-patchwork3
-```
-
 ### Visualising EHSA
 
 In this section, we will learn how to visualise the geographic distribution EHSA classes. However, before we can do so, we need to join *mmr_shp_mimu2 & ehsa3)* together by using the code chunk below.
@@ -419,6 +349,106 @@ ehsa_sig299 <- mmr_ehsa299  %>%
 
 ehsa_sig399 <- mmr_ehsa399  %>%
   filter(p_value < 0.05)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ehsa3_99count <- ehsa_sig99 %>%
+  mutate(count = 1) %>%
+  group_by(classification) %>%
+  summarise(count = sum(count)) %>%
+  ungroup() %>%
+  mutate(classification = fct_reorder(classification, count))
+
+
+ehsa3_199count <- ehsa_sig199 %>%
+  mutate(count = 1) %>%
+  group_by(classification) %>%
+  summarise(count = sum(count)) %>%
+  ungroup() %>%
+  mutate(classification = fct_reorder(classification, count))
+
+ehsa3_299count <- ehsa_sig299 %>%
+  mutate(count = 1) %>%
+  group_by(classification) %>%
+  summarise(count = sum(count)) %>%
+  ungroup() %>%
+  mutate(classification = fct_reorder(classification, count))
+
+ehsa3_399count <- ehsa_sig399 %>%
+  mutate(count = 1) %>%
+  group_by(classification) %>%
+  summarise(count = sum(count)) %>%
+  ungroup() %>%
+  mutate(classification = fct_reorder(classification, count))
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+p6 <- ggplot(data = ehsa3_99count, aes(x = fct_reorder(classification,count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Distribution of EHSA classes - 99 simulations") + 
+  geom_text(aes(label = count), hjust = -0.1) 
+  
+  
+p7 <- ggplot(data = ehsa3_199count, aes(x = fct_reorder(classification,count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Distribution of EHSA classes - 199 simulations") + 
+  geom_text(aes(label = count), hjust = -0.1) 
+
+p8 <- ggplot(data = ehsa3_299count, aes(x = fct_reorder(classification,count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Distribution of EHSA classes - 299 simulations") + 
+  geom_text(aes(label = count), hjust = -0.1) 
+
+p9 <- ggplot(data = ehsa3_399count, aes(x = fct_reorder(classification,count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank(),  
+        axis.text.x = element_blank()) + 
+  ggtitle("Distribution of EHSA classes - 399 simulations") + 
+  geom_text(aes(label = count), hjust = -0.1) 
+
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+
+patchwork2 <- p6/p7
+
+patchwork2
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 12
+#| column: body-outset-right
+
+
+patchwork3 <- p8/p9
+
+patchwork3
 ```
 
 ```{r}
@@ -502,4 +532,65 @@ tmap_arrange(ehsa1, ehsa2,
 tmap_arrange(ehsa3, ehsa4, 
              asp = 1,
              ncol=2, nrow=1)
+```
+
+99 simulations
+
+```{r}
+Districts_classtype99 <- ehsa_sig99 %>%
+  select(DT, classification) %>%
+  rename("District" = "DT") %>%
+  filter(classification %in% c("oscilating hotspot", "sporadic hotspot", "new hotspot", "consecutive hotspot"))
+
+
+Districts_classtype99 <- st_drop_geometry(Districts_classtype99)
+
+# Display the table
+kable(Districts_classtype99)
+```
+
+199 simulations
+
+```{r}
+Districts_classtype199 <- ehsa_sig199 %>%
+  select(DT, classification) %>%
+  rename("District" = "DT") %>%
+  filter(classification %in% c("oscilating hotspot", "sporadic hotspot", "new hotspot", "consecutive hotspot"))
+
+
+Districts_classtype199 <- st_drop_geometry(Districts_classtype199)
+
+# Display the table
+kable(Districts_classtype199)
+```
+
+299 simulations
+
+```{r}
+Districts_classtype299 <- ehsa_sig299 %>%
+  select(DT, classification) %>%
+  rename("District" = "DT") %>%
+  filter(classification %in% c("oscilating hotspot", "sporadic hotspot", "new hotspot", "consecutive hotspot"))
+
+
+Districts_classtype299 <- st_drop_geometry(Districts_classtype299)
+
+# Display the table
+kable(Districts_classtype299)
+```
+
+399 simulations
+
+```{r}
+
+Districts_classtype399 <- ehsa_sig399 %>%
+  select(DT, classification) %>%
+  rename("District" = "DT") %>%
+  filter(classification %in% c("oscilating hotspot", "sporadic hotspot", "new hotspot", "consecutive hotspot"))
+
+
+Districts_classtype399 <- st_drop_geometry(Districts_classtype399)
+
+# Display the table
+kable(Districts_classtype399)
 ```
