@@ -456,8 +456,8 @@ patchwork3
 #| code-summary: "Show the code"
 
 ehsa1 <- tm_shape(mmr_ehsa99) +
-  tm_polygons() +
-  tm_borders(alpha = 0.5) +
+  
+  tm_borders() +
 tm_shape(ehsa_sig99) +
   tm_fill("classification") + 
   tm_borders(alpha = 0.4) +
@@ -470,7 +470,7 @@ tm_shape(ehsa_sig99) +
             legend.position = c("left", "bottom"))
 
 ehsa2 <- tm_shape(mmr_ehsa199) +
-  tm_polygons() +
+  
   tm_borders(alpha = 0.5) +
 tm_shape(ehsa_sig199) +
   tm_fill("classification") + 
@@ -484,7 +484,7 @@ tm_shape(ehsa_sig199) +
             legend.position = c("left", "bottom"))
 
 ehsa3 <- tm_shape(mmr_ehsa299) +
-  tm_polygons() +
+  
   tm_borders(alpha = 0.5) +
 tm_shape(ehsa_sig299) +
   tm_fill("classification") + 
@@ -498,7 +498,7 @@ tm_shape(ehsa_sig299) +
             legend.position = c("left", "bottom"))
 
 ehsa4 <- tm_shape(mmr_ehsa399) +
-  tm_polygons() +
+  
   tm_borders(alpha = 0.5) +
 tm_shape(ehsa_sig399) +
   tm_fill("classification") + 
