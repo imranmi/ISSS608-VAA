@@ -1246,7 +1246,7 @@ server <- function(input, output, session) {
     
     
     lisa_sig <- df  %>%
-      filter(p_value < input$MoranConf)  
+      filter(p_value < as.numeric(input$MoranConf))  
     
     lisamap <- tm_shape(df) +
       tm_polygons() +
@@ -1419,7 +1419,7 @@ server <- function(input, output, session) {
     
     
     HCSA_sig <- df  %>%
-      filter(p_value < input$GIConf)
+      filter(p_value < as.numeric(input$GIConf))
     
     # Create the choropleth map for HSCA Map
     HSCAmap <- tm_shape(df) +
@@ -1505,7 +1505,7 @@ server <- function(input, output, session) {
     df <- EHSAData()
     
     df <- df %>%
-      filter(p_value < input$EHSAConf) %>%
+      filter(p_value < as.numeric(input$EHSAConf)) %>%
       group_by(classification) %>%
       summarise(count = n()) %>%
       ungroup() 
@@ -1546,7 +1546,7 @@ server <- function(input, output, session) {
     if(is.null(df)) return()
     
     ehsa_sig3 <- df  %>%
-      filter(p_value < input$EHSAConf)
+      filter(p_value < as.numeric(input$EHSAConf))
     
     
     ehsamap <- tm_shape(df) +
@@ -1584,7 +1584,7 @@ server <- function(input, output, session) {
   
   
       ehsa_sig3 <- EHSATable  %>%
-        filter(p_value < input$EHSAConf) 
+        filter(p_value < as.numeric(input$EHSAConf)) 
   
     ehsa_sig3
     })
@@ -1752,7 +1752,7 @@ server <- function(input, output, session) {
                             x = event_type, 
                             y = Total_Fatalities,
                             #plot.type = input$PlotType,  #KIV for plot type change
-                            conf.level = input$Conlevel,
+                            conf.level = as.numeric(input$Conlevel),
                             type = input$Testtype,
                             mean.ci = TRUE, 
                             pairwise.comparisons = TRUE, 
