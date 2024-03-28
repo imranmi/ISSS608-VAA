@@ -312,12 +312,13 @@ Cluster2 <- fluidRow(
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
                                      "Riots" = "Riots"),
                          selected = "Battles"),
-#         ),
-#         box(title = "Options for Local Moran's I",    # a seperate filter box (KIV)
-#             status = "info",
-#             solidHeader = FALSE,
-#             width = NULL,
-             selectInput("MoranWeights", "Spatial Weights Style",
+             radioButtons(inputId = "Contiguity1",
+                          label = "Contiguity Method",
+                          choices = c("Queen" = TRUE, 
+                                      "Rook" = FALSE),
+                          selected = "TRUE",
+                          inline = TRUE),
+              selectInput("MoranWeights", "Spatial Weights Style",
                          choices = c("W: Row standardised" = "W",
                                      "B: Binary" = "B",
                                      "C: Globally standardised" = "C",
@@ -393,17 +394,7 @@ Cluster2 <- tagList(Cluster2,
                                  align = "center",
                                  withSpinner(dataTableOutput("localMoransTable1")),
                                  style = "height:600px; overflow-y: scroll; overflow-x: scroll;"))
-                      #column(12,       
-                      #       box(
-                      #         title = "LISA results (P-values < 0.05)",
-                      #         status = "danger",
-                      #         solidHeader = TRUE,
-                      #         collapsible = TRUE,     # table with just isolated significant vals (KIV)
-                      #         width = NULL,
-                      #         align = "center",
-                      #         dataTableOutput("localMoransTable2"),
-                      #         style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
-                      #)
+                      
                     )
                     
 )
@@ -445,8 +436,14 @@ HotCold1 <- fluidRow(
                                      "Explosions/Remote violence" = "Explosions/Remote violence",
                                      "Riots" = "Riots"),
                          selected = "Battles"),
+             radioButtons(inputId = "Contiguity2",
+                          label = "Contiguity Method",
+                          choices = c("Queen" = TRUE, 
+                                      "Rook" = FALSE),
+                          selected = "TRUE",
+                          inline = TRUE),
              selectInput(inputId = "GISims",
-                         label = "Number of Simulations for Gi*:",
+                         label = "Number of Simulations:",
                          choices = c(99,199,299,399,499),
                          selected = 99),
              actionButton("GIUpdate", "Update Plot"),
@@ -513,17 +510,7 @@ HotCold1 <- tagList(HotCold1,
                                align = "center",
                                withSpinner(dataTableOutput("GiStat")),
                                style = "height:500px; overflow-y: scroll;overflow-x: scroll;"))
-                      #column(12,       
-                      #        box(
-                      #            title = "GI* Statistics - Significant Hot & Cold spots (P-values < 0.05)",
-                      #            status = "danger",
-                      #            solidHeader = TRUE,
-                      #            collapsible = TRUE,      # table with just isolated significant vals (KIV)
-                      #            width = NULL,
-                      #            align = "center",
-                      #            dataTableOutput("GiStat2"),
-                      #            style = "height:500px; overflow-y: scroll;overflow-x: scroll;")
-                      #  )
+                      
                     )
                     
 )
@@ -550,6 +537,12 @@ EHSA2 <- fluidRow(
                                      "Protests" = "Protests",
                                      "Explosions/Remote violence" = "Explosions/Remote violence"),
                          selected = "Battles"),
+             radioButtons(inputId = "Contiguity3",
+                          label = "Contiguity Method",
+                          choices = c("Queen" = TRUE, 
+                                      "Rook" = FALSE),
+                          selected = "TRUE",
+                          inline = TRUE),
              selectInput(inputId = "EHSANumLags", 
                          label = "Time Lag of spatial neighbours:", 
                          choices = c(1, 2, 3, 4, 5),
@@ -687,7 +680,6 @@ Confirm1 <- fluidRow(
              #                selected = c("Mon", "Yangon"), 
              #                options = list(maxItems = 18, placeholder = 'Enter Region/State')
              # ),
-             
              hr(),
              selectizeInput(inputId = "event_ggstat",
                             label = "Select event type",
@@ -760,40 +752,7 @@ Confirm1 <- fluidRow(
   )
 )
 
-## for GG mosaic version (KIV)
 
-#Confirm2 <- fluidRow(
-#  column(2,
-#         box(title = "Analysis Period: 2020-2023",
-#             status = "info",
-#             solidHeader = FALSE,
-#             width = NULL,
-#             helpText("Filter Options for Dataset"),
-#             selectInput(inputId = "YearMosaic",
-#                         label = "Year:",
-#                         choices = seq(2020,2023),
-#                         selected = 2023)
-
-#         ),
-#         box(title = "Chart Interpretation",
-#             status = "danger",
-#             solidHeader = TRUE,
-#             collapsible = TRUE,
-#             width = NULL,
-#             textOutput("MosaicText")
-#         )
-#  ),
-#  column(10,
-#         box(title = "Mosaic Plot for event type per Region/State",
-#             status = "danger",
-#             solidHeader = TRUE,
-#             collapsible = TRUE,
-#             width = NULL,
-#             align = "left",
-#             plotlyOutput("Mosaicplot", height = "1400px")
-#         )
-#  )
-#)
 
 ## VCD Mosaic
 
@@ -852,14 +811,6 @@ ClusterSubTabs <- tabsetPanel(
            EHSA2)
 )
 
-# seperate sidebar tab for emerging hot spot analytis (KIV)
-#ESHASubTabs <- tabsetPanel(
-#tabPanel("Gi* trend and Mann Kendall test", 
-#EHSA1),
-# tabPanel("Emerging Hot Spot Analysis", 
-#         EHSA2)
-
-#)
 
 
 ConfirmSubTabs <- tabsetPanel(
@@ -897,12 +848,8 @@ body <- dashboardBody(
             
             ClusterSubTabs 
     ),
-    #3rd tab content
-    #tabItem(tabName = "EHSA",  #seperate tab set for EHSA (KIV)
     
-    #      ESHASubTabs
-    # ),
-    #4th tab content
+    #3rd tab content
     tabItem(tabName = "ConfirmatoryAnalysis",
             
             ConfirmSubTabs)
@@ -1196,7 +1143,7 @@ server <- function(input, output, session) {
     
     # Computing Contiguity Spatial Weights
     wm_q <- filteredData %>%
-      mutate(nb = st_contiguity(geometry),
+      mutate(nb = st_contiguity(geometry, queen = input$Contiguity1),
              wt = st_weights(nb,
                              style = input$MoranWeights))
     
@@ -1280,20 +1227,6 @@ server <- function(input, output, session) {
     
   })
   
-  ## Just to show table for LISA map values (KIV)
-  
-  # output$localMoransTable2 <- renderTable({
-  #    df2 <- localMIResults()
-  
-  # Check if data is available
-  #    if (is.null(df2)) return()   # For table with significant vals only(KIV)
-  
-  #    lisa_sig2 <- df2  %>%
-  #      filter(p_value < 0.05)
-  
-  #    lisa_sig2
-  
-  #  })
   
   output$MoransItext <- renderText({ 
     "Local Moran's I assesses spatial patterns at a local level, 
@@ -1309,57 +1242,7 @@ server <- function(input, output, session) {
     a random spatial distribution." 
   })
   
-  
-  
-  
-  #==========================================================
-  # Moran Scatter plot in Cluster 3 using spdep package - (KIV)
-  #==========================================================  
-  
-  
-  #output$MoranScatter <- renderPlot({
-  # Retrieve filtered data based on input selections for event type and year
-  #filteredData1 <- Events_admin2 %>%
-  #filter(year == input$YearMoranScat, event_type == input$eventType4)
-  
-  # Exit if no data is available for the selected criteria
-  #if(nrow(filteredData1) == 0) {
-  #return(NULL)
-  #}
-  
-  # Standardize the Incidents variable
-  #standardizedIncidents <- scale(filteredData1$Incidents) %>% 
-  #as.vector 
-  
-  # Computing Contiguity Spatial Weights
-  #wm_q <- poly2nb(filteredData1, queen = TRUE)
-  #rswm_q <- nb2listw(wm_q, style = "W", zero.policy = TRUE)
-  
-  # Compute Moran's I values
-  #moranValues <- localmoran(standardizedIncidents, rswm_q, na.action = na.exclude)
-  
-  #plotTitle <- paste("Moran Scatterplot for", input$eventType4, "in", input$YearMoranScat)
-  
-  # Create the Moran scatterplot
-  #nci <- moran.plot(standardizedIncidents, rswm_q,
-  #labels = as.character(filteredData1$DT),
-  #xlab = "Standardized Incidents",
-  #ylab = "Spatially Lagged Incidents",
-  #main = plotTitle)
-  
-  
-  #})
-  
-  #output$MoranScatText <- renderText({ 
-#  "The Moran scatterplot is divided into four areas, with each quadrant corresponding 
-#    with one of four categories: (1) High-High (HH) in the top-right quadrant; (2) High-Low (HL) 
-#    in the bottom right quadrant; (3) Low-High (LH) in the top-left quadrant; 
-#    (4) Low- Low (LL) in the bottom left quadrant. The top right corner belongs to areas that have high incidents of events and are surrounded by other areas 
-#    that have higher than the average level/number of battles This is the high-high locations." 
-  #})
-  
-  
-  
+
   #==========================================================
   # Hot & Cold Spot Analysis - GI* statistics
   #==========================================================
@@ -1372,7 +1255,7 @@ server <- function(input, output, session) {
     
     #Derive a spatial weight matrix by using sfdep functions and tidyverse approach.
     wm_idw <- filtered_data2 %>%
-      mutate(nb = st_contiguity(geometry),
+      mutate(nb = st_contiguity(geometry, queen = input$Contiguity2),
              wts = st_inverse_distance(nb, geometry,
                                        scale = 1,
                                        alpha = 1))
@@ -1407,8 +1290,7 @@ server <- function(input, output, session) {
               title = input$localgistats) +
       tm_borders()
     
-    Gi_map #+ 
-    #tm_view(set.zoom.limits = c(5,7)) # for tmap only
+    Gi_map 
   })
   
   
@@ -1441,18 +1323,6 @@ server <- function(input, output, session) {
     
     data_with_gi
   })
-  
-  #isolating for just values in HSCA map (KIV)
-  
-  #  output$GiStat2 <- renderDataTable({
-  #    data_with_gi2 <- GiData()  
-  #    if(is.null(data_with_gi2)) return ()
-  
-  #    HCSA_sig2 <- data_with_gi2  %>%
-  #      filter(p_value < 0.05)  
-  
-  #    HCSA_sig2
-  #  })
   
   
   output$HotColdText <- renderText({ 
@@ -1616,7 +1486,7 @@ server <- function(input, output, session) {
     
     Quarterly_nb2 <- Quarterly_spt2 %>%
       activate("geometry") %>%
-      mutate(nb = include_self(st_contiguity(geometry)),
+      mutate(nb = include_self(st_contiguity(geometry, queen = input$Contiguity3)),
              wt = st_inverse_distance(nb, geometry,
                                       scale = 1,
                                       alpha = 1),
@@ -1681,34 +1551,6 @@ server <- function(input, output, session) {
     return(ehsa32)
   })
 
-    
-#For Mann Kendall Table only       
-  
-#  output$MKtest2 <- renderDataTable({
-    # Get the Mann-Kendall test results
-#    mkResults2 <- EHSADataMKTest2()
-    
-#    mkResults2 <- mkResults2 %>%
-#      rename("District" = "DT")
-    
-    # Return the results to render them as a table
-#    mkResults2
-#  })
-  
-  
-
-#For Mann Kendall Table only 
-    
-#  output$MKText <- renderText({ 
-#    "The Mann-Kendall test is a non-parametric statistical test used to identify trends 
-#      in a series of data. Its primary purpose is to determine whether there is a 
-#      monotonic trend over time in the observed data. 
-#      To view significant emerging hot/cold spots, users can sort 
-#      the tau & sl variables in descending order."
-    
-#  })  
-  
-  
   
   #==========================================================
   # END of Emerging Hot spot Analysis Module
@@ -1766,47 +1608,8 @@ server <- function(input, output, session) {
     
   })
   
-  
-  
-  #GGMosaic (KIV)
-  
-  #Mosaic Plot
-  
-  #  MosaicResults <- reactive({
-  # Filter the data based on the user's selection
-  #    filteredData <- Region_Summary %>%
-  #      filter(year == input$YearMosaic) 
-  
-  
-  #    if(nrow(filteredData) == 0) return(NULL)  # Exit if no data    
-  
-  #    return(filteredData)  
-  
-  #  })        
-  
-  
-  #  output$Mosaicplot <- renderPlotly({
-  
-  #    dataForMosaic <- MosaicResults()  
-  
-  #    if(is.null(dataForMosaic)) return()  # Check if the data is NULL and exit if it is
-  
-  #    gg5 <- ggplot(dataForMosaic) +
-  #      geom_mosaic(aes(weight = Total_Fatalities,
-  #                      x = product(event_type, country), fill = admin1)) +
-  #      labs(x = "Myanmar",
-  #           fill = "Regions") +
-  #      theme(
-  #        axis.text.x = element_blank(),
-  #        axis.title.y = element_blank(),
-  #        axis.ticks.x = element_blank()
-  #      )
-  
-  # Converting the ggplot object to a plotly object
-  #    ggplotly(gg5)
-  #  })
-  
-  
+
+ 
   # VCD mosaic
   MosaicResults2 <- eventReactive(input$Mosaic2Update,{
     # Filter the data based on the user's selection
