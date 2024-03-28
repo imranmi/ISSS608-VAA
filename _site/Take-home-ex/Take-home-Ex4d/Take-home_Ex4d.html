@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 27, 2024</p>
+      <p class="date-modified">March 28, 2024</p>
     </div>
   </div>
     
@@ -758,25 +758,25 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(wide_quarter_summary_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 28 features and 4 fields
+<pre><code>Simple feature collection with 26 features and 4 fields
 Geometry type: GEOMETRY
 Dimension:     XY
 Bounding box:  xmin: 93.09198 ymin: 9.696844 xmax: 99.32485 ymax: 28.54554
 Geodetic CRS:  WGS 84
-# A tibble: 28 × 5
+# A tibble: 26 × 5
    DT                                  geometry `Low-High` `High-High` `Low-Low`
    &lt;chr&gt;                         &lt;GEOMETRY [°]&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
- 1 Bawlake   POLYGON ((97.52725 19.33779, 97.5… 2022Q1, 2… 2021Q3      &lt;NA&gt;     
- 2 Bhamo     POLYGON ((97.19567 24.90225, 97.1… 2023Q4     2021Q1, 20… &lt;NA&gt;     
- 3 Dawei     MULTIPOLYGON (((98.13264 13.53337… &lt;NA&gt;       2022Q4, 20… &lt;NA&gt;     
- 4 Gangaw    POLYGON ((94.11823 22.76677, 94.1… &lt;NA&gt;       2021Q3, 20… &lt;NA&gt;     
- 5 Hakha     POLYGON ((93.3483 23.07166, 93.33… 2022Q1, 2… &lt;NA&gt;        &lt;NA&gt;     
- 6 Hpa-An    MULTIPOLYGON (((97.815 16.52402, … 2022Q1, 2… &lt;NA&gt;        &lt;NA&gt;     
- 7 Kale      POLYGON ((94.17719 23.65037, 94.1… &lt;NA&gt;       2021Q4, 20… &lt;NA&gt;     
- 8 Kanbalu   POLYGON ((95.10246 23.84708, 95.1… 2022Q2, 2… 2022Q4, 20… &lt;NA&gt;     
- 9 Katha     POLYGON ((95.80617 24.95999, 95.8… &lt;NA&gt;       2021Q2      &lt;NA&gt;     
-10 Kawthoung MULTIPOLYGON (((98.10929 9.708863… 2022Q4, 2… &lt;NA&gt;        &lt;NA&gt;     
-# ℹ 18 more rows</code></pre>
+ 1 Bawlake            POLYGON ((97.52725 19.33… 2022Q1     2021Q3      &lt;NA&gt;     
+ 2 Bhamo              POLYGON ((97.19567 24.90… 2023Q4     2021Q1, 20… &lt;NA&gt;     
+ 3 Dawei              MULTIPOLYGON (((98.13264… &lt;NA&gt;       2022Q4, 20… &lt;NA&gt;     
+ 4 Gangaw             POLYGON ((94.11823 22.76… &lt;NA&gt;       2021Q3, 20… &lt;NA&gt;     
+ 5 Hakha              POLYGON ((93.3483 23.071… 2022Q1, 2… 2022Q3      &lt;NA&gt;     
+ 6 Hpa-An             MULTIPOLYGON (((97.815 1… 2022Q2, 2… &lt;NA&gt;        &lt;NA&gt;     
+ 7 Kale               POLYGON ((94.17719 23.65… &lt;NA&gt;       2021Q4, 20… &lt;NA&gt;     
+ 8 Kanbalu            POLYGON ((95.10246 23.84… 2022Q1, 2… 2022Q4, 20… &lt;NA&gt;     
+ 9 Kawthoung          MULTIPOLYGON (((98.10929… 2022Q4, 2… &lt;NA&gt;        &lt;NA&gt;     
+10 Kokang Self-Admin… POLYGON ((98.88376 24.15… 2021Q1, 2… 2023Q4      &lt;NA&gt;     
+# ℹ 16 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -791,9 +791,9 @@ Geodetic CRS:  WGS 84
 <div class="cell-output-display column-body-outset-right">
 <table class="table table-sm table-striped small">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 20%">
-<col style="width: 52%">
+<col style="width: 22%">
+<col style="width: 16%">
+<col style="width: 55%">
 <col style="width: 5%">
 </colgroup>
 <thead>
@@ -807,20 +807,20 @@ Geodetic CRS:  WGS 84
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Bawlake</td>
-<td style="text-align: left;">2022Q1, 2022Q2</td>
+<td style="text-align: left;">2022Q1</td>
 <td style="text-align: left;">2021Q3</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Bhamo</td>
 <td style="text-align: left;">2023Q4</td>
-<td style="text-align: left;">2021Q1, 2021Q2, 2021Q3, 2021Q4, 2023Q3</td>
+<td style="text-align: left;">2021Q1, 2021Q2, 2021Q3, 2021Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Dawei</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2022Q4, 2023Q1, 2023Q2</td>
+<td style="text-align: left;">2022Q4, 2023Q1</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="even">
@@ -832,62 +832,50 @@ Geodetic CRS:  WGS 84
 <tr class="odd">
 <td style="text-align: left;">Hakha</td>
 <td style="text-align: left;">2022Q1, 2022Q2</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">2022Q3</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Hpa-An</td>
-<td style="text-align: left;">2022Q1, 2022Q2, 2022Q3, 2023Q2</td>
+<td style="text-align: left;">2022Q2, 2022Q3, 2023Q3</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Kale</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2023Q1, 2023Q2</td>
+<td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2023Q2</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Kanbalu</td>
-<td style="text-align: left;">2022Q2, 2022Q3</td>
+<td style="text-align: left;">2022Q1, 2022Q2, 2022Q3</td>
 <td style="text-align: left;">2022Q4, 2023Q2</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Katha</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">2021Q2</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">Kawthoung</td>
 <td style="text-align: left;">2022Q4, 2023Q2</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Kokang Self-Administered Zone</td>
 <td style="text-align: left;">2021Q1, 2021Q3, 2021Q4</td>
 <td style="text-align: left;">2023Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Lashio</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q1, 2021Q3, 2023Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Loilen</td>
 <td style="text-align: left;">2021Q1</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Maubin</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">2023Q2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Mohnyin</td>
@@ -903,7 +891,7 @@ Geodetic CRS:  WGS 84
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Monywa</td>
-<td style="text-align: left;">2021Q3</td>
+<td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3, 2023Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
@@ -926,46 +914,46 @@ Geodetic CRS:  WGS 84
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Naga Self-Administered Zone</td>
-<td style="text-align: left;">2021Q2</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">Nyaung-U</td>
 <td style="text-align: left;">2023Q1</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Pa Laung Self-Administered Zone</td>
-<td style="text-align: left;">2021Q2, 2021Q3</td>
+<td style="text-align: left;">2021Q2, 2021Q3, 2021Q4</td>
 <td style="text-align: left;">2021Q1, 2023Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Pakokku</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2022Q2, 2022Q4, 2023Q1, 2023Q2</td>
+<td style="text-align: left;">2021Q4, 2022Q2, 2023Q1, 2023Q2</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Puta-O</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q2</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Sagaing</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2022Q2, 2022Q4, 2023Q1, 2023Q2, 2023Q3</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Shwebo</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3</td>
 <td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Yangon (South)</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">2023Q2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yinmarbin</td>
@@ -1018,7 +1006,7 @@ Geodetic CRS:  WGS 84
 <tr class="even">
 <td style="text-align: left;">Monywa</td>
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
@@ -1034,20 +1022,20 @@ Geodetic CRS:  WGS 84
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Bhamo</td>
+<td style="text-align: left;">Sagaing</td>
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Kale</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Bhamo</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Sagaing</td>
-<td style="text-align: right;">5</td>
+<td style="text-align: left;">Kale</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
@@ -1058,14 +1046,14 @@ Geodetic CRS:  WGS 84
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Dawei</td>
+<td style="text-align: left;">Lashio</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Lashio</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: left;">Dawei</td>
+<td style="text-align: right;">2</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
 </tr>
@@ -1095,7 +1083,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig1) <span class="sc">+</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2021"</span>,</span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1109,7 +1097,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig2) <span class="sc">+</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2021"</span>,</span>
 <span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -1123,7 +1111,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig3) <span class="sc">+</span></span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2021"</span>,</span>
 <span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -1137,7 +1125,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig4) <span class="sc">+</span></span>
-<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span>  </span>
 <span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2021"</span>,</span>
 <span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -1151,7 +1139,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig5) <span class="sc">+</span></span>
-<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2022"</span>,</span>
 <span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1165,7 +1153,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-73"><a href="#cb27-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-74"><a href="#cb27-74" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig6) <span class="sc">+</span></span>
-<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2022"</span>,</span>
 <span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -1179,7 +1167,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-86"><a href="#cb27-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-87"><a href="#cb27-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-88"><a href="#cb27-88" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig7) <span class="sc">+</span></span>
-<span id="cb27-89"><a href="#cb27-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-89"><a href="#cb27-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span>  </span>
 <span id="cb27-90"><a href="#cb27-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-91"><a href="#cb27-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2022"</span>,</span>
 <span id="cb27-92"><a href="#cb27-92" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -1193,7 +1181,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-100"><a href="#cb27-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-101"><a href="#cb27-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-102"><a href="#cb27-102" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig8) <span class="sc">+</span></span>
-<span id="cb27-103"><a href="#cb27-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-103"><a href="#cb27-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-104"><a href="#cb27-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-105"><a href="#cb27-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2022"</span>,</span>
 <span id="cb27-106"><a href="#cb27-106" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -1207,7 +1195,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-114"><a href="#cb27-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-115"><a href="#cb27-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-116"><a href="#cb27-116" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig9) <span class="sc">+</span></span>
-<span id="cb27-117"><a href="#cb27-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-117"><a href="#cb27-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span>  </span>
 <span id="cb27-118"><a href="#cb27-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-119"><a href="#cb27-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2023"</span>,</span>
 <span id="cb27-120"><a href="#cb27-120" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1221,7 +1209,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-128"><a href="#cb27-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-129"><a href="#cb27-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-130"><a href="#cb27-130" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig10) <span class="sc">+</span></span>
-<span id="cb27-131"><a href="#cb27-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-131"><a href="#cb27-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-132"><a href="#cb27-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-133"><a href="#cb27-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2023"</span>,</span>
 <span id="cb27-134"><a href="#cb27-134" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -1235,7 +1223,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-142"><a href="#cb27-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-143"><a href="#cb27-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-144"><a href="#cb27-144" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig11) <span class="sc">+</span></span>
-<span id="cb27-145"><a href="#cb27-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-145"><a href="#cb27-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-146"><a href="#cb27-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-147"><a href="#cb27-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2023"</span>,</span>
 <span id="cb27-148"><a href="#cb27-148" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -1249,7 +1237,7 @@ Geodetic CRS:  WGS 84
 <span id="cb27-156"><a href="#cb27-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb27-157"><a href="#cb27-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb27-158"><a href="#cb27-158" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa_sig12) <span class="sc">+</span></span>
-<span id="cb27-159"><a href="#cb27-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>) <span class="sc">+</span> </span>
+<span id="cb27-159"><a href="#cb27-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"mean"</span>, <span class="at">style =</span> <span class="st">"pretty"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb27-160"><a href="#cb27-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb27-161"><a href="#cb27-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA Map for Battles in 2022"</span>,</span>
 <span id="cb27-162"><a href="#cb27-162" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -1264,8 +1252,7 @@ Geodetic CRS:  WGS 84
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(lisamap1, lisamap2, lisamap3, lisamap4, </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>             lisamap5, lisamap6, lisamap7, lisamap8, </span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>             lisamap9, lisamap10, lisamap11, lisamap12, </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">1</span>,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">4</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">4</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display column-body-outset-right">
 <p><img src="Take-home_Ex4d_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="1152"></p>
 </div>
@@ -1562,12 +1549,12 @@ Geodetic CRS:  WGS 84
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(wide_quarter_summary_df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 30 features and 3 fields
+<pre><code>Simple feature collection with 28 features and 3 fields
 Geometry type: GEOMETRY
 Dimension:     XY
 Bounding box:  xmin: 93.09198 ymin: 9.696844 xmax: 99.32485 ymax: 28.54554
 Geodetic CRS:  WGS 84
-# A tibble: 30 × 4
+# A tibble: 28 × 4
    DT                                                       geometry Low   High 
    &lt;chr&gt;                                              &lt;GEOMETRY [°]&gt; &lt;chr&gt; &lt;chr&gt;
  1 Bawlake   POLYGON ((97.52725 19.33779, 97.52732 19.34059, 97.524… 2022… 2021…
@@ -1576,11 +1563,11 @@ Geodetic CRS:  WGS 84
  4 Gangaw    POLYGON ((94.11823 22.76677, 94.11878 22.7686, 94.1152… &lt;NA&gt;  2021…
  5 Hakha     POLYGON ((93.3483 23.07166, 93.33987 23.07274, 93.3431… 2022… &lt;NA&gt; 
  6 Hpa-An    MULTIPOLYGON (((97.815 16.52402, 97.81483 16.52413, 97… 2022… &lt;NA&gt; 
- 7 Kale      POLYGON ((94.17719 23.65037, 94.17714 23.65038, 94.177… &lt;NA&gt;  2022…
- 8 Kanbalu   POLYGON ((95.10246 23.84708, 95.10219 23.84983, 95.103… 2021… 2023…
+ 7 Kale      POLYGON ((94.17719 23.65037, 94.17714 23.65038, 94.177… &lt;NA&gt;  2021…
+ 8 Kanbalu   POLYGON ((95.10246 23.84708, 95.10219 23.84983, 95.103… 2022… 2022…
  9 Katha     POLYGON ((95.80617 24.95999, 95.80529 24.95822, 95.793… &lt;NA&gt;  2021…
 10 Kawthoung MULTIPOLYGON (((98.10929 9.708863, 98.11007 9.711755, … 2022… &lt;NA&gt; 
-# ℹ 20 more rows</code></pre>
+# ℹ 18 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1595,9 +1582,9 @@ Geodetic CRS:  WGS 84
 <div class="cell-output-display column-body-outset-right">
 <table class="table table-sm table-striped small">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 21%">
-<col style="width: 55%">
+<col style="width: 25%">
+<col style="width: 18%">
+<col style="width: 56%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1634,18 +1621,18 @@ Geodetic CRS:  WGS 84
 </tr>
 <tr class="even">
 <td style="text-align: left;">Hpa-An</td>
-<td style="text-align: left;">2022Q2, 2022Q3</td>
+<td style="text-align: left;">2022Q1, 2022Q3</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Kale</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2022Q1, 2022Q2, 2022Q3, 2023Q1, 2023Q2</td>
+<td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2023Q2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Kanbalu</td>
-<td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3</td>
-<td style="text-align: left;">2023Q2</td>
+<td style="text-align: left;">2022Q1, 2022Q2, 2022Q3</td>
+<td style="text-align: left;">2022Q4, 2023Q2</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Katha</td>
@@ -1663,79 +1650,69 @@ Geodetic CRS:  WGS 84
 <td style="text-align: left;">2023Q4</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Kyaukse</td>
-<td style="text-align: left;">2021Q1</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Lashio</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2021Q1, 2023Q4</td>
+<td style="text-align: left;">2021Q1, 2021Q3, 2023Q4</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Loilen</td>
 <td style="text-align: left;">2021Q1</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
-<td style="text-align: left;">Maubin</td>
-<td style="text-align: left;">2022Q3, 2023Q2</td>
-<td style="text-align: left;">NA</td>
-</tr>
 <tr class="even">
-<td style="text-align: left;">Mawlamyine</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">2023Q2</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Mohnyin</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Mongmit</td>
 <td style="text-align: left;">2021Q1, 2021Q2, 2023Q4</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Monywa</td>
-<td style="text-align: left;">NA</td>
+<td style="text-align: left;">2021Q3</td>
 <td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3, 2023Q4</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Muse</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q2, 2023Q4</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Myingyan</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2023Q1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Myitkyina</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q2</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Nyaung-U</td>
 <td style="text-align: left;">2023Q1</td>
 <td style="text-align: left;">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Pa Laung Self-Administered Zone</td>
 <td style="text-align: left;">2021Q2, 2021Q3</td>
 <td style="text-align: left;">2021Q1, 2023Q4</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">Pakokku</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2022Q2, 2023Q1, 2023Q2</td>
+<td style="text-align: left;">2021Q4, 2022Q2, 2023Q1, 2023Q2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Puta-O</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">2021Q2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pyinoolwin</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">2022Q4</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Sagaing</td>
@@ -1748,14 +1725,14 @@ Geodetic CRS:  WGS 84
 <td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Yangon (South)</td>
+<td style="text-align: left;">Yangon (North)</td>
 <td style="text-align: left;">2023Q2</td>
 <td style="text-align: left;">NA</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Yinmarbin</td>
 <td style="text-align: left;">NA</td>
-<td style="text-align: left;">2021Q3, 2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3, 2023Q4</td>
+<td style="text-align: left;">2021Q4, 2022Q1, 2022Q2, 2022Q3, 2022Q4, 2023Q1, 2023Q2, 2023Q3, 2023Q4</td>
 </tr>
 </tbody>
 </table>
@@ -1792,12 +1769,12 @@ Geodetic CRS:  WGS 84
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Yinmarbin</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Monywa</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Monywa</td>
+<td style="text-align: left;">Yinmarbin</td>
 <td style="text-align: right;">9</td>
 <td style="text-align: right;">0</td>
 </tr>
@@ -1817,28 +1794,28 @@ Geodetic CRS:  WGS 84
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Kale</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Bhamo</td>
 <td style="text-align: right;">4</td>
 <td style="text-align: right;">1</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">Kale</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+</tr>
 <tr class="even">
-<td style="text-align: left;">Dawei</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: left;">Pakokku</td>
+<td style="text-align: right;">4</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Pakokku</td>
+<td style="text-align: left;">Dawei</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Lashio</td>
-<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
 <td style="text-align: right;">0</td>
 </tr>
 </tbody>
@@ -1867,7 +1844,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig1) <span class="sc">+</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">" HCSA Map for Battles in 2021"</span>,</span>
 <span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1881,7 +1858,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig2) <span class="sc">+</span></span>
-<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2021"</span>,</span>
 <span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -1895,7 +1872,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig3) <span class="sc">+</span></span>
-<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2021"</span>,</span>
 <span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -1909,7 +1886,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-44"><a href="#cb43-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-45"><a href="#cb43-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-46"><a href="#cb43-46" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig4) <span class="sc">+</span></span>
-<span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb43-48"><a href="#cb43-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-49"><a href="#cb43-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2021"</span>,</span>
 <span id="cb43-50"><a href="#cb43-50" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -1923,7 +1900,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-58"><a href="#cb43-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-59"><a href="#cb43-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-60"><a href="#cb43-60" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig5) <span class="sc">+</span></span>
-<span id="cb43-61"><a href="#cb43-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-61"><a href="#cb43-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb43-62"><a href="#cb43-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-63"><a href="#cb43-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2022"</span>,</span>
 <span id="cb43-64"><a href="#cb43-64" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1937,7 +1914,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-72"><a href="#cb43-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-73"><a href="#cb43-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-74"><a href="#cb43-74" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig6) <span class="sc">+</span></span>
-<span id="cb43-75"><a href="#cb43-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-75"><a href="#cb43-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-76"><a href="#cb43-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-77"><a href="#cb43-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2022"</span>,</span>
 <span id="cb43-78"><a href="#cb43-78" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -1951,7 +1928,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-86"><a href="#cb43-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-87"><a href="#cb43-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-88"><a href="#cb43-88" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig7) <span class="sc">+</span></span>
-<span id="cb43-89"><a href="#cb43-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-89"><a href="#cb43-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-90"><a href="#cb43-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-91"><a href="#cb43-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2022"</span>,</span>
 <span id="cb43-92"><a href="#cb43-92" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -1965,7 +1942,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-100"><a href="#cb43-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-101"><a href="#cb43-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-102"><a href="#cb43-102" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig8) <span class="sc">+</span></span>
-<span id="cb43-103"><a href="#cb43-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-103"><a href="#cb43-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-104"><a href="#cb43-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-105"><a href="#cb43-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2022"</span>,</span>
 <span id="cb43-106"><a href="#cb43-106" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -1979,7 +1956,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-114"><a href="#cb43-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-115"><a href="#cb43-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-116"><a href="#cb43-116" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig9) <span class="sc">+</span></span>
-<span id="cb43-117"><a href="#cb43-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-117"><a href="#cb43-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-118"><a href="#cb43-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-119"><a href="#cb43-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2023"</span>,</span>
 <span id="cb43-120"><a href="#cb43-120" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 1"</span>,</span>
@@ -1993,7 +1970,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-128"><a href="#cb43-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-129"><a href="#cb43-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-130"><a href="#cb43-130" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig10) <span class="sc">+</span></span>
-<span id="cb43-131"><a href="#cb43-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-131"><a href="#cb43-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-132"><a href="#cb43-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-133"><a href="#cb43-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2023"</span>,</span>
 <span id="cb43-134"><a href="#cb43-134" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 2"</span>,</span>
@@ -2007,7 +1984,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-142"><a href="#cb43-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-143"><a href="#cb43-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-144"><a href="#cb43-144" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig11) <span class="sc">+</span></span>
-<span id="cb43-145"><a href="#cb43-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-145"><a href="#cb43-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span> </span>
 <span id="cb43-146"><a href="#cb43-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-147"><a href="#cb43-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2023"</span>,</span>
 <span id="cb43-148"><a href="#cb43-148" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 3"</span>,</span>
@@ -2021,7 +1998,7 @@ Geodetic CRS:  WGS 84
 <span id="cb43-156"><a href="#cb43-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
 <span id="cb43-157"><a href="#cb43-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
 <span id="cb43-158"><a href="#cb43-158" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(HCSA_sig12) <span class="sc">+</span></span>
-<span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>) <span class="sc">+</span> </span>
+<span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"gi_star"</span>, <span class="at">palette =</span> <span class="st">"-RdBu"</span>) <span class="sc">+</span></span>
 <span id="cb43-160"><a href="#cb43-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb43-161"><a href="#cb43-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"HCSA Map for Battles in 2022"</span>,</span>
 <span id="cb43-162"><a href="#cb43-162" aria-hidden="true" tabindex="-1"></a>            <span class="at">title =</span> <span class="st">"Quarter 4"</span>,</span>
@@ -2036,8 +2013,7 @@ Geodetic CRS:  WGS 84
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(HCSAmap1, HCSAmap2, HCSAmap3, HCSAmap4, </span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>             HCSAmap5, HCSAmap6, HCSAmap7, HCSAmap8, </span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>             HCSAmap9, HCSAmap10, HCSAmap11, HCSAmap12, </span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">1</span>,</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">4</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">4</span>, <span class="at">nrow=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display column-body-outset-right">
 <p><img src="Take-home_Ex4d_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="1152"></p>
 </div>

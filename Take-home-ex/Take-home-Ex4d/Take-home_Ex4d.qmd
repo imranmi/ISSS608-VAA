@@ -482,7 +482,7 @@ lisamap1 <- tm_shape(lisa1) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig1) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2021",
             title = "Quarter 1",
@@ -496,7 +496,7 @@ lisamap2 <- tm_shape(lisa2) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig2) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2021",
             title = "Quarter 2",
@@ -510,7 +510,7 @@ lisamap3 <- tm_shape(lisa3) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig3) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2021",
             title = "Quarter 3",
@@ -524,7 +524,7 @@ lisamap4 <- tm_shape(lisa4) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig4) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") +  
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2021",
             title = "Quarter 4",
@@ -538,7 +538,7 @@ lisamap5 <- tm_shape(lisa5) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig5) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2022",
             title = "Quarter 1",
@@ -552,7 +552,7 @@ lisamap6 <- tm_shape(lisa6) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig6) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2022",
             title = "Quarter 2",
@@ -566,7 +566,7 @@ lisamap7 <- tm_shape(lisa7) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig7) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") +  
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2022",
             title = "Quarter 3",
@@ -580,7 +580,7 @@ lisamap8 <- tm_shape(lisa8) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig8) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2022",
             title = "Quarter 4",
@@ -594,7 +594,7 @@ lisamap9 <- tm_shape(lisa9) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig9) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") +  
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2023",
             title = "Quarter 1",
@@ -608,7 +608,7 @@ lisamap10 <- tm_shape(lisa10) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig10) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2023",
             title = "Quarter 2",
@@ -622,7 +622,7 @@ lisamap11 <- tm_shape(lisa11) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig11) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2023",
             title = "Quarter 3",
@@ -636,7 +636,7 @@ lisamap12 <- tm_shape(lisa12) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(lisa_sig12) +
-  tm_fill("mean") + 
+  tm_fill("mean", style = "pretty", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "LISA Map for Battles in 2022",
             title = "Quarter 4",
@@ -655,7 +655,6 @@ tm_shape(lisa_sig12) +
 tmap_arrange(lisamap1, lisamap2, lisamap3, lisamap4, 
              lisamap5, lisamap6, lisamap7, lisamap8, 
              lisamap9, lisamap10, lisamap11, lisamap12, 
-             asp = 1,
              ncol=4, nrow=3)
 ```
 
@@ -1018,7 +1017,7 @@ HCSAmap1 <- tm_shape(HCSA1) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig1) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = " HCSA Map for Battles in 2021",
             title = "Quarter 1",
@@ -1032,7 +1031,7 @@ HCSAmap2 <- tm_shape(HCSA2) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig2) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2021",
             title = "Quarter 2",
@@ -1046,7 +1045,7 @@ HCSAmap3 <- tm_shape(HCSA3) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig3) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2021",
             title = "Quarter 3",
@@ -1060,7 +1059,7 @@ HCSAmap4 <- tm_shape(HCSA4) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig4) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2021",
             title = "Quarter 4",
@@ -1074,7 +1073,7 @@ HCSAmap5 <- tm_shape(HCSA5) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig5) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2022",
             title = "Quarter 1",
@@ -1088,7 +1087,7 @@ HCSAmap6 <- tm_shape(HCSA6) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig6) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2022",
             title = "Quarter 2",
@@ -1102,7 +1101,7 @@ HCSAmap7 <- tm_shape(HCSA7) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig7) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2022",
             title = "Quarter 3",
@@ -1116,7 +1115,7 @@ HCSAmap8 <- tm_shape(HCSA8) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig8) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2022",
             title = "Quarter 4",
@@ -1130,7 +1129,7 @@ HCSAmap9 <- tm_shape(HCSA9) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig9) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2023",
             title = "Quarter 1",
@@ -1144,7 +1143,7 @@ HCSAmap10 <- tm_shape(HCSA10) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig10) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2023",
             title = "Quarter 2",
@@ -1158,7 +1157,7 @@ HCSAmap11 <- tm_shape(HCSA11) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig11) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") + 
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2023",
             title = "Quarter 3",
@@ -1172,7 +1171,7 @@ HCSAmap12 <- tm_shape(HCSA12) +
   tm_polygons() +
   tm_borders(alpha = 0.5) +
 tm_shape(HCSA_sig12) +
-  tm_fill("gi_star") + 
+  tm_fill("gi_star", palette = "-RdBu") +
   tm_borders(alpha = 0.4) +
   tm_layout(main.title = "HCSA Map for Battles in 2022",
             title = "Quarter 4",
@@ -1191,6 +1190,5 @@ tm_shape(HCSA_sig12) +
 tmap_arrange(HCSAmap1, HCSAmap2, HCSAmap3, HCSAmap4, 
              HCSAmap5, HCSAmap6, HCSAmap7, HCSAmap8, 
              HCSAmap9, HCSAmap10, HCSAmap11, HCSAmap12, 
-             asp = 1,
              ncol=4, nrow=3)
 ```
