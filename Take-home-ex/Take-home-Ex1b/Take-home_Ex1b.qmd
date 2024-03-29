@@ -149,6 +149,14 @@ Battles_data <- Events_admin2 %>%
   filter(quarter == "2023Q4", event_type == "Battles")
 ```
 
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#Battles_data_whole <- Events_admin2 %>%
+#  filter(event_type == "Battles")
+```
+
 # Local Measures of Spatial Autocorrelation - `sfdep methods`
 
 ```{r}
@@ -179,6 +187,17 @@ wm_q <- Battles_data %>%
          wt = st_weights(nb,
                          style = "W"),
          .before = 1) 
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#wm_q_whole <- Battles_data_whole %>%
+#  mutate(nb = st_contiguity(geometry),
+#         wt = st_weights(nb,
+#                         style = "W"),
+#         .before = 1) 
 ```
 
 `st_weights()` provides 3 arguments, they are:
@@ -229,13 +248,42 @@ set.seed(1234)
 Next, `global_moran_perm()` is used to perform Monte Carlo simulation.
 
 ```{r}
-global_moran_perm(wm_q$Incidents,
+global_test <- global_moran_perm(wm_q$Incidents,
                        wm_q$nb,
                        wm_q$wt,
-                  nsim = 99)
+                  nsim = 999)
+
+global_test
 ```
 
 The statistical report above show that the p-value is smaller than alpha value of 0.05. Hence, we have enough statistical evidence to reject the null hypothesis that the spatial distribution of Incidents for event type==Battle, resemble random distribution (i.e. independent from spatial). Because the Moran’s I statistics is greater than 0. We can infer that the spatial distribution shows sign of clustering.
+
+### Visualising Monte Carlo Moran’s I
+
+It is always a good practice for us the examine the simulated Moran’s I test statistics in greater detail. This can be achieved by plotting the distribution of the statistical values as a histogram by using the code chunk below.
+
+In the code chunk below [`hist()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/hist) and [`abline()`](https://www.rdocumentation.org/packages/graphics/versions/3.6.2/topics/abline) of R Graphics are used.
+
+```{r}
+mean(global_test$res[1:999])
+```
+
+```{r}
+var(global_test$res[1:999])
+```
+
+```{r}
+summary(global_test$res[1:999])
+```
+
+```{r}
+hist(global_test$res, 
+     freq=TRUE, 
+     breaks=20, 
+     xlab="Simulated Moran's I")
+abline(v=0, 
+       col="red") 
+```
 
 ## Computing local Moran’s I
 
