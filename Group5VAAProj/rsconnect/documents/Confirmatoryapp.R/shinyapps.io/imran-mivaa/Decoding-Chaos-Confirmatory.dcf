@@ -1,0 +1,13 @@
+name: Decoding-Chaos-Confirmatory
+title: Decoding-Chaos-Confirmatory
+username: imran-mivaa
+account: imran-mivaa
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11622998
+bundleId: 8434945
+url: https://group5vaa.shinyapps.io/Decoding-Chaos-Confirmatory/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Aspatialapp.R|Consolidatedapp.R|Geospatialapp.R

@@ -1,0 +1,13 @@
+name: Group5VAA-Decoding-Chaos
+title: Group5VAA-Decoding-Chaos
+username: imran-mi
+account: imran-mi
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11623042
+bundleId: 8435004
+url: https://imran-mi.shinyapps.io/Group5VAA-Decoding-Chaos/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Aspatialapp.R|Confirmatoryapp.R|Geospatialapp.R
