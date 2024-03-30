@@ -5,7 +5,7 @@ account: imran-mi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11623122
-bundleId: 8435080
+bundleId: 8435510
 url: https://imran-mi.shinyapps.io/Group5VAA-Decoding-Chaos-Confirmatory/
 version: 1
 asMultiple: FALSE

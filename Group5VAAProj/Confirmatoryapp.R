@@ -2230,9 +2230,9 @@ server <- function(input, output, session) {
     Mosaic2 <- vcd::mosaic(~ admin1 + event_type + Has_Fatalities, data = dataForMosaic2, gp = shading_Friendly, 
                            labeling = labeling_border(labels = TRUE, varnames = FALSE, 
                                                       rot_labels = c(90, 0, 0, 0), 
-                                                      just_labels = c("left", "left", "center", "right")))
+                                                      just_labels = c("left", "left", "center", "right")),
+                           margins = c(15,10,4,10))
     Mosaic2
-    
   })
   
   output$Mosaic2Text <- renderText({ 

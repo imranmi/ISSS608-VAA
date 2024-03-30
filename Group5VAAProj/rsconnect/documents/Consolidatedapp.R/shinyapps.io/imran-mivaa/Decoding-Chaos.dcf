@@ -5,7 +5,7 @@ account: imran-mivaa
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11622836
-bundleId: 8434863
+bundleId: 8435479
 url: https://group5vaa.shinyapps.io/Decoding-Chaos/
 version: 1
 asMultiple: FALSE
