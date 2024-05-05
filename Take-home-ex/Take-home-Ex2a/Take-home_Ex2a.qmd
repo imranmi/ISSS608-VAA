@@ -14,7 +14,7 @@ execute:
 
 # 1. Overview
 
-In the [previous Take-home Exercise](https://akalestale.netlify.app/take-home_ex/take-home_ex01/take-home_ex01), we utilised Exploratory Data Analysis methods and ggplot functions to uncover the distribution of performance among Singaporean students in mathematics, reading, and science. We also explored the relationships between these performance metrics and factors such as schools, gender, and socioeconomic status, leveraging data from the PISA Student Questionnaire Survey.
+In the [previous Take-home Exercise](https://imranmi-isss608-jan24.netlify.app/take-home-ex/take-home-ex1a/take-home_ex1a), we utilised Exploratory Data Analysis methods and ggplot functions to uncover the distribution of performance among Singaporean students in mathematics, reading, and science. We also explored the relationships between these performance metrics and factors such as schools, gender, and socioeconomic status, leveraging data from the PISA Student Questionnaire Survey.
 
 In this exercise, the objective is to enhance the original visualisations I have created in the previous exercise. \
 \
